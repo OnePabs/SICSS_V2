@@ -2,7 +2,6 @@ package server;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 import server.enumerators.PROGRAM_STATE;

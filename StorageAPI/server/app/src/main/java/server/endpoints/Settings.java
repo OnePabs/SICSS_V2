@@ -1,14 +1,14 @@
 package server.endpoints;
 
 import java.io.IOException;
-import java.util.Hashtable;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import server.inner_modules.SettingsController;
 
-import java.io.IOException;
-import java.io.InputStream;
+
 
 public class Settings implements HttpHandler {
 	private SettingsController settingsCtrl;
@@ -19,7 +19,7 @@ public class Settings implements HttpHandler {
 	}
 	
 	@Override
-	public void handle(HttpExchange t) throws IOException {
+	public void handle(HttpExchange t) {
 		if(settingsCtrl.getIsVerbose()){
 			System.out.println("settings endpoint reached");
 		}
@@ -27,18 +27,28 @@ public class Settings implements HttpHandler {
 		InputStream input_stream = t.getRequestBody();
 		try {
 			byte[] content = input_stream.readAllBytes();
-			String jsonStr = String.valueOf(content);
+			String jsonStr = new String(content, StandardCharsets.UTF_8);
+
 			if(settingsCtrl.changeSettings(jsonStr)){
 				t.sendResponseHeaders(200,-1);
+				if(settingsCtrl.getIsVerbose()){
+					System.out.println("received and changed settings: "+jsonStr);
+				}
+			}else{
+				t.sendResponseHeaders(400,-1);
 			}
 		}catch(Exception e) {
 			if(settingsCtrl.getIsVerbose()){
 				System.out.println("Exception happened at SETTINGS entry point");
+				e.printStackTrace();
 			}
-			e.printStackTrace();
-			t.sendResponseHeaders(500, -1);
-		}finally {
-			input_stream.close();
+
+			try{
+				t.sendResponseHeaders(500, -1);
+				input_stream.close();
+			}catch(Exception e2){
+				e2.printStackTrace();
+			}
 		}
 	}
 

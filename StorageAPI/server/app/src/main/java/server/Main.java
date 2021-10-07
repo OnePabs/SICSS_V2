@@ -15,21 +15,9 @@ public class Main {
 		System.out.println("Storage API Version 2");
 		
 		//create inner modules
-		StateController stateCtrl = new StateController();
-		SettingsController settingsCtrl = new SettingsController(stateCtrl);
-		stateCtrl.setSttingsController(settingsCtrl);
-		
-		//Set up endpoints
-		try {
-			HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-			server.createContext("/settings", new Settings(settingsCtrl));
-			server.setExecutor(null);
-			server.start();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		InnerModulesContainer ic = new InnerModulesContainer(8080);
+		ic.init();
+		ic.start();
 	}
+
 }

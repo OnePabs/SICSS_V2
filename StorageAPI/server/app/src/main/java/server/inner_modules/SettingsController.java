@@ -29,7 +29,12 @@ public class SettingsController {
 		this.stateCtrl = stateCtrl;
 	}
 
-	
+	/*
+	* @params newSettings is a Hashtable with all the settings for the Storage API as Strings
+	* Changes the Storage API state to SETTINGS
+	* Returns true if the Storage API state changed to SETTING and new settings are set
+	* Returns false otherwise
+	* */
 	synchronized public boolean changeSettings(Hashtable<String,String> newSettings) {
 		if(stateCtrl.changeState(PROGRAM_STATE.SETTINGS)) {
 			this.settings = newSettings;
@@ -56,7 +61,7 @@ public class SettingsController {
 			}
 			changeSettings(newSettings);
 		}catch(ParseException pe) {
-			System.out.println("Error Changing Settings from JSON String: Parser Exception");
+			System.out.println("Error Changing Settings from JSON String: Parser Exception. json string="+jsonstr);
 			System.out.println("position: " + pe.getPosition());
 			System.out.println(pe);
 			return false;
