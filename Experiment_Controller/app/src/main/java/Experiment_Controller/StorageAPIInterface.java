@@ -37,6 +37,42 @@ public class StorageAPIInterface {
         	
         }
         return false;
-        
+	}
+	
+	
+	public boolean start() {
+		URI uri = URI.create(address + "/start");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
+        try {
+        	HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
+        	if(response.statusCode() == 200) {
+        		return true;
+        	}
+        }catch(IOException ioe){
+        	
+        }catch(InterruptedException ie) {
+        	
+        }
+        return false;
+	}
+	
+	public boolean stop() {
+		URI uri = URI.create(address + "/stop");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
+        try {
+        	HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
+        	if(response.statusCode() == 200) {
+        		return true;
+        	}
+        }catch(IOException ioe){
+        	
+        }catch(InterruptedException ie) {
+        	
+        }
+        return false;
 	}
 }

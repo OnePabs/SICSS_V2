@@ -25,18 +25,21 @@ public class Settings implements HttpHandler {
 		}
 
 		InputStream input_stream = t.getRequestBody();
+		int returnCode;
+
 		try {
 			byte[] content = input_stream.readAllBytes();
 			String jsonStr = new String(content, StandardCharsets.UTF_8);
 
 			if(settingsCtrl.changeSettings(jsonStr)){
-				t.sendResponseHeaders(200,-1);
+				returnCode = 200;
 				if(settingsCtrl.getIsVerbose()){
 					System.out.println("received and changed settings: "+jsonStr);
 				}
 			}else{
-				t.sendResponseHeaders(400,-1);
+				returnCode = 400;
 			}
+			t.sendResponseHeaders(returnCode,-1);
 		}catch(Exception e) {
 			if(settingsCtrl.getIsVerbose()){
 				System.out.println("Exception happened at SETTINGS entry point");
@@ -44,7 +47,7 @@ public class Settings implements HttpHandler {
 			}
 
 			try{
-				t.sendResponseHeaders(500, -1);
+				t.sendResponseHeaders(400, -1);
 				input_stream.close();
 			}catch(Exception e2){
 				e2.printStackTrace();

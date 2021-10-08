@@ -47,7 +47,7 @@ public class SettingsController {
 	* @Params jsonstr: JSON string representing all the settings. start and end with curly brackets. only settingName:settingValue allowed
 	* returns: True if parsing was successful and new settings were created. False otherwise.
 	* */
-	synchronized public boolean changeSettings(String jsonstr) throws ParseException{
+	synchronized public boolean changeSettings(String jsonstr){
 		JSONParser parser = new JSONParser();
 		try{
 			//parse JSON string into JSON object {key:value,...}
@@ -59,14 +59,14 @@ public class SettingsController {
 			for(Object key : keys){
 				newSettings.put(String.valueOf(key),String.valueOf(obj.get(key)));
 			}
-			changeSettings(newSettings);
+			return changeSettings(newSettings);
 		}catch(ParseException pe) {
 			System.out.println("Error Changing Settings from JSON String: Parser Exception. json string="+jsonstr);
 			System.out.println("position: " + pe.getPosition());
 			System.out.println(pe);
 			return false;
 		}
-		return true;
+
 	}
 
 	/*

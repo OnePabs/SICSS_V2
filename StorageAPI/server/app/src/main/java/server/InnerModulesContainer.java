@@ -1,7 +1,7 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
-import server.endpoints.Settings;
+import server.endpoints.*;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 
@@ -41,6 +41,8 @@ public class InnerModulesContainer {
         try{
             server = HttpServer.create(new InetSocketAddress("localhost",portNumber), 0);
             server.createContext("/settings", new Settings(settingsCtrl));
+            server.createContext("/start", new Start(stateCtrl,settingsCtrl));
+            server.createContext("/stop", new Stop(stateCtrl,settingsCtrl));
             server.setExecutor(null);
             return true;
         }catch(Exception e){
