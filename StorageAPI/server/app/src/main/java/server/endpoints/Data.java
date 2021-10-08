@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import server.data_structures.IORequest;
 import server.enumerators.PROGRAM_STATE;
+import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 
@@ -13,15 +14,19 @@ import java.nio.charset.StandardCharsets;
 public class Data implements HttpHandler {
     private StateController stateController;
     private SettingsController settingsController;
+    private MeasurementController measurementController;
 
-    public Data(StateController stateController,SettingsController settingsController){
+    public Data(StateController stateController, SettingsController settingsController, MeasurementController measurementController){
         this.stateController = stateController;
         this.settingsController = settingsController;
+        this.measurementController = measurementController;
     }
 
 
     @Override
     public void handle(HttpExchange t){
+        Long arrival_time = System.nanoTime();
+
         int returnCode;
         if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
             InputStream input_stream = t.getRequestBody();
@@ -34,7 +39,12 @@ public class Data implements HttpHandler {
 
                 //to IORequest
                 IORequest req = new IORequest(content);
-                //Todo: send measurements to Measurement controller
+                Long enqueueTime = System.nanoTime();
+
+                //add time measurements to Measurement controller
+                measurementController.addMeasurement("arrival_time",arrival_time);
+                measurementController.addMeasurement("entry_List_arrival_time",arrival_time);
+
                 //Todo: send data to IORequest queue
 
                 returnCode = 200;
