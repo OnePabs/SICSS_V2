@@ -5,24 +5,6 @@ import static org.testng.Assert.*;
 
 public class StorageAPITest {
 	
-	@Test public void testStart() {
-		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
-		assertEquals(sapi.start(),true);
-	}
-	
-	@Test public void testStop() {
-		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
-		assertEquals(sapi.stop(),true);
-	}
-
-	@Test public void testSettingsEndpoint() {
-		String jr = "{\"isVerbose\":\"true\",\"dataTransferTechnique\":\"a\"}";
-		
-		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
-		if(sapi.changeSettings(jr)) {
-			System.out.println("settings changed");
-		}
-	}
 	
 	@Test public void testStates() {
 		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
@@ -57,5 +39,19 @@ public class StorageAPITest {
 		assertEquals(sapi.changeSettings(jr),true);
 		
 		System.out.println("All state transitions tested");
+	}
+	
+	@Test public void testDataEndpoint() {
+		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
+		String jr = "{\"isVerbose\":\"true\",\"dataTransferTechnique\":\"a\"}";
+		
+		//change settings
+		assertEquals(sapi.changeSettings(jr),true);
+		
+		//start
+		assertEquals(sapi.start(),true);
+		
+		//send data
+		assertEquals(sapi.sendData("hello world!"),true);
 	}
 }

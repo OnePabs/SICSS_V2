@@ -75,4 +75,24 @@ public class StorageAPIInterface {
         }
         return false;
 	}
+	
+	public boolean sendData(String data) {
+		URI uri = URI.create(address + "/data");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Content-Type", "text/plain; charset=UTF-8")
+                .POST(BodyPublishers.ofString(data))
+                .build();
+        try {
+        	HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
+        	if(response.statusCode() == 200) {
+        		return true;
+        	}
+        }catch(IOException ioe){
+        	
+        }catch(InterruptedException ie) {
+        	
+        }
+        return false;
+	}
 }
