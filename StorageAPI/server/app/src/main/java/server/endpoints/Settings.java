@@ -21,7 +21,7 @@ public class Settings implements HttpHandler {
 	@Override
 	public void handle(HttpExchange t) {
 		if(settingsCtrl.getIsVerbose()){
-			System.out.println("settings endpoint reached");
+			System.out.println("settings endpoint reached. isVerbose=true");
 		}
 
 		InputStream input_stream = t.getRequestBody();
@@ -34,7 +34,7 @@ public class Settings implements HttpHandler {
 			if(settingsCtrl.changeSettings(jsonStr)){
 				returnCode = 200;
 				if(settingsCtrl.getIsVerbose()){
-					System.out.println("received and changed settings: "+jsonStr);
+					System.out.println("Settings EndPoint: Successfully changed settings to: "+jsonStr);
 				}
 			}else{
 				returnCode = 400;

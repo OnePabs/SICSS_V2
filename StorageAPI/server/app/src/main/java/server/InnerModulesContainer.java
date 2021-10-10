@@ -6,6 +6,7 @@ import server.endpoints.*;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
+import server.inner_modules.data_transfer_technique.DataTransferTechniqueController;
 
 import java.net.InetSocketAddress;
 
@@ -16,12 +17,15 @@ public class InnerModulesContainer {
     public SettingsController settingsCtrl = null;
     public MeasurementController measurementController = null;
     public SyncIORequestLinkedList IoEntryList = null;
+    public DataTransferTechniqueController dataTransferTechniqueController;
 
     public InnerModulesContainer(int portNumber){
         this.portNumber = portNumber;
     }
 
     public void start(){
+        Thread dataTransferControllerThread = new Thread(dataTransferTechniqueController);
+        dataTransferControllerThread.start();
         server.start();
     }
 
@@ -37,11 +41,15 @@ public class InnerModulesContainer {
         settingsCtrl = new SettingsController();
         measurementController = new MeasurementController();
         IoEntryList = new SyncIORequestLinkedList((byte)0);
+        dataTransferTechniqueController = new DataTransferTechniqueController();
 
         stateCtrl.setSttingsController(settingsCtrl);
         settingsCtrl.setStateController(stateCtrl);
         measurementController.setStateController(stateCtrl);
         IoEntryList.setStateController(stateCtrl);
+        dataTransferTechniqueController.setStateController(stateCtrl);
+        dataTransferTechniqueController.setSettingsController(settingsCtrl);
+        dataTransferTechniqueController.setIoEntryList(IoEntryList);
 
         return true;
     }

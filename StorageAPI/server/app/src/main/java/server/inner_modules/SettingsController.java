@@ -12,17 +12,13 @@ import java.util.Iterator;
 import server.enumerators.PROGRAM_STATE;
 
 public class SettingsController {
-	
 	private Hashtable<String,String> settings;
 	private StateController stateCtrl;
-	
-	public SettingsController(StateController stateCtrl) {
-		settings = new Hashtable<String,String>();
-		this.stateCtrl = stateCtrl;
-	}
+	public Object changaOfSettingsNotifier;
 
 	public SettingsController() {
 		settings = new Hashtable<String,String>();
+		changaOfSettingsNotifier = new Object();
 	}
 
 	public void setStateController(StateController stateCtrl){
@@ -31,13 +27,16 @@ public class SettingsController {
 
 	/*
 	* @params newSettings is a Hashtable with all the settings for the Storage API as Strings
-	* Changes the Storage API state to SETTINGS
+	* Changes the Storage API state to SETTINGS. Notifies all threads waiting on changaOfSettingsNotifier
 	* Returns true if the Storage API state changed to SETTING and new settings are set
 	* Returns false otherwise
 	* */
-	synchronized public boolean changeSettings(Hashtable<String,String> newSettings) {
+	public boolean changeSettings(Hashtable<String,String> newSettings) {
 		if(stateCtrl.changeState(PROGRAM_STATE.SETTINGS)) {
-			this.settings = newSettings;
+			synchronized (changaOfSettingsNotifier){
+				this.settings = newSettings;
+				changaOfSettingsNotifier.notifyAll();
+			}
 			return true;
 		}
 		return false;
@@ -47,7 +46,7 @@ public class SettingsController {
 	* @Params jsonstr: JSON string representing all the settings. start and end with curly brackets. only settingName:settingValue allowed
 	* returns: True if parsing was successful and new settings were created. False otherwise.
 	* */
-	synchronized public boolean changeSettings(String jsonstr){
+	public boolean changeSettings(String jsonstr){
 		JSONParser parser = new JSONParser();
 		try{
 			//parse JSON string into JSON object {key:value,...}
@@ -66,26 +65,25 @@ public class SettingsController {
 			System.out.println(pe);
 			return false;
 		}
-
 	}
 
 	/*
 	* @Params settingName: setting name
 	* returns: setting value if setting name was found. null String otherwise
 	* */
-	synchronized public String getSetting(String settingName){
+	public String getSetting(String settingName){
 		return this.settings.get(settingName);
 	}
 
-	synchronized public int getNumberOfSettings(){
+	public int getNumberOfSettings(){
 		return this.settings.size();
 	}
 
-	synchronized public boolean containsSetting(String settingName){
+	public boolean containsSetting(String settingName){
 		return this.settings.containsKey(settingName);
 	}
 
-	synchronized public boolean getIsVerbose(){
+	public boolean getIsVerbose(){
 		String settingName = "isVerbose";
 		String settingValue;
 		boolean isVerbose;
