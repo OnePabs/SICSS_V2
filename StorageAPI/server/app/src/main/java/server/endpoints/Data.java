@@ -40,8 +40,12 @@ public class Data implements HttpHandler {
             try{
                 byte[] content = input_stream.readAllBytes();
                 if(settingsController.getIsVerbose()){
-                    String str = new String(content, StandardCharsets.UTF_8);
-                    System.out.println("Data endpoint received: " + str);
+                    System.out.print("The byte content received is: ");
+                    StringBuilder sb = new StringBuilder();
+                    for (byte b : content) {
+                        sb.append(String.format("%02X ", b));
+                    }
+                    System.out.println(sb.toString());
                 }
 
                 //to IORequest
