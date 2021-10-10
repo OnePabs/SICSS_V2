@@ -1,8 +1,10 @@
 package server.endpoints;
 
+import server.data_structures.IORequest;
+import server.data_structures.SyncIORequestLinkedList;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import server.data_structures.IORequest;
 import server.enumerators.PROGRAM_STATE;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
@@ -15,8 +17,9 @@ public class Data implements HttpHandler {
     private StateController stateController;
     private SettingsController settingsController;
     private MeasurementController measurementController;
+    private SyncIORequestLinkedList IoEntryList;
 
-    public Data(StateController stateController, SettingsController settingsController, MeasurementController measurementController){
+    public Data(StateController stateController, SettingsController settingsController, MeasurementController measurementController, SyncIORequestLinkedList IoEntryList){
         this.stateController = stateController;
         this.settingsController = settingsController;
         this.measurementController = measurementController;
@@ -49,8 +52,8 @@ public class Data implements HttpHandler {
                 measurementController.addMeasurement("arrival_time",arrival_time);
                 measurementController.addMeasurement("entry_List_arrival_time",arrival_time);
 
-                //Todo: send data to IORequest queue
-
+                //add IO Request to IoEntryList
+                IoEntryList.addIORequest(req);
                 returnCode = 200;
             }catch(Exception e){
                 if(settingsController.getIsVerbose()){

@@ -52,7 +52,7 @@ public class InnerModulesContainer {
             server.createContext("/settings", new Settings(settingsCtrl));
             server.createContext("/start", new Start(stateCtrl,settingsCtrl));
             server.createContext("/stop", new Stop(stateCtrl,settingsCtrl));
-            server.createContext("/data", new Data(stateCtrl,settingsCtrl,measurementController));
+            server.createContext("/data", new Data(stateCtrl,settingsCtrl,measurementController,IoEntryList));
             server.setExecutor(null);
             return true;
         }catch(Exception e){
