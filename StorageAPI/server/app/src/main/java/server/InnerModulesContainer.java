@@ -1,6 +1,7 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
+import server.data_structures.SyncIORequestLinkedList;
 import server.endpoints.*;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
@@ -14,6 +15,7 @@ public class InnerModulesContainer {
     public StateController stateCtrl = null;
     public SettingsController settingsCtrl = null;
     public MeasurementController measurementController = null;
+    public SyncIORequestLinkedList IoEntryList = null;
 
     public InnerModulesContainer(int portNumber){
         this.portNumber = portNumber;
@@ -25,19 +27,22 @@ public class InnerModulesContainer {
 
 
     public boolean init(){
-        return initControllers() &&
+        return initInnerModules() &&
                initServer()
                ;
     }
 
-    public boolean initControllers(){
+    public boolean initInnerModules(){
         stateCtrl = new StateController();
         settingsCtrl = new SettingsController();
         measurementController = new MeasurementController();
+        IoEntryList = new SyncIORequestLinkedList((byte)0);
 
         stateCtrl.setSttingsController(settingsCtrl);
         settingsCtrl.setStateController(stateCtrl);
         measurementController.setStateController(stateCtrl);
+        IoEntryList.setStateController(stateCtrl);
+
         return true;
     }
 

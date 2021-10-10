@@ -27,6 +27,10 @@ public class Data implements HttpHandler {
     public void handle(HttpExchange t){
         Long arrival_time = System.nanoTime();
 
+        if(settingsController.getIsVerbose()){
+            System.out.println("data endpoint reached");
+        }
+
         int returnCode;
         if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
             InputStream input_stream = t.getRequestBody();

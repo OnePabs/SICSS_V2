@@ -11,6 +11,9 @@ public class MeasurementList {
         this.measurements = new LinkedList<Long>();
     }
 
+    public String getMeasurementName(){
+        return measurementName;
+    }
 
     public void addMeasurement(Long measurement){
         measurements.add(measurement);

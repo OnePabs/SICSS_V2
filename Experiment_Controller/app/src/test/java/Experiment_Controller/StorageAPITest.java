@@ -42,6 +42,7 @@ public class StorageAPITest {
 	}
 	
 	@Test public void testDataEndpoint() {
+		System.out.println("Testing sending data to Storage API using Storage API Experiment Controller Interface");
 		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
 		String jr = "{\"isVerbose\":\"true\",\"dataTransferTechnique\":\"a\"}";
 		
@@ -53,5 +54,6 @@ public class StorageAPITest {
 		
 		//send data
 		assertEquals(sapi.sendData("hello world!"),true);
+		System.out.println("Test completed successfully");
 	}
 }

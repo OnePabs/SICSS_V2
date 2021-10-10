@@ -1,11 +1,9 @@
 package server.inner_modules;
 
-
 import server.data_structures.MeasurementList;
 import server.enumerators.PROGRAM_STATE;
 
 import java.util.Hashtable;
-import java.util.LinkedList;
 
 public class MeasurementController {
     private StateController stateController;
@@ -61,6 +59,13 @@ public class MeasurementController {
                 MeasurementList ml = measurementListHashtable.get(measurementName);
                 return ml.getMeasurements();
             }
+        }
+        return null;
+    }
+
+    public MeasurementList[] getAllMeasurements(){
+        if(stateController.getCurrentState() == PROGRAM_STATE.STOPPED){
+
         }
         return null;
     }

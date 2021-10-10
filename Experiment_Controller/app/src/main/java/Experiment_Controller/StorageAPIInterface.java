@@ -87,6 +87,8 @@ public class StorageAPIInterface {
         	HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
         	if(response.statusCode() == 200) {
         		return true;
+        	}else {
+        		System.out.println("Error code received: " + response.statusCode());
         	}
         }catch(IOException ioe){
         	

@@ -1,17 +1,24 @@
 package server.data_structures;
 
+import server.enumerators.PROGRAM_STATE;
+import server.inner_modules.SettingsController;
+import server.inner_modules.StateController;
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class SyncIORequestLinkedList {
 	private byte linkedListId;
 	private LinkedList<IORequest> requests;
-	public boolean allowAdd = false;
-	
+	private StateController stateController;
 	
 	public SyncIORequestLinkedList(byte linkedListId) {
 		this.linkedListId = linkedListId;
 		requests = new LinkedList<IORequest>();
+	}
+
+	public void setStateController(StateController stateController){
+		this.stateController = stateController;
 	}
 	
 	
@@ -25,7 +32,7 @@ public class SyncIORequestLinkedList {
 	
 	
 	public synchronized void addIORequest(IORequest req) {
-		if(allowAdd) {
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
 			requests.add(req);
 			if(requests.size() == 1) {
 				notifyAll();
@@ -40,23 +47,29 @@ public class SyncIORequestLinkedList {
 	 * @throws InterruptedException
 	 */
 	public synchronized IORequest take() throws InterruptedException {
-		IORequest req = null;
-		do {
-			try {
-				req = requests.remove();
-			}catch(NoSuchElementException e) {
-				req = null;
-				wait();
-			}
-		}while(req == null);
-		return req;
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
+			IORequest req = null;
+			do {
+				try {
+					req = requests.remove();
+				} catch (NoSuchElementException e) {
+					req = null;
+					wait();
+				}
+			} while (req == null);
+			return req;
+		}
+		return null;
 	}
 	
 	
 	public synchronized LinkedList<IORequest> getAndRemoveAllRequests(){
-		LinkedList<IORequest> tempRequests = requests;
-		requests = new LinkedList<IORequest>();
-		return tempRequests;
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
+			LinkedList<IORequest> tempRequests = requests;
+			requests = new LinkedList<IORequest>();
+			return tempRequests;
+		}
+		return null;
 	}
 	
 	
@@ -65,26 +78,31 @@ public class SyncIORequestLinkedList {
 	 * @return all requests with appId that are in this linked list
 	 */
 	public synchronized LinkedList<IORequest> getAndRemoveAllRequestsWithAppId(byte appId){
-		LinkedList<IORequest> appRequests = new LinkedList<IORequest>();
-		
-		int maxIndex = requests.size();
-		int idx = 0;
-		while(idx < maxIndex) {
-			IORequest req = requests.get(idx);
-			if(req.getAppId() == appId) {
-				appRequests.add(req);
-				requests.remove(idx);
-				maxIndex--; //one less element in list
-			}else {
-				idx++;//check the next request
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
+			LinkedList<IORequest> appRequests = new LinkedList<IORequest>();
+
+			int maxIndex = requests.size();
+			int idx = 0;
+			while (idx < maxIndex) {
+				IORequest req = requests.get(idx);
+				if (req.getAppId() == appId) {
+					appRequests.add(req);
+					requests.remove(idx);
+					maxIndex--; //one less element in list
+				} else {
+					idx++;//check the next request
+				}
 			}
+			return appRequests;
 		}
-		return appRequests;
+		return null;
 	}
 	
 	
 	public void clearList() {
-		requests = new LinkedList<IORequest>();
+		if(stateController.getCurrentState() == PROGRAM_STATE.STOPPED) {
+			requests = new LinkedList<IORequest>();
+		}
 	}
 	
 	
