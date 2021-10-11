@@ -16,7 +16,7 @@ public class InnerModulesContainer {
     public StateController stateCtrl = null;
     public SettingsController settingsCtrl = null;
     public MeasurementController measurementController = null;
-    public SyncIORequestLinkedList IoEntryList = null;
+    public SyncIORequestLinkedList ioEntryList = null;
     public DataTransferTechniqueController dataTransferTechniqueController;
 
     public InnerModulesContainer(int portNumber){
@@ -40,16 +40,16 @@ public class InnerModulesContainer {
         stateCtrl = new StateController();
         settingsCtrl = new SettingsController();
         measurementController = new MeasurementController();
-        IoEntryList = new SyncIORequestLinkedList((byte)0);
+        ioEntryList = new SyncIORequestLinkedList((byte)0);
         dataTransferTechniqueController = new DataTransferTechniqueController();
 
         stateCtrl.setSttingsController(settingsCtrl);
         settingsCtrl.setStateController(stateCtrl);
         measurementController.setStateController(stateCtrl);
-        IoEntryList.setStateController(stateCtrl);
+        ioEntryList.setStateController(stateCtrl);
         dataTransferTechniqueController.setStateController(stateCtrl);
         dataTransferTechniqueController.setSettingsController(settingsCtrl);
-        dataTransferTechniqueController.setIoEntryList(IoEntryList);
+        dataTransferTechniqueController.setIoEntryList(ioEntryList);
 
         return true;
     }
@@ -60,7 +60,7 @@ public class InnerModulesContainer {
             server.createContext("/settings", new Settings(settingsCtrl));
             server.createContext("/start", new Start(stateCtrl,settingsCtrl));
             server.createContext("/stop", new Stop(stateCtrl,settingsCtrl));
-            server.createContext("/data", new Data(stateCtrl,settingsCtrl,measurementController,IoEntryList));
+            server.createContext("/data", new Data(stateCtrl,settingsCtrl,measurementController, ioEntryList));
             server.setExecutor(null);
             return true;
         }catch(Exception e){

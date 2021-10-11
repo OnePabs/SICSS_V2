@@ -7,7 +7,7 @@ public class StorageAPITest {
 	
 	@Test public void changeSettings() {
 		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
-		String jr = "{\"isVerbose\":\"true\",\"dataTransferTechnique\":\"a\"}";
+		String jr = "{\"isVerbose\":true,\"dataTransferTechnique\":\"a\"}";
 		System.out.println("Changing settings to: " + jr);
 		assertEquals(sapi.changeSettings(jr),true);
 		System.out.println("Successfully changed Storage API settings");

@@ -21,7 +21,7 @@ public class StateControllerTest {
     	
     	//set up state controller and needed modules
     	StateController sctrl = new StateController();
-    	SettingsController settingsCtrl = new SettingsController(sctrl);
+    	SettingsController settingsCtrl = new SettingsController();
     	sctrl.setSttingsController(settingsCtrl);
     	
     	//verify that initial state is initial

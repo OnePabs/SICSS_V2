@@ -8,7 +8,7 @@ public class DataTransferTechniqueController implements Runnable{
     private StateController stateController;
     private SettingsController settingsController;
     private ParentDataTransferTechnique dataTransferTechnique;
-    private SyncIORequestLinkedList IoEntryList;
+    private SyncIORequestLinkedList ioEntryList;
     private boolean stop = false;
 
     public DataTransferTechniqueController(){}
@@ -22,7 +22,7 @@ public class DataTransferTechniqueController implements Runnable{
     }
 
     public void setIoEntryList(SyncIORequestLinkedList ioEntryList) {
-        IoEntryList = ioEntryList;
+        this.ioEntryList = ioEntryList;
     }
 
 
@@ -34,7 +34,10 @@ public class DataTransferTechniqueController implements Runnable{
                 synchronized (settingsController.changaOfSettingsNotifier){
                     settingsController.changaOfSettingsNotifier.wait();
                 }
-                System.out.println("Data Transfer Controller: Settings Controller Changed Settings");
+
+                if(settingsController.getIsVerbose()){
+                    System.out.println("Data Transfer Controller: Settings Controller Changed Settings");
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

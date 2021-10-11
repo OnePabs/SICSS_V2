@@ -74,7 +74,7 @@ public class SettingsControllerTest {
 
         //create and set new settings in hashtable
         System.out.println("Creating Hashtable and Putting key values: isVerbose=true, dataTransferTechnique=a, and Transmitter=stub");
-        Hashtable<String,String> newSettings = new Hashtable<String,String>();
+        Hashtable<String,Object> newSettings = new Hashtable<String,Object>();
         newSettings.put("isVerbose","true");
         newSettings.put("dataTransferTechnique","a");
         newSettings.put("transmitter","stub");
@@ -132,18 +132,18 @@ public class SettingsControllerTest {
         //Change State to SETTINGS
         statectrl.changeState(PROGRAM_STATE.SETTINGS);
 
-        String result;
+        Object result;
         boolean isSuccess;
 
         //get setting when no setting in settings
         System.out.println("Testing getSetting with empty settings...");
         result = settingsctrl.getSetting("name");
         assertEquals(result,null);
-        System.out.println("Test passed. value returned is: " + result);
+        System.out.println("Test passed. value returned is: " + result.toString());
 
         //create and set new settings in hashtable
         System.out.println("Putting settings isVerbose, dataTransferTechnique, and Transmitter");
-        Hashtable<String,String> newSettings = new Hashtable<String,String>();
+        Hashtable<String,Object> newSettings = new Hashtable<String,Object>();
         newSettings.put("isVerbose","true");
         newSettings.put("dataTransferTechnique","a");
         newSettings.put("transmitter","stub");
@@ -167,33 +167,33 @@ public class SettingsControllerTest {
         isSuccess = settingsctrl.containsSetting(settingName);
         if(isSuccess){
             result = settingsctrl.getSetting(settingName);
-            System.out.println(settingName + " found. value=" + result);
+            System.out.println(settingName + " found. value=" + result.toString());
         }else{
             System.out.println(settingName + " NOT Found!!!");
         }
-        assertEquals(result,"true");
+        assertEquals(result.toString(),"true");
 
         //Get dataTransferTechnique
         settingName = "dataTransferTechnique";
         isSuccess = settingsctrl.containsSetting(settingName);
         if(isSuccess){
             result = settingsctrl.getSetting(settingName);
-            System.out.println(settingName + " found. value=" + result);
+            System.out.println(settingName + " found. value=" + result.toString());
         }else{
             System.out.println(settingName + " NOT Found!!!");
         }
-        assertEquals(result,"a");
+        assertEquals(result.toString(),"a");
 
         //Get transmitter
         settingName = "transmitter";
         isSuccess = settingsctrl.containsSetting(settingName);
         if(isSuccess){
             result = settingsctrl.getSetting(settingName);
-            System.out.println(settingName + " found. value=" + result);
+            System.out.println(settingName + " found. value=" + result.toString());
         }else{
             System.out.println(settingName + " NOT Found!!!");
         }
-        assertEquals(result,"stub");
+        assertEquals(result.toString(),"stub");
 
         System.out.println("testing of getSetting finished");
     }
@@ -208,14 +208,14 @@ public class SettingsControllerTest {
         //Change State to SETTINGS
         statectrl.changeState(PROGRAM_STATE.SETTINGS);
 
-        String result;
+        Object result;
         boolean isSuccess;
 
         //get setting when no setting in settings
         System.out.println("Testing getSetting with empty settings...");
         result = settingsctrl.getSetting("name");
         assertEquals(result,null);
-        System.out.println("Test passed. value returned is: " + result);
+        System.out.println("Test passed. null is returned");
 
 
         //Test change settings with JSON string with settings between quotation marks
@@ -224,9 +224,9 @@ public class SettingsControllerTest {
             isSuccess = settingsctrl.changeSettings(settingStr);
             assertEquals(isSuccess,true);
             assertEquals(settingsctrl.getNumberOfSettings(),3);
-            assertEquals(settingsctrl.getSetting("isVerbose"),"true");
-            assertEquals(settingsctrl.getSetting("dataTransferTechnique"),"a");
-            assertEquals(settingsctrl.getSetting("transmitter"),"stub");
+            assertEquals(settingsctrl.getSetting("isVerbose").toString(),"true");
+            assertEquals(settingsctrl.getSetting("dataTransferTechnique").toString(),"a");
+            assertEquals(settingsctrl.getSetting("transmitter").toString(),"stub");
             System.out.println("successfully changed settings");
         }catch(Exception e){
             System.out.println("Unable to change settings");

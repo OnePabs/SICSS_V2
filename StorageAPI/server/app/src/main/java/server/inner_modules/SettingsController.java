@@ -1,23 +1,21 @@
 package server.inner_modules;
 
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
 import java.util.Hashtable;
 import java.util.Set;
-import java.util.Iterator;
 
 import server.enumerators.PROGRAM_STATE;
 
 public class SettingsController {
-	private Hashtable<String,String> settings;
+	private Hashtable<String,Object> settings;
 	private StateController stateCtrl;
 	public Object changaOfSettingsNotifier;
 
 	public SettingsController() {
-		settings = new Hashtable<String,String>();
+		settings = new Hashtable<String,Object>();
 		changaOfSettingsNotifier = new Object();
 	}
 
@@ -31,7 +29,7 @@ public class SettingsController {
 	* Returns true if the Storage API state changed to SETTING and new settings are set
 	* Returns false otherwise
 	* */
-	public boolean changeSettings(Hashtable<String,String> newSettings) {
+	public boolean changeSettings(Hashtable<String,Object> newSettings) {
 		if(stateCtrl.changeState(PROGRAM_STATE.SETTINGS)) {
 			synchronized (changaOfSettingsNotifier){
 				this.settings = newSettings;
@@ -50,13 +48,13 @@ public class SettingsController {
 		JSONParser parser = new JSONParser();
 		try{
 			//parse JSON string into JSON object {key:value,...}
-			JSONObject obj = (JSONObject)parser.parse(jsonstr);
+			JSONObject jasonObject = (JSONObject)parser.parse(jsonstr);
 
 			//Copy JSON settings into HashTable settings
-			Hashtable<String,String> newSettings = new Hashtable<String,String>();
-			Set<Object> keys = obj.keySet();
+			Hashtable<String,Object> newSettings = new Hashtable<String,Object>();
+			Set<Object> keys = jasonObject.keySet();
 			for(Object key : keys){
-				newSettings.put(String.valueOf(key),String.valueOf(obj.get(key)));
+				newSettings.put(String.valueOf(key),jasonObject.get(key));
 			}
 			return changeSettings(newSettings);
 		}catch(ParseException pe) {
@@ -71,7 +69,7 @@ public class SettingsController {
 	* @Params settingName: setting name
 	* returns: setting value if setting name was found. null String otherwise
 	* */
-	public String getSetting(String settingName){
+	public Object getSetting(String settingName){
 		return this.settings.get(settingName);
 	}
 
@@ -85,11 +83,11 @@ public class SettingsController {
 
 	public boolean getIsVerbose(){
 		String settingName = "isVerbose";
-		String settingValue;
+		Object settingValue;
 		boolean isVerbose;
 		if(containsSetting(settingName)){
 			settingValue = getSetting(settingName);
-			isVerbose = Boolean.valueOf(settingValue);
+			isVerbose = Boolean.valueOf(settingValue.toString());
 		}else{
 			isVerbose = false;
 		}
