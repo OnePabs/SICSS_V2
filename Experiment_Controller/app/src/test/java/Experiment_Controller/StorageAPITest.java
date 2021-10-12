@@ -51,7 +51,13 @@ public class StorageAPITest {
 	@Test public void testDataEndpoint() {
 		System.out.println("Testing sending data to Storage API using Storage API Experiment Controller Interface");
 		StorageAPIInterface sapi = new StorageAPIInterface("http://localhost:8080");
-		String jr = "{\"isVerbose\":\"true\",\"dataTransferTechnique\":\"a\"}";
+		String jr = "{"
+				+ "\"isVerbose\":true,"
+				+ "\"dataTransferTechnique\":\"a\","
+				+ "\"serviceTimeDistribution\":\"CONSTANT\","
+				+ "\"serviceTimeDistributionSettings\":3000,"
+				+"\"useSleepForMockProcessing\":true"
+				+ "}";
 		
 		//change settings
 		assertEquals(sapi.changeSettings(jr),true);

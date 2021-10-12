@@ -7,7 +7,7 @@ import server.inner_modules.StateController;
 public class DataTransferTechniqueController implements Runnable{
     private StateController stateController;
     private SettingsController settingsController;
-    private ParentDataTransferTechnique dataTransferTechnique;
+    private ParentDataTransferTechnique dataTransferTechnique = null;
     private SyncIORequestLinkedList ioEntryList;
     private boolean stop = false;
 
@@ -38,6 +38,17 @@ public class DataTransferTechniqueController implements Runnable{
                 if(settingsController.getIsVerbose()){
                     System.out.println("Data Transfer Controller: Settings Controller Changed Settings");
                 }
+
+                //stop running data transfer technique
+                if(dataTransferTechnique != null){
+                    dataTransferTechnique.finishExecution();
+                }
+
+                //create new data transfer with new settings
+                dataTransferTechnique = TechniqueBuilder.build(ioEntryList,stateController,settingsController);
+                Thread dtt = new Thread(dataTransferTechnique);
+                dtt.start();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

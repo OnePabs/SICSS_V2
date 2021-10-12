@@ -27,7 +27,7 @@ public class StateController {
 	synchronized public boolean changeState(PROGRAM_STATE newState) {
 		
 		if(settingsController.getIsVerbose()) {
-			System.out.println("State Controller received request to change state. State Requested: "+newState.toString()+". Current state: "+this.currentState.toString());
+			System.out.print("State Controller received request to change state. State Requested: "+newState.toString()+". Current state: "+this.currentState.toString() + ". ");
 		}
 		
 		
@@ -69,9 +69,9 @@ public class StateController {
 		}
 		
 		if(settingsController.getIsVerbose() && isChangeAllowed) {
-			System.out.println("Change allowed. New current state: : " + this.currentState.toString());
+			System.out.println("State Change allowed. ");
 		}else if(settingsController.getIsVerbose() && !isChangeAllowed) {
-			System.out.println("Change not allowed. State is still: " + this.currentState.toString());
+			System.out.println("State Change not allowed. ");
 		}
 		return isChangeAllowed;
 	}

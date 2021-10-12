@@ -23,6 +23,7 @@ public class Data implements HttpHandler {
         this.stateController = stateController;
         this.settingsController = settingsController;
         this.measurementController = measurementController;
+        this.IoEntryList = IoEntryList;
     }
 
 
@@ -54,7 +55,7 @@ public class Data implements HttpHandler {
 
                 //add time measurements to Measurement controller
                 measurementController.addMeasurement("arrival_time",arrival_time);
-                measurementController.addMeasurement("entry_List_arrival_time",arrival_time);
+                measurementController.addMeasurement("entry_List_arrival_time",enqueueTime);
 
                 //add IO Request to IoEntryList
                 IoEntryList.addIORequest(req);
@@ -75,7 +76,6 @@ public class Data implements HttpHandler {
                 e.printStackTrace();
             }
         }
-
     }
 
 }
