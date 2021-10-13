@@ -6,24 +6,27 @@ import server.data_structures.SyncIORequestLinkedList;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import server.enumerators.PROGRAM_STATE;
+import server.enumerators.TIMESTAMP_NAME;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
+import server.enumerators.TIMESTAMP_NAME.*;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 public class Data implements HttpHandler {
     private StateController stateController;
     private SettingsController settingsController;
     private MeasurementController measurementController;
     private SyncIORequestLinkedList IoEntryList;
+    private long requestNum;
 
     public Data(StateController stateController, SettingsController settingsController, MeasurementController measurementController, SyncIORequestLinkedList IoEntryList){
         this.stateController = stateController;
         this.settingsController = settingsController;
         this.measurementController = measurementController;
         this.IoEntryList = IoEntryList;
+        this.requestNum = 0;
     }
 
 
@@ -50,12 +53,12 @@ public class Data implements HttpHandler {
                 }
 
                 //to IORequest
-                IORequest req = new IORequest(content);
+                IORequest req = new IORequest(requestNum++,content);
                 Long enqueueTime = System.nanoTime();
 
-                //add time measurements to Measurement controller
-                measurementController.addMeasurement("arrival_time",arrival_time);
-                measurementController.addMeasurement("entry_List_arrival_time",enqueueTime);
+                //add time measurements to IO request
+                req.addTimeStamp(TIMESTAMP_NAME.STORAGE_API_ENTRY,arrival_time);
+                req.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_ENTRY,arrival_time);
 
                 //add IO Request to IoEntryList
                 IoEntryList.add(req);

@@ -7,6 +7,8 @@ import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 import server.inner_modules.data_transfer_technique.DataTransferTechniqueController;
+import server.inner_modules.transmitters.ParentTransmitter;
+import server.inner_modules.transmitters.TransmitterBuilder;
 
 import java.net.InetSocketAddress;
 
@@ -18,6 +20,7 @@ public class InnerModulesContainer {
     public MeasurementController measurementController = null;
     public SyncIORequestLinkedList ioEntryList = null;
     public DataTransferTechniqueController dataTransferTechniqueController;
+    public ParentTransmitter transmitter;
 
     public InnerModulesContainer(int portNumber){
         this.portNumber = portNumber;

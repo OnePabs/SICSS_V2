@@ -1,14 +1,21 @@
 package server.inner_modules.data_transfer_technique;
 
+import server.data_structures.ReadyLists;
 import server.data_structures.SyncIORequestLinkedList;
+import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
+import server.inner_modules.transmitters.ParentTransmitter;
+import server.inner_modules.transmitters.TransmitterBuilder;
 
 public class DataTransferTechniqueController implements Runnable{
     private StateController stateController;
     private SettingsController settingsController;
+    private MeasurementController measurementController;
     private ParentDataTransferTechnique dataTransferTechnique = null;
     private SyncIORequestLinkedList ioEntryList;
+    private ReadyLists readyLists;
+    protected ParentTransmitter transmitter;
     private boolean stop = false;
 
     public DataTransferTechniqueController(){}
@@ -44,8 +51,14 @@ public class DataTransferTechniqueController implements Runnable{
                     dataTransferTechnique.finishExecution();
                 }
 
+                //create new readyLists
+                readyLists = new ReadyLists();
+
+                //create new transmitter
+                transmitter = TransmitterBuilder.build(readyLists,stateController,settingsController,measurementController);
+
                 //create new data transfer with new settings
-                dataTransferTechnique = TechniqueBuilder.build(ioEntryList,stateController,settingsController);
+                dataTransferTechnique = TechniqueBuilder.build(ioEntryList,readyLists,stateController,settingsController);
                 Thread dtt = new Thread(dataTransferTechnique);
                 dtt.start();
 

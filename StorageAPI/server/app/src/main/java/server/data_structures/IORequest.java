@@ -4,11 +4,12 @@ import java.util.*;
 import server.enumerators.TIMESTAMP_NAME;
 
 public class IORequest {
-	
+	private long requestId;
 	private byte[] content;
-	public LinkedList<TimeStamp> timeStamps;
+	private LinkedList<TimeStamp> timeStamps;
 	
-	public IORequest(byte[] content) {
+	public IORequest(long requestId, byte[] content) {
+		this.requestId = requestId;
 		this.content = content;
 		this.timeStamps = new LinkedList<TimeStamp>();
 	}
@@ -42,14 +43,23 @@ public class IORequest {
 	//Add time stamp
 	public void addTimeStamp(TIMESTAMP_NAME name, long timeStamp)
 	{
-		this.timeStamps.add(new TimeStamp(name,timeStamp));
+		this.timeStamps.add(new TimeStamp(requestId,name,timeStamp));
 	}
 	
 	public void addTimeStamp(TIMESTAMP_NAME name) {
 		addTimeStamp(name,System.nanoTime());
 	}
 	
-	
+	public TimeStamp getTimeStamp(TIMESTAMP_NAME name){
+		for(TimeStamp tp : timeStamps){
+			if(tp.getName().equals(name)){
+				return tp;
+			}
+		}
+		return null;
+	}
+
+
 	//Completness of batch/application
 	public boolean isBatchComplete() {
 		if(getBatchCompleteByte() == (byte)0)

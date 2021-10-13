@@ -1,5 +1,7 @@
 package server.data_structures;
 
+import server.enumerators.TIMESTAMP_NAME;
+
 import java.util.Hashtable;
 import java.util.Set;
 
@@ -22,6 +24,7 @@ public class ReadyLists {
             batch.put(appId, new SyncIORequestLinkedList(appId));
         }
         applicationIORequestList = batch.get(appId);
+        request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
         applicationIORequestList.add(request);
     }
 

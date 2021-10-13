@@ -22,6 +22,7 @@ public class TechniqueA extends ParentDataTransferTechnique{
 
     @Override
     public void transmit(){
+
         System.out.println("Technique A Transmits an IO Request.");
     }
 }

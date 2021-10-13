@@ -1,6 +1,8 @@
 package server.inner_modules.data_transfer_technique;
 
+import server.data_structures.ReadyLists;
 import server.data_structures.SyncIORequestLinkedList;
+import server.endpoints.Read;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 import server.inner_modules.data_transfer_technique.techniques.*;
@@ -10,6 +12,7 @@ import server.inner_modules.service_time_creators.ServiceTimeCreatorBuilder;
 public class TechniqueBuilder {
     public static ParentDataTransferTechnique build(
             SyncIORequestLinkedList ioEntryList,
+            ReadyLists readyLists,
             StateController stateController,
             SettingsController settingsController
     ){
@@ -37,10 +40,10 @@ public class TechniqueBuilder {
         }
 
         technique.setIoEntryList(ioEntryList);
+        technique.setReadyLists(readyLists);
         technique.setStateController(stateController);
         technique.setSettingsController(settingsController);
         technique.setParentServiceTimeCreator(ServiceTimeCreatorBuilder.build(settingsController));
-
         return technique;
     }
 }

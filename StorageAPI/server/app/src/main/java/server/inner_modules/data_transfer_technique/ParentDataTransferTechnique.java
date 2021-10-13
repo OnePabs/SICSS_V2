@@ -4,9 +4,11 @@ import server.data_structures.IORequest;
 import server.data_structures.ReadyLists;
 import server.data_structures.SyncIORequestLinkedList;
 import server.enumerators.PROGRAM_STATE;
+import server.enumerators.TIMESTAMP_NAME;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 import server.inner_modules.service_time_creators.ParentServiceTimeCreator;
+import server.inner_modules.transmitters.ParentTransmitter;
 
 public class ParentDataTransferTechnique implements Runnable{
     protected String techniqueName;
@@ -14,15 +16,14 @@ public class ParentDataTransferTechnique implements Runnable{
     protected StateController stateController;
     protected ParentServiceTimeCreator parentServiceTimeCreator;
     protected ReadyLists readyLists;
+    protected ParentTransmitter transmitter;
 
     //variables for data transfer technique
     protected SyncIORequestLinkedList ioEntryList;
     private boolean isExecutionSupposedToFinish;
 
     //constructor
-    public ParentDataTransferTechnique(){
-        readyLists = new ReadyLists();
-    }
+    public ParentDataTransferTechnique(){}
 
     //SETTERS
     public void setStateController(StateController stateController){
@@ -37,7 +38,10 @@ public class ParentDataTransferTechnique implements Runnable{
     public void setParentServiceTimeCreator(ParentServiceTimeCreator parentServiceTimeCreator) {
         this.parentServiceTimeCreator = parentServiceTimeCreator;
     }
-
+    public void setTransmitter(ParentTransmitter transmitter){
+        this.transmitter = transmitter;
+    }
+    public void setReadyLists(ReadyLists readyLists){this.readyLists=readyLists;}
     //GETTERS
     public String getTechniqueName(){
         return this.techniqueName;
@@ -66,12 +70,20 @@ public class ParentDataTransferTechnique implements Runnable{
                         }
                     }
                 }else{
-                    //process and handle next IO request from ioEntryList
-                    parentServiceTimeCreator.createServiceTime();
-
                     //take request from Entry List and put it in ready lists
                     try{
+                        //Take a request from the Entry List
                         IORequest request = this.ioEntryList.take();
+                        //add timestamp to request
+                        request.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_EXIT);
+
+                        //process and handle next IO request from ioEntryList
+                        request.addTimeStamp(TIMESTAMP_NAME.SERVICE_TIME_START);
+                        parentServiceTimeCreator.createServiceTime();
+                        request.addTimeStamp(TIMESTAMP_NAME.SERVICE_TIME_END);
+
+                        //add request to ready lists
+                        request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
                         readyLists.add(request);
                         if(settingsController.getIsVerbose()){
                             StringBuilder sb = new StringBuilder();
