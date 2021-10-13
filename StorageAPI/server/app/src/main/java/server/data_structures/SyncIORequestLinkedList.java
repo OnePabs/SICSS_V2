@@ -31,7 +31,7 @@ public class SyncIORequestLinkedList {
 	}
 	
 	
-	public synchronized void addIORequest(IORequest req) {
+	public synchronized void add(IORequest req) {
 		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
 			requests.add(req);
 			if(requests.size() == 1) {
@@ -39,9 +39,14 @@ public class SyncIORequestLinkedList {
 			}
 		}
 	}
-	
-	
-	
+
+	public synchronized void add(SyncIORequestLinkedList li){
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
+			requests.addAll(li.requests);
+		}
+	}
+
+
 	/**
 	 * @return Retrives and removes the head of the linked list. waits in case of no elements in list.
 	 * @throws InterruptedException
@@ -61,52 +66,13 @@ public class SyncIORequestLinkedList {
 		}
 		return null;
 	}
-	
-	
-	public synchronized LinkedList<IORequest> getAndRemoveAllRequests(){
-		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
-			LinkedList<IORequest> tempRequests = requests;
-			requests = new LinkedList<IORequest>();
-			return tempRequests;
-		}
-		return null;
-	}
-	
-	
-	/**
-	 * @param appId
-	 * @return all requests with appId that are in this linked list
-	 */
-	public synchronized LinkedList<IORequest> getAndRemoveAllRequestsWithAppId(byte appId){
-		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
-			LinkedList<IORequest> appRequests = new LinkedList<IORequest>();
 
-			int maxIndex = requests.size();
-			int idx = 0;
-			while (idx < maxIndex) {
-				IORequest req = requests.get(idx);
-				if (req.getAppId() == appId) {
-					appRequests.add(req);
-					requests.remove(idx);
-					maxIndex--; //one less element in list
-				} else {
-					idx++;//check the next request
-				}
-			}
-			return appRequests;
-		}
-		return null;
-	}
-	
-	
 	public void clearList() {
 		if(stateController.getCurrentState() == PROGRAM_STATE.STOPPED) {
 			requests = new LinkedList<IORequest>();
 		}
 	}
-	
-	
-	
+
 	public synchronized void printIds() {
 		System.out.print("Printing all IO Requests appIds in linkedlist ");
 		System.out.printf("0x%02X: ", this.linkedListId);

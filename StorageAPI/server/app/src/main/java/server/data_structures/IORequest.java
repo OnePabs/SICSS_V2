@@ -5,7 +5,7 @@ import server.enumerators.TIMESTAMP_NAME;
 
 public class IORequest {
 	
-	public byte[] content;
+	private byte[] content;
 	public LinkedList<TimeStamp> timeStamps;
 	
 	public IORequest(byte[] content) {
@@ -31,7 +31,7 @@ public class IORequest {
 	}
 	
 	public byte[] getContent() {
-		return content;
+		return Arrays.copyOf(content,content.length);
 	}
 	
 	public LinkedList<TimeStamp> getTimeStamps(){

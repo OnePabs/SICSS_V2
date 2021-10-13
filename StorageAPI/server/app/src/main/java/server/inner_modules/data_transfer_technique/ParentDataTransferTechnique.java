@@ -1,6 +1,7 @@
 package server.inner_modules.data_transfer_technique;
 
 import server.data_structures.IORequest;
+import server.data_structures.ReadyLists;
 import server.data_structures.SyncIORequestLinkedList;
 import server.enumerators.PROGRAM_STATE;
 import server.inner_modules.SettingsController;
@@ -12,13 +13,16 @@ public class ParentDataTransferTechnique implements Runnable{
     protected SettingsController settingsController;
     protected StateController stateController;
     protected ParentServiceTimeCreator parentServiceTimeCreator;
+    protected ReadyLists readyLists;
 
     //variables for data transfer technique
     protected SyncIORequestLinkedList ioEntryList;
     private boolean isExecutionSupposedToFinish;
 
     //constructor
-    public ParentDataTransferTechnique(){}
+    public ParentDataTransferTechnique(){
+        readyLists = new ReadyLists();
+    }
 
     //SETTERS
     public void setStateController(StateController stateController){
@@ -34,17 +38,16 @@ public class ParentDataTransferTechnique implements Runnable{
         this.parentServiceTimeCreator = parentServiceTimeCreator;
     }
 
-
     //GETTERS
     public String getTechniqueName(){
         return this.techniqueName;
     }
 
-    //METHODS used within RUN  (these must be @Override by child classes
+
+    //METHODS that MUST be Overridden by child
     public boolean isTransferConditionSatisfied(){return true;} //condition for sending ready IO requests
-    public void handle(){}
     public void transmit(){}
-    public void clear(){}
+
 
 
     //RUN METHOD. DO NOT Override
@@ -65,7 +68,24 @@ public class ParentDataTransferTechnique implements Runnable{
                 }else{
                     //process and handle next IO request from ioEntryList
                     parentServiceTimeCreator.createServiceTime();
-                    handle();
+
+                    //take request from Entry List and put it in ready lists
+                    try{
+                        IORequest request = this.ioEntryList.take();
+                        readyLists.add(request);
+                        if(settingsController.getIsVerbose()){
+                            StringBuilder sb = new StringBuilder();
+                            for (byte b : request.getContent()) {
+                                sb.append(String.format("%02X ", b));
+                            }
+                            System.out.println("Took IO Request from IOEntryList and added it to readylists. Body:");
+                            System.out.println("IORequest Body taken by data transfer technique from readylist: "+ sb.toString());
+                        }
+                    }catch (Exception e){
+                        if(settingsController.getIsVerbose()) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }else{
                 //State is NOT running. Transfer technique is not allowed to run
@@ -76,7 +96,7 @@ public class ParentDataTransferTechnique implements Runnable{
                 }
             }
         }
-        clear();
+        readyLists.clear();
         if(settingsController.getIsVerbose()){
             System.out.println("Data Transfer Technique finished executing. Thread ends");
         }

@@ -58,7 +58,7 @@ public class Data implements HttpHandler {
                 measurementController.addMeasurement("entry_List_arrival_time",enqueueTime);
 
                 //add IO Request to IoEntryList
-                IoEntryList.addIORequest(req);
+                IoEntryList.add(req);
                 returnCode = 200;
             }catch(Exception e){
                 if(settingsController.getIsVerbose()){

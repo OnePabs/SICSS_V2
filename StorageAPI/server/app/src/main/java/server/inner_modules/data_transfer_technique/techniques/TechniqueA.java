@@ -21,27 +21,7 @@ public class TechniqueA extends ParentDataTransferTechnique{
     }
 
     @Override
-    public void handle(){
-        System.out.println("Technique A handling an IO Request.");
-        try{
-            request = this.ioEntryList.take();
-            String reqBody = new String(request.content, StandardCharsets.UTF_8);
-            System.out.println("Technique A - Request body: " + reqBody);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-    }
-
-    @Override
     public void transmit(){
         System.out.println("Technique A Transmits an IO Request.");
     }
-
-    @Override
-    public void clear(){
-        System.out.println("Technique A clear: nothing to clear");
-    }
-
 }
