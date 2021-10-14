@@ -1,10 +1,7 @@
 package server.inner_modules;
 
-import server.data_structures.MeasurementList;
 import server.data_structures.TimeStamp;
 import server.enumerators.PROGRAM_STATE;
-
-import java.util.Hashtable;
 import java.util.LinkedList;
 
 public class MeasurementController {
@@ -13,6 +10,7 @@ public class MeasurementController {
 
     public MeasurementController(StateController stateController){
         this.stateController = stateController;
+        measurements = new LinkedList<TimeStamp>();
     }
 
     public boolean addMeasurement(TimeStamp tp){
@@ -20,5 +18,14 @@ public class MeasurementController {
             measurements.add(tp);
         }
         return false;
+    }
+
+    public TimeStamp[] getMeasurements(){
+        System.out.println("Measurement controller num measurements: " + measurements.size());
+        return measurements.toArray(new TimeStamp[measurements.size()]);
+    }
+
+    public void clear(){
+        measurements.clear();
     }
 }

@@ -97,4 +97,24 @@ public class StorageAPIInterface {
         }
         return false;
 	}
+	
+	public String getMeasurements() {
+		URI uri = URI.create(address + "/measurements");
+		HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
+		try {
+        	HttpResponse<String>  response = client.send(request,BodyHandlers.ofString());
+        	if(response.statusCode() == 200) {
+        		return response.body();
+        	}else {
+        		System.out.println("getMeasurements: Error code received: " + response.statusCode());
+        	}
+        }catch(IOException ioe){
+        	
+        }catch(InterruptedException ie) {
+        	
+        }
+        return "";
+	}
 }

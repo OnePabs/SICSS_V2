@@ -7,6 +7,7 @@ import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 import server.inner_modules.data_transfer_technique.techniques.*;
 import server.inner_modules.service_time_creators.ServiceTimeCreatorBuilder;
+import server.inner_modules.transmitters.ParentTransmitter;
 
 
 public class TechniqueBuilder {
@@ -14,7 +15,8 @@ public class TechniqueBuilder {
             SyncIORequestLinkedList ioEntryList,
             ReadyLists readyLists,
             StateController stateController,
-            SettingsController settingsController
+            SettingsController settingsController,
+            ParentTransmitter transmitter
     ){
         ParentDataTransferTechnique technique;
         String techniqueName = settingsController.getSetting("dataTransferTechnique").toString();
@@ -44,6 +46,7 @@ public class TechniqueBuilder {
         technique.setStateController(stateController);
         technique.setSettingsController(settingsController);
         technique.setParentServiceTimeCreator(ServiceTimeCreatorBuilder.build(settingsController));
+        technique.setTransmitter(transmitter);
         return technique;
     }
 }

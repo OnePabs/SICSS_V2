@@ -56,7 +56,7 @@ public class DataTransferTechniqueController implements Runnable{
                 transmitter = TransmitterBuilder.build(readyLists,stateController,settingsController,measurementController);
 
                 //create new data transfer with new settings
-                dataTransferTechnique = TechniqueBuilder.build(ioEntryList,readyLists,stateController,settingsController);
+                dataTransferTechnique = TechniqueBuilder.build(ioEntryList,readyLists,stateController,settingsController,transmitter);
                 Thread dtt = new Thread(dataTransferTechnique);
                 dtt.start();
 

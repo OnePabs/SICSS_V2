@@ -79,6 +79,23 @@ public class StorageAPITest {
 		
 		//send data
 		assertEquals(sapi.sendData("hello world!"),true);
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		assertEquals(sapi.stop(),true);
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		String measurements = sapi.getMeasurements();
+		System.out.println("Obtained measurements: " + measurements);
+		
+		
 		System.out.println("Test completed successfully");
 	}
 }
