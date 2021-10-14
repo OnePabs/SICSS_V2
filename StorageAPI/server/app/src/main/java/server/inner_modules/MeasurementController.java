@@ -11,9 +11,7 @@ public class MeasurementController {
     private StateController stateController;
     private LinkedList<TimeStamp> measurements;
 
-    public MeasurementController(){}
-
-    public void setStateController(StateController stateController){
+    public MeasurementController(StateController stateController){
         this.stateController = stateController;
     }
 

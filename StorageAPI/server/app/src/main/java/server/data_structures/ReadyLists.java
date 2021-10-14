@@ -1,27 +1,30 @@
 package server.data_structures;
 
 import server.enumerators.TIMESTAMP_NAME;
+import server.inner_modules.StateController;
 
 import java.util.Hashtable;
 import java.util.Set;
 
 public class ReadyLists {
     private Hashtable<Byte,Hashtable<Byte,SyncIORequestLinkedList>> readylists;
+    private StateController stateController;
 
-    public ReadyLists(){
+    public ReadyLists(StateController stateController){
         readylists = new Hashtable<Byte,Hashtable<Byte,SyncIORequestLinkedList>>();
+        this.stateController = stateController;
     }
 
     synchronized public void add(IORequest request, Byte batchId, Byte appId){
         SyncIORequestLinkedList applicationIORequestList;
-        if(!readylists.containsKey(batchId)){
+        if(!readylists.containsKey(batchId) || readylists.get(batchId)==null){
             //batch does not exist. create it
             readylists.put(batchId, new Hashtable<Byte,SyncIORequestLinkedList>());
         }
         Hashtable<Byte,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
-        if(!batch.containsKey(appId)){
+        if(!batch.containsKey(appId) || batch.get(appId)==null){
             //batch does not have an application with that id. create it
-            batch.put(appId, new SyncIORequestLinkedList(appId));
+            batch.put(appId, new SyncIORequestLinkedList(appId,stateController));
         }
         applicationIORequestList = batch.get(appId);
         request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
@@ -43,7 +46,7 @@ public class ReadyLists {
     }
 
     synchronized public SyncIORequestLinkedList getAndRemoveAllFromBatch(Byte batchId){
-        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList(batchId);
+        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList(batchId,stateController);
         if(readylists.containsKey(batchId)){
             Hashtable<Byte,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
             Set<Byte> appListIds = batch.keySet();
@@ -55,7 +58,7 @@ public class ReadyLists {
     }
 
     synchronized public SyncIORequestLinkedList getAndRemoveFromAllBatches(){
-        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList((byte)0);
+        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList((byte)0,stateController);
         Set<Byte> batchesIds = readylists.keySet();
         for(Byte batchId : batchesIds){
             requestsList.add(getAndRemoveAllFromBatch(batchId));

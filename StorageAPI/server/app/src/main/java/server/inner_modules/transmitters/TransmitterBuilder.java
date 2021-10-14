@@ -1,7 +1,6 @@
 package server.inner_modules.transmitters;
 
 import server.data_structures.ReadyLists;
-import server.data_structures.SyncIORequestLinkedList;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
@@ -19,15 +18,11 @@ public class TransmitterBuilder {
         transmitterType = transmitterType.toUpperCase();
         switch(transmitterType){
             case "STUB":
-                transmitter = new StubTransmitter();
+                transmitter = new StubTransmitter(stateController,settingsController,readyLists,measurementController);
                 break;
             default:
-                transmitter = new ParentTransmitter();
+                transmitter = new ParentTransmitter(stateController,settingsController,readyLists,measurementController);
         }
-
-        transmitter.setReadyLists(readyLists);
-        transmitter.setStateController(stateController);
-        transmitter.setMeasurementController(measurementController);
         return transmitter;
     }
 }

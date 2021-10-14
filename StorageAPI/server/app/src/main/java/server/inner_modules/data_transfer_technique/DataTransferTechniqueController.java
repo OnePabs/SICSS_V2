@@ -11,25 +11,23 @@ import server.inner_modules.transmitters.TransmitterBuilder;
 public class DataTransferTechniqueController implements Runnable{
     private StateController stateController;
     private SettingsController settingsController;
-    private MeasurementController measurementController;
     private ParentDataTransferTechnique dataTransferTechnique = null;
     private SyncIORequestLinkedList ioEntryList;
     private ReadyLists readyLists;
     protected ParentTransmitter transmitter;
+    protected MeasurementController measurementController;
     private boolean stop = false;
 
-    public DataTransferTechniqueController(){}
-
-    public void setSettingsController(SettingsController settingsController) {
-        this.settingsController = settingsController;
-    }
-
-    public void setStateController(StateController stateController){
+    public DataTransferTechniqueController(
+            StateController stateController,
+            SettingsController settingsController,
+            SyncIORequestLinkedList ioEntryList,
+            MeasurementController measurementController
+    ){
         this.stateController = stateController;
-    }
-
-    public void setIoEntryList(SyncIORequestLinkedList ioEntryList) {
+        this.settingsController = settingsController;
         this.ioEntryList = ioEntryList;
+        this.measurementController = measurementController;
     }
 
 
@@ -52,7 +50,7 @@ public class DataTransferTechniqueController implements Runnable{
                 }
 
                 //create new readyLists
-                readyLists = new ReadyLists();
+                readyLists = new ReadyLists(stateController);
 
                 //create new transmitter
                 transmitter = TransmitterBuilder.build(readyLists,stateController,settingsController,measurementController);

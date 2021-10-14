@@ -38,6 +38,10 @@ public class IORequest {
 	public LinkedList<TimeStamp> getTimeStamps(){
 		return this.timeStamps;
 	}
+
+	public long getRequestId(){
+		return this.requestId;
+	}
 	
 	
 	//Add time stamp

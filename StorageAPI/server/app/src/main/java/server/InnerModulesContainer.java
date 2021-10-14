@@ -42,17 +42,12 @@ public class InnerModulesContainer {
     public boolean initInnerModules(){
         stateCtrl = new StateController();
         settingsCtrl = new SettingsController();
-        measurementController = new MeasurementController();
-        ioEntryList = new SyncIORequestLinkedList((byte)0);
-        dataTransferTechniqueController = new DataTransferTechniqueController();
-
         stateCtrl.setSttingsController(settingsCtrl);
         settingsCtrl.setStateController(stateCtrl);
-        measurementController.setStateController(stateCtrl);
-        ioEntryList.setStateController(stateCtrl);
-        dataTransferTechniqueController.setStateController(stateCtrl);
-        dataTransferTechniqueController.setSettingsController(settingsCtrl);
-        dataTransferTechniqueController.setIoEntryList(ioEntryList);
+
+        ioEntryList = new SyncIORequestLinkedList((byte)0,stateCtrl);
+        measurementController = new MeasurementController(stateCtrl);
+        dataTransferTechniqueController = new DataTransferTechniqueController(stateCtrl,settingsCtrl,ioEntryList,measurementController);
 
         return true;
     }

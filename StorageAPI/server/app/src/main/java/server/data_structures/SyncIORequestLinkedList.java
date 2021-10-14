@@ -12,15 +12,11 @@ public class SyncIORequestLinkedList {
 	private LinkedList<IORequest> requests;
 	private StateController stateController;
 	
-	public SyncIORequestLinkedList(byte linkedListId) {
+	public SyncIORequestLinkedList(byte linkedListId, StateController stateController) {
 		this.linkedListId = linkedListId;
 		requests = new LinkedList<IORequest>();
-	}
-
-	public void setStateController(StateController stateController){
 		this.stateController = stateController;
 	}
-	
 	
 	public byte getLinkedListId() {
 		return linkedListId;
@@ -32,7 +28,7 @@ public class SyncIORequestLinkedList {
 	
 	
 	public synchronized void add(IORequest req) {
-		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING && req!=null) {
 			requests.add(req);
 			if(requests.size() == 1) {
 				notifyAll();
@@ -41,7 +37,7 @@ public class SyncIORequestLinkedList {
 	}
 
 	public synchronized void add(SyncIORequestLinkedList li){
-		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING) {
+		if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING && li!=null &&li.getSize()>0) {
 			requests.addAll(li.requests);
 		}
 	}

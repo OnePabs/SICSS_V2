@@ -57,13 +57,25 @@ public class StorageAPITest {
 				+ "\"serviceTimeDistribution\":\"CONSTANT\","
 				+ "\"serviceTimeDistributionSettings\":3000,"
 				+"\"useSleepForMockProcessing\":true"
+				+ "\"transmitter\":\"stub\""
 				+ "}";
 		
 		//change settings
 		assertEquals(sapi.changeSettings(jr),true);
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 		//start
 		assertEquals(sapi.start(),true);
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		//send data
 		assertEquals(sapi.sendData("hello world!"),true);

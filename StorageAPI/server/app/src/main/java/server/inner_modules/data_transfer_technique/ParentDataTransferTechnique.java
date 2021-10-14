@@ -84,17 +84,18 @@ public class ParentDataTransferTechnique implements Runnable{
 
                         //add request to ready lists
                         request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
+
                         readyLists.add(request);
                         if(settingsController.getIsVerbose()){
                             StringBuilder sb = new StringBuilder();
                             for (byte b : request.getContent()) {
                                 sb.append(String.format("%02X ", b));
                             }
-                            System.out.println("Took IO Request from IOEntryList and added it to readylists. Body:");
-                            System.out.println("IORequest Body taken by data transfer technique from readylist: "+ sb.toString());
+                            System.out.println("Took IORequest from IOEntryList and put it in readyLists. body: "+ sb.toString());
                         }
                     }catch (Exception e){
                         if(settingsController.getIsVerbose()) {
+                            System.out.println("Error at Parent Data Transfer Technique");
                             e.printStackTrace();
                         }
                     }

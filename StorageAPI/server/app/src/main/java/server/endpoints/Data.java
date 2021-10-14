@@ -35,7 +35,7 @@ public class Data implements HttpHandler {
         Long arrival_time = System.nanoTime();
 
         if(settingsController.getIsVerbose()){
-            System.out.println("data endpoint reached");
+            System.out.println("data endpoint reached. IORequest Id: " + requestNum);
         }
 
         int returnCode;
@@ -43,14 +43,6 @@ public class Data implements HttpHandler {
             InputStream input_stream = t.getRequestBody();
             try{
                 byte[] content = input_stream.readAllBytes();
-                if(settingsController.getIsVerbose()){
-                    System.out.print("The byte content received is: ");
-                    StringBuilder sb = new StringBuilder();
-                    for (byte b : content) {
-                        sb.append(String.format("%02X ", b));
-                    }
-                    System.out.println(sb.toString());
-                }
 
                 //to IORequest
                 IORequest req = new IORequest(requestNum++,content);
@@ -58,7 +50,7 @@ public class Data implements HttpHandler {
 
                 //add time measurements to IO request
                 req.addTimeStamp(TIMESTAMP_NAME.STORAGE_API_ENTRY,arrival_time);
-                req.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_ENTRY,arrival_time);
+                req.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_ENTRY,enqueueTime);
 
                 //add IO Request to IoEntryList
                 IoEntryList.add(req);
