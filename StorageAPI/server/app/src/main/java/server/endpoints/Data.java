@@ -40,6 +40,7 @@ public class Data implements HttpHandler {
 
         int returnCode;
         if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
+        	System.out.println("data endpoint: progran us running");
             InputStream input_stream = t.getRequestBody();
             try{
                 byte[] content = input_stream.readAllBytes();
@@ -54,6 +55,7 @@ public class Data implements HttpHandler {
 
                 //add IO Request to IoEntryList
                 IoEntryList.add(req);
+                System.out.println("data endpoint: added request to entry list");
                 returnCode = 200;
             }catch(Exception e){
                 if(settingsController.getIsVerbose()){

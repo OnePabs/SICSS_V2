@@ -7,15 +7,18 @@ import java.nio.charset.StandardCharsets;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import server.inner_modules.SettingsController;
+import server.inner_modules.StateController;
 
 
 
 public class Settings implements HttpHandler {
 	private SettingsController settingsCtrl;
+	private StateController stateController;
 	
-	public Settings(SettingsController settingsCtrl) {
+	public Settings(StateController stateController, SettingsController settingsCtrl) {
 		super();
 		this.settingsCtrl = settingsCtrl;
+		this.stateController = stateController;
 	}
 	
 	@Override
@@ -23,7 +26,8 @@ public class Settings implements HttpHandler {
 		if(settingsCtrl.getIsVerbose()){
 			System.out.println("settings endpoint reached. isVerbose=true");
 		}
-
+		
+		
 		InputStream input_stream = t.getRequestBody();
 		int returnCode;
 

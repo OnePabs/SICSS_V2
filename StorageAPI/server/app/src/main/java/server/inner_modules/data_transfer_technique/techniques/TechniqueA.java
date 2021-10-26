@@ -10,6 +10,7 @@ public class TechniqueA extends ParentDataTransferTechnique{
 
     public TechniqueA() {
         super();
+        techniqueName = "techniqueA";
     }
 
     @Override

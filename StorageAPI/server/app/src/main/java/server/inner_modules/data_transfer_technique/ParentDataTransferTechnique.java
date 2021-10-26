@@ -57,6 +57,13 @@ public class ParentDataTransferTechnique implements Runnable{
     //RUN METHOD. DO NOT Override
     @Override
     public void run() {
+    	
+    	this.isExecutionSupposedToFinish = false;
+    	
+    	if(settingsController.getIsVerbose()){
+    		System.out.println("Data transfer " + this.techniqueName + " started");
+    	}
+    	
         while(!isExecutionSupposedToFinish){
             if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
                 //data transfer technique is allowed to run
@@ -74,6 +81,8 @@ public class ParentDataTransferTechnique implements Runnable{
                     try{
                         //Take a request from the Entry List
                         IORequest request = this.ioEntryList.take();
+                        System.out.println("data transfer took from entry list");
+                        
                         //add timestamp to request
                         request.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_EXIT);
 
@@ -86,13 +95,16 @@ public class ParentDataTransferTechnique implements Runnable{
                         request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
 
                         readyLists.add(request);
+                        System.out.println("data transfer technique put request in readyLists.");
+                        /*
                         if(settingsController.getIsVerbose()){
                             StringBuilder sb = new StringBuilder();
                             for (byte b : request.getContent()) {
                                 sb.append(String.format("%02X ", b));
                             }
-                            System.out.println("Took IORequest from IOEntryList and put it in readyLists. body: "+ sb.toString());
+                            System.out.println("data transfer technique put request in readyLists. body: "+ sb.toString());
                         }
+                        */
                     }catch (Exception e){
                         if(settingsController.getIsVerbose()) {
                             System.out.println("Error at Parent Data Transfer Technique");
@@ -103,7 +115,7 @@ public class ParentDataTransferTechnique implements Runnable{
             }else{
                 //State is NOT running. Transfer technique is not allowed to run
                 try{
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -117,7 +129,7 @@ public class ParentDataTransferTechnique implements Runnable{
 
     public void finishExecution(){
         //ends the execution of the data transfer thread
-        isExecutionSupposedToFinish = true;
+        this.isExecutionSupposedToFinish = true;
     }
 
 }

@@ -11,7 +11,7 @@ import server.inner_modules.transmitters.TransmitterBuilder;
 public class DataTransferTechniqueController implements Runnable{
     private StateController stateController;
     private SettingsController settingsController;
-    private ParentDataTransferTechnique dataTransferTechnique = null;
+    private ParentDataTransferTechnique dataTransferTechnique;
     private SyncIORequestLinkedList ioEntryList;
     private ReadyLists readyLists;
     protected ParentTransmitter transmitter;
@@ -28,6 +28,8 @@ public class DataTransferTechniqueController implements Runnable{
         this.settingsController = settingsController;
         this.ioEntryList = ioEntryList;
         this.measurementController = measurementController;
+        
+        dataTransferTechnique = null;
     }
 
 
@@ -46,6 +48,9 @@ public class DataTransferTechniqueController implements Runnable{
 
                 //stop running data transfer technique
                 if(dataTransferTechnique != null){
+                	if(settingsController.getIsVerbose()){
+                		System.out.println("Data controller finished data transfer execution");
+                	}
                     dataTransferTechnique.finishExecution();
                 }
 

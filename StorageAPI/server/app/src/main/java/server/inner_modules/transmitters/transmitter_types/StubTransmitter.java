@@ -41,6 +41,9 @@ public class StubTransmitter extends ParentTransmitter {
 
     @Override
     public void transmit(SyncIORequestLinkedList requests){
+    	if(settingsController.getIsVerbose()){
+                System.out.println("Transmitting SyncIORequestLinkedList");
+        }
         if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
             int numRequests = requests.getSize();
             for(int i=0;i<numRequests;i++){

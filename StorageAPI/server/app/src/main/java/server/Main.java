@@ -12,10 +12,11 @@ import server.inner_modules.*;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("Storage API Version 2");
+		int port = 8080;
+		System.out.println("Storage API Version 2. Running on port: " + String.valueOf(8080));
 		
 		//create inner modules
-		InnerModulesContainer ic = new InnerModulesContainer(8080);
+		InnerModulesContainer ic = new InnerModulesContainer(port);
 		ic.init();
 		ic.start();
 	}
