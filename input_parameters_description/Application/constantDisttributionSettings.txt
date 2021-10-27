@@ -1,0 +1,3 @@
+Constant distribution obligatory params
+	//the value of the constant is passed as the object value to key interGenerationTimeDistributionSettings
+	//this will change in the future

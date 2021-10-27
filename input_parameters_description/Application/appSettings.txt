@@ -1,0 +1,12 @@
+//////////////////////
+/// APPLICATION //////
+//////////////////////
+Obligatory Params
+	String receiverAddress
+	String interGenerationTimeDistribution
+	object interGenerationTimeDistributionSettings
+
+
+Optional Params
+	boolean isVerbose
+	boolean useSleepForMockProcessing

@@ -1,0 +1,8 @@
+Eponential Distribution Parameters
+
+Obligatory Parameters:
+	int lambda: Mean to the exponential distribution
+	
+
+Optional Parameters
+	long seed: seed to the Random() object used for random number generation
