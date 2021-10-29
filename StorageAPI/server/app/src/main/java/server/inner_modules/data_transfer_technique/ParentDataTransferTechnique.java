@@ -49,6 +49,7 @@ public class ParentDataTransferTechnique implements Runnable{
 
 
     //METHODS that MUST be Overridden by child
+    public boolean initialize(){return true;}
     public boolean isTransferConditionSatisfied(){return true;} //condition for sending ready IO requests
     public void transmit(){}
 
@@ -63,39 +64,39 @@ public class ParentDataTransferTechnique implements Runnable{
     	if(settingsController.getIsVerbose()){
     		System.out.println("Data transfer " + this.techniqueName + " started");
     	}
-    	
-        while(!isExecutionSupposedToFinish){
-            if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
-                //data transfer technique is allowed to run
-                if(isTransferConditionSatisfied()){
-                    //transmit data
-                    try{
-                        transmit();
-                    }catch(Exception e){
-                        if(settingsController.getIsVerbose()){
-                            e.printStackTrace();
+    	if(initialize()){
+            while(!isExecutionSupposedToFinish){
+                if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
+                    //data transfer technique is allowed to run
+                    if(isTransferConditionSatisfied()){
+                        //transmit data
+                        try{
+                            transmit();
+                        }catch(Exception e){
+                            if(settingsController.getIsVerbose()){
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                }else{
-                    //take request from Entry List and put it in ready lists
-                    try{
-                        //Take a request from the Entry List
-                        IORequest request = this.ioEntryList.take();
-                        System.out.println("data transfer took from entry list");
-                        
-                        //add timestamp to request
-                        request.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_EXIT);
+                    }else{
+                        //take request from Entry List and put it in ready lists
+                        try{
+                            //Take a request from the Entry List
+                            IORequest request = this.ioEntryList.take();
+                            System.out.println("data transfer took from entry list");
 
-                        //process and handle next IO request from ioEntryList
-                        request.addTimeStamp(TIMESTAMP_NAME.SERVICE_TIME_START);
-                        parentServiceTimeCreator.createServiceTime();
-                        request.addTimeStamp(TIMESTAMP_NAME.SERVICE_TIME_END);
+                            //add timestamp to request
+                            request.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_EXIT);
 
-                        //add request to ready lists
-                        request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
+                            //process and handle next IO request from ioEntryList
+                            request.addTimeStamp(TIMESTAMP_NAME.SERVICE_TIME_START);
+                            parentServiceTimeCreator.createServiceTime();
+                            request.addTimeStamp(TIMESTAMP_NAME.SERVICE_TIME_END);
 
-                        readyLists.add(request);
-                        System.out.println("data transfer technique put request in readyLists.");
+                            //add request to ready lists
+                            request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
+
+                            readyLists.add(request);
+                            System.out.println("data transfer technique put request in readyLists.");
                         /*
                         if(settingsController.getIsVerbose()){
                             StringBuilder sb = new StringBuilder();
@@ -105,22 +106,28 @@ public class ParentDataTransferTechnique implements Runnable{
                             System.out.println("data transfer technique put request in readyLists. body: "+ sb.toString());
                         }
                         */
-                    }catch (Exception e){
-                        if(settingsController.getIsVerbose()) {
-                            System.out.println("Error at Parent Data Transfer Technique");
-                            e.printStackTrace();
+                        }catch (Exception e){
+                            if(settingsController.getIsVerbose()) {
+                                System.out.println("Error at Parent Data Transfer Technique");
+                                e.printStackTrace();
+                            }
                         }
                     }
-                }
-            }else{
-                //State is NOT running. Transfer technique is not allowed to run
-                try{
-                    Thread.sleep(10);
-                }catch(Exception e){
-                    e.printStackTrace();
+                }else{
+                    //State is NOT running. Transfer technique is not allowed to run
+                    try{
+                        Thread.sleep(10);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
+        }else{
+            if(settingsController.getIsVerbose()){
+                System.out.println("Data transfer technique unable to initialize...");
+            }
         }
+
         readyLists.clear();
         if(settingsController.getIsVerbose()){
             System.out.println("Data Transfer Technique finished executing. Thread ends");

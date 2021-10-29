@@ -1,5 +1,6 @@
 package enumerators;
 
 public enum DISTRIBUTION {
-    CONSTANT
+    CONSTANT,
+    GEOMETRIC
 }

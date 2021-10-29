@@ -1,0 +1,12 @@
+Obligatory Params
+	String dataTransferTechnique
+	Object dataTransferTechniqueSettings
+	String serviceTimeDistribution
+	Object serviceTimeDistributionSettings
+	    
+	String transmitter
+
+
+Optional Params
+	boolean isVerbose
+	boolean useSleepForMockProcessing

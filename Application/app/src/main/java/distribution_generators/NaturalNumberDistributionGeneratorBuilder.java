@@ -15,6 +15,9 @@ public class NaturalNumberDistributionGeneratorBuilder {
             case CONSTANT:
                 generator = new NaturalConstantGenerator(settingsController);
                 break;
+            case GEOMETRIC:
+                generator = new NaturalGeometricGenerator(settingsController);
+                break;
             default:
                 generator = null;
         }
