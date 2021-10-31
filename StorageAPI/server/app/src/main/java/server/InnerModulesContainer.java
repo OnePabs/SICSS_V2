@@ -60,6 +60,7 @@ public class InnerModulesContainer {
             server.createContext("/stop", new Stop(stateCtrl,settingsCtrl));
             server.createContext("/data", new Data(stateCtrl,settingsCtrl,measurementController, ioEntryList));
             server.createContext("/measurements", new Measurements(stateCtrl,settingsCtrl,measurementController));
+            server.createContext("/clear", new Clear(stateCtrl,settingsCtrl,measurementController,ioEntryList,dataTransferTechniqueController));
             server.setExecutor(null);
             return true;
         }catch(Exception e){

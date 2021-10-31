@@ -1,6 +1,9 @@
 package Experiment_Controller;
 
 import org.testng.annotations.*;
+
+import common.StorageAPIInterface;
+
 import static org.testng.Assert.*;
 
 public class StorageAPITest {

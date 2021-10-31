@@ -21,6 +21,9 @@ public class TechniqueB extends ParentDataTransferTechnique {
         }
 
         period = (Long)dtSettings.get("period");
+        if(settingsController.getIsVerbose()){
+            System.out.println("Technique B period: " + period + ". value of period setting: " + dtSettings.get("period").toString());
+        }
         return true;
     }
 
@@ -30,6 +33,7 @@ public class TechniqueB extends ParentDataTransferTechnique {
             periodStartTime = Long.valueOf(System.currentTimeMillis());
             return false;
         }else if((System.currentTimeMillis() - periodStartTime) > period){
+            periodStartTime = System.currentTimeMillis();
             return true;
         }else{
             return false;
@@ -40,13 +44,19 @@ public class TechniqueB extends ParentDataTransferTechnique {
     public void transmit(){
         SyncIORequestLinkedList requestToTransmit = readyLists.getAndRemoveFromAllBatches();
         if(requestToTransmit == null){
-            System.out.println("requestToTransmit is null");
+            System.out.println("Technique B: requestToTransmit is null");
+            return;
         }
+        int size = requestToTransmit.getSize();
 
         if(transmitter == null){
-            System.out.println("transmitter null");
+            System.out.println("Technique B: transmitter null");
+            return;
         }
         transmitter.transmit(requestToTransmit);
-        System.out.println("Technique B transmitted IO Requests.");
+        if(settingsController.getIsVerbose()){
+            System.out.println("Technique B transmitted " + size + " IO Requests.");
+        }
+
     }
 }

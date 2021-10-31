@@ -1,16 +1,43 @@
 package Experiment_Controller;
 
+import common.ApplicationInterface;
+import common.StorageAPIInterface;
+import scripts.*;
+
 public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 		
+		String storageApiAddress = "http://localhost:8080";
+		String applicationAddress = "http://localhost:8000";
+		
+		long interArrivalTime = (long)2000;
+		long serviceTime = (long)1600;
+		Long[] runtimes = {(long) 10};
+		int runTimesConversionFactor = 1000;
+		String resultsFileName = "/home/juancontreras/Downloads";
+		boolean isVerbose = true;
+		ParentScript script = new TechAConstant(interArrivalTime,
+				serviceTime,
+				runtimes,
+				runTimesConversionFactor,
+				storageApiAddress,
+				applicationAddress,
+				resultsFileName,
+				isVerbose
+				);
+		script.run();
+		
+		/*
+		
 		// Storage API
 		String jr = "{"
 				+ "\"isVerbose\":true,"
-				+ "\"dataTransferTechnique\":\"a\","
+				+ "\"dataTransferTechnique\":\"b\","
+				+ "\"dataTransferTechniqueSettings\":{\"period\":3000},"
 				+ "\"serviceTimeDistribution\":\"CONSTANT\","
-				+ "\"serviceTimeDistributionSettings\":40,"
+				+ "\"serviceTimeDistributionSettings\":1600,"
 				+"\"useSleepForMockProcessing\":true,"
 				+ "\"transmitter\":\"stub\""
 				+ "}";
@@ -21,7 +48,7 @@ public class Main {
 		}
 		
 		try {
-			Thread.sleep(500);
+			Thread.sleep(3000);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -35,7 +62,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		/*
+		
 		//send data
 		sapi.sendData("hello world!");
 		try {
@@ -50,7 +77,7 @@ public class Main {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		*/
+		
 		
 		
 		//Application
@@ -59,7 +86,7 @@ public class Main {
 				+ "\"isVerbose\":true,"
 				+"\"useSleepForMockProcessing\":true,"
 				+"\"interGenerationTimeDistribution\":\"CONSTANT\","
-				+"\"interGenerationTimeDistributionSettings\":50"
+				+"\"interGenerationTimeDistributionSettings\":2000"
 				+ "}";
 		
 		ApplicationInterface ai = new ApplicationInterface("http://localhost:8000");
@@ -75,7 +102,7 @@ public class Main {
 		ai.start();
 		
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(10000);
 		}catch(Exception e) {
 			
 		}
@@ -100,6 +127,8 @@ public class Main {
 		
 		String measurements = sapi.getMeasurements();
 		System.out.println("Obtained measurements: " + measurements);
+		
+		*/
 		
 	}
 

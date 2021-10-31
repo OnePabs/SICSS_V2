@@ -70,4 +70,10 @@ public class DataTransferTechniqueController implements Runnable{
             }
         }
     }
+
+    public void clear(){
+        if(dataTransferTechnique != null){
+            dataTransferTechnique.readyLists.clear();
+        }
+    }
 }
