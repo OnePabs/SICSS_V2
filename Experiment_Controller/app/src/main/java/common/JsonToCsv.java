@@ -1,5 +1,10 @@
 package common;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.*;
 
 import common.TIMESTAMP_NAME;
@@ -10,48 +15,236 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class JsonToCsv {
+	private LinkedList<MeasurementEntry> measurements;
+	private LinkedList<IORequest> requests;
+	private boolean isVerbose;
 	
-	public static void writeMeasurementsAndCalculations(String jsonArrayStr, String basePath, boolean isVerbose) {
-		//parse and write measurements and calculations
+	public JsonToCsv(String jsonArrayStr, boolean isVerbose) {
+		//parse Json array into measurements and requests
 		
 		//parse json array string into a JSONArray
 		JSONArray mesJsonArray = parseJsonArrayStr(jsonArrayStr);
 		
 		//map JSONArray into a linked list of MeasurementEntry objects
-		LinkedList<MeasurementEntry> mes = mapJsonMeasurementsToMeasurementEntries(mesJsonArray);
-		if(isVerbose) {
-			printMeasurementEntries(mes);
-		}
+		measurements = mapJsonMeasurementsToMeasurementEntries(mesJsonArray);
 		
 		//sort measurement entries by time stamp
-		Collections.sort(mes, new TimeStampComparator());
-		
+		Collections.sort(measurements, new TimeStampComparator());
 		if(isVerbose) {
 			System.out.println();
 			System.out.println("---");
 			System.out.println("Measurements sorted by time stamp");
-			printMeasurementEntries(mes);
+			printMeasurementEntries(measurements);
 		}
 		
-		//write measurements to file
+		//map measurements to IORequests
+        requests = getIORequestsFromMeasurements(measurements);
+        Collections.sort(requests, new RequestComparator());
+        if(isVerbose) {
+        	System.out.println();
+			System.out.println("---");
+			System.out.println("Requests sorted by arrival time");
+        	printIORequests(requests);
+        }
+        
+        //set isVerbose
+        this.isVerbose = isVerbose;
 	}
 	
-	private static void writeMeasurementsToFile(String jsonArrayStr, String path) {
-		//writes the measurement in csv file with headers requestID,STORAGE_API_ENTRY,...,TRANSMITTER_EXIT
+	public boolean writeMeasurementsToFile(String basePath) {
+		//write measurements to a file in csv format
+		
+		if( measurements == null || measurements.isEmpty()) {
+			return false;
+		}
+		
+		try {
+	        FileWriter myWriter = new FileWriter(basePath + "measurements.txt");
+	        
+	        //write headers
+	        myWriter.write("Request ID");
+	        myWriter.write(",");
+	        myWriter.write("Time Stamp Name");
+	        myWriter.write(",");
+	        myWriter.write("Time Stamp");
+	        myWriter.write("\n");
+	        
+	        
+	        //write measurements
+	        for(MeasurementEntry me: measurements) {
+	        	myWriter.write(String.valueOf(me.id));
+	        	myWriter.write(",");
+	        	myWriter.write(String.valueOf(me.timestampName));
+	        	myWriter.write(",");
+	        	myWriter.write(String.valueOf(me.timestamp));
+	        	myWriter.write("\n");
+	        }
+	        
+	        myWriter.close();
+	      } catch (IOException e) {
+	        System.out.println("An error occurred.");
+	        e.printStackTrace();
+	      }
+	    return true;
 		
 	}
 	
 	
 	
-	private static void performAndWriteCalculationsToFile() {
-		//writes the calculations from the measurements
+	public boolean writeBasicCalculationsToFile(double serviceRate, String resultsBasePath, boolean includeMM1Expected) {
+		//writes basic general calculations from the measurements
 		//headers are: 
 		//Experiment Runtime, Arrival Rate, Residence Time, Throughput, MM1 Expected Residence Time, Average Number of jobs in the system, MM1 Expected Number of jobs in the system, Percentage Difference between observed and MM1 expected Calculations   
-	}
-	
-	
-	private static LinkedList<MeasurementEntry> sortMeasurementEntriesByTimeStamp(LinkedList<MeasurementEntry> mes){
-		return null;
+		
+		if( measurements == null || measurements.isEmpty() || measurements.size() < 2) {
+			return false;
+		}
+		
+	    try {
+	    	Path basic_calculations_path = Paths.get(resultsBasePath + "basic_calculations.txt");
+	    	if (Files.notExists(basic_calculations_path)) {
+		        FileWriter myHeaderWriter = new FileWriter(resultsBasePath + "basic_calculations.txt");
+		        
+		        //write headers
+		        myHeaderWriter.write("Experiment Runtime (minutes)");
+		        myHeaderWriter.write(",");
+		        myHeaderWriter.write("Arrival Rate (requests/second)");
+		        myHeaderWriter.write(",");
+		        myHeaderWriter.write("Throughput (requests/second)");
+		        myHeaderWriter.write(",");
+		        myHeaderWriter.write("Average Residence Time (milliseconds)");
+		        myHeaderWriter.write(",");
+		        if(includeMM1Expected) {
+		        	myHeaderWriter.write("MM1 Expected Residence Time (milliseconds)");
+		        	myHeaderWriter.write(",");
+		        	myHeaderWriter.write("Percentage difference between Measured Residence time and Expected residence time of an MM1 queue (%)");
+		        	myHeaderWriter.write(",");
+		        }
+		        myHeaderWriter.write("Average Number of jobs in the system");
+		        if(includeMM1Expected) {
+		        	myHeaderWriter.write(",");
+		        	myHeaderWriter.write("MM1 Expected Number of jobs in the system");
+			        myHeaderWriter.write(",");
+			        myHeaderWriter.write("Percentage difference between Measured Average Number of Jobs in the system and Expected Average Number of Jobs in the system in a MM1 queue (%)");
+		        }
+		        myHeaderWriter.write("\n");
+		        myHeaderWriter.close();
+	    	}
+
+	    	FileWriter myWriter = new FileWriter(resultsBasePath + "basic_calculations.txt",true);
+	        
+	        //Experiment runtime
+	        long startTime = measurements.getFirst().timestamp;
+	        long endTime = measurements.getLast().timestamp;
+	        long runtimeNano = endTime - startTime; //runtime in nanoseconds
+	        double runtime = (double)runtimeNano/1000000000; //runtime in seconds
+	        runtime = runtime/60; //runtime in minutes
+	        myWriter.write(String.valueOf(runtime));
+	        myWriter.write(",");
+	        
+	       
+	        
+	        //Arrival rate
+	        long interArrivalTimesSum = 0;
+	        double avgInterArrivalTime;
+	        double arrivalRate;
+	        if(requests.size()<=1) {
+	        	arrivalRate = 0;
+	        }else {
+	        	for(int i=1;i<requests.size();i++) {
+	        		interArrivalTimesSum += (requests.get(i).STORAGE_API_ENTRY_time_stamp -requests.get(i-1).STORAGE_API_ENTRY_time_stamp);
+	        	}
+	        	avgInterArrivalTime = (double)interArrivalTimesSum/(requests.size()-1); //average inter arrival time in nanoseconds
+	        	avgInterArrivalTime = avgInterArrivalTime/1000000000; //convert average inter-arrival time to seconds
+	        	arrivalRate = 1/avgInterArrivalTime;
+	        }
+	        myWriter.write(String.valueOf(arrivalRate));
+	        myWriter.write(",");
+	        
+	        
+	        //throughput
+	        long interExitTimeSum = 0;
+	        double interExitTimesAvg;
+	        double throughput;
+	        if(requests.size()<=1) {
+	        	throughput = 0;
+	        }else {
+	        	for(int i=1;i<requests.size();i++) {
+	        		interExitTimeSum += (requests.get(i).TRANSMITTER_EXIT_time_stamp -requests.get(i-1).TRANSMITTER_EXIT_time_stamp);
+	        	}
+	        	interExitTimesAvg = (double)interExitTimeSum/(requests.size()-1); //average inter exit time in nanoseconds
+	        	interExitTimesAvg = interExitTimesAvg/1000000000; //convert average inter-arrival time to seconds
+	        	throughput = 1/interExitTimesAvg;
+	        	myWriter.write(String.valueOf(throughput));
+		        myWriter.write(",");
+	        }
+	        
+	        
+	        //residence time
+	        long resTimeSum = 0;
+	        double resTimeAvg;
+	        if(requests.isEmpty()) {
+	        	resTimeAvg = 0;
+	        }else {
+	        	for(int i=0;i<requests.size();i++) {
+	        		resTimeSum += (requests.get(i).TRANSMITTER_EXIT_time_stamp - requests.get(i).STORAGE_API_ENTRY_time_stamp);
+	        	}
+	        	resTimeAvg = (double)resTimeSum/requests.size(); //average residence time in nanoseconds
+	        	resTimeAvg = resTimeAvg/1000000; //convert residence time to milliseconds
+	        }
+	        myWriter.write(String.valueOf(resTimeAvg));
+	        myWriter.write(",");
+	        
+	        //MM1 Expected Residence Time
+	        //Expected response time or sojourn time is: 1/(mu-lambda), where mu is service rate and lambda is arrival rate
+	        //from: https://en.wikipedia.org/wiki/M/M/1_queue
+	        double expectedMM1ResidenceTime = 0;
+	        if(includeMM1Expected) {
+		        expectedMM1ResidenceTime = 1/(serviceRate - arrivalRate); //expected MM1 residence time in seconds
+		        expectedMM1ResidenceTime = expectedMM1ResidenceTime*1000; //convert to milliseconds
+		        myWriter.write(String.valueOf(expectedMM1ResidenceTime));
+		        myWriter.write(",");
+		        
+		      //Percentage difference between Measured Residence time and Expected residence time of an MM1 queue
+		      double residancePercentageDiff = Math.abs(expectedMM1ResidenceTime - resTimeAvg)*100/expectedMM1ResidenceTime;
+		      myWriter.write(String.valueOf(residancePercentageDiff));
+		        myWriter.write(",");
+	        }
+	        
+	        
+	        //Average Number of jobs in the system
+	        double numJobsInSystemAvg = (double)resTimeSum/runtimeNano;
+	        myWriter.write(String.valueOf(numJobsInSystemAvg));
+	        if(includeMM1Expected) {
+	        	myWriter.write(",");
+	        }else {
+	        	myWriter.write("\n");
+	        }
+	        
+
+	        //mm1 expected number of jobs in the system
+	        double rho = 0;
+	        double expectedMM1numjobs = 0;
+	        if(includeMM1Expected) {
+	        	rho = arrivalRate/serviceRate;
+	        	expectedMM1numjobs = rho/(1-rho);
+	        	myWriter.write(String.valueOf(expectedMM1numjobs));
+		        myWriter.write(",");
+		        
+		      //Percentage difference between Measured Average Number of Jobs in the system and Expected Average Number of Jobs in the system in a MM1 queue (%)
+		      double rhoExp = arrivalRate*(expectedMM1ResidenceTime/1000); //expected residence time was in milliseconds so it is converted to seconds
+		      expectedMM1numjobs = rhoExp/(1-rhoExp);
+		      myWriter.write(String.valueOf(expectedMM1numjobs));
+		      myWriter.write("\n");
+	        }
+	        
+	        myWriter.close();
+	      } catch (IOException e) {
+	        System.out.println("An error occurred.");
+	        e.printStackTrace();
+	      }
+	    
+	    return true;
 	}
 	
 	private static void printMeasurementEntries(LinkedList<MeasurementEntry> mes) {
@@ -89,7 +282,60 @@ public class JsonToCsv {
         }
         return jsonArray;
 	}
+	
+	private static void printIORequests(LinkedList<IORequest> requests) {
+		if(requests == null || requests.isEmpty()) {
+			return;
+		}
+		for(IORequest req : requests) {
+			System.out.println();
+			System.out.println("----");
+			System.out.println("Printing measurements grouped into IORequest");
+			System.out.println(
+					"Request Id: " + req.id + "," 
+					+ "STORAGE_API_ENTRY: " + req.STORAGE_API_ENTRY_time_stamp + "," 
+					+ "ENTRY_LIST_ENTRY: " + req.ENTRY_LIST_ENTRY_time_stamp + "," 
+					+ "ENTRY_LIST_EXIT: " + req.ENTRY_LIST_EXIT_time_stamp + "," 
+					+ "SERVICE_TIME_START: " + req.SERVICE_TIME_START_time_stamp + "," 
+					+ "SERVICE_TIME_END: " + req.SERVICE_TIME_END_time_stamp + "," 
+					+ "READY_LIST_ENTRY: " + req.READY_LIST_ENTRY_time_stamp + "," 
+					+ "TRANSMITTER_ENTRY: " + req.TRANSMITTER_ENTRY_time_stamp + "," 
+					+ "TRANSMITTER_EXIT: " + req.TRANSMITTER_EXIT_time_stamp + "," 
+					);
+		}
+	}
+	
+	private static LinkedList<IORequest> getIORequestsFromMeasurements(LinkedList<MeasurementEntry> measurements){
+		LinkedList<IORequest> requests = new LinkedList<IORequest>();
+		boolean isMeIdInRequests;
+		IORequest request;
+		
+		//add measurements to appropriate request
+		for(MeasurementEntry me:measurements) {
+			isMeIdInRequests = false;
+			for(int i=0; i<requests.size(); i++) {
+				request = requests.get(i);
+				if(request.id == me.id) {
+					request.addMeasurement(me);
+					isMeIdInRequests = true;
+				}
+			}
+			if(!isMeIdInRequests) {
+				//create new IORequest and put it in list of IORequests
+				IORequest newReq = new IORequest();
+				newReq.id = me.id;
+				newReq.addMeasurement(me);
+				requests.add(newReq);
+			}
+		}
+		return requests;
+	}
+	
+	
 }
+
+
+
 
 class MeasurementEntry {
 	public long id;
@@ -97,9 +343,56 @@ class MeasurementEntry {
 	public long timestamp;
 }
 
+class IORequest{
+	public long id;
+	public long STORAGE_API_ENTRY_time_stamp;
+	public long ENTRY_LIST_ENTRY_time_stamp;
+	public long ENTRY_LIST_EXIT_time_stamp;
+	public long SERVICE_TIME_START_time_stamp;
+	public long SERVICE_TIME_END_time_stamp;
+	public long READY_LIST_ENTRY_time_stamp;
+	public long TRANSMITTER_ENTRY_time_stamp;
+	public long TRANSMITTER_EXIT_time_stamp;
+	
+	public void addMeasurement(MeasurementEntry me) {
+		switch(me.timestampName) {
+			case STORAGE_API_ENTRY:
+				this.STORAGE_API_ENTRY_time_stamp = me.timestamp;
+				break;
+			case ENTRY_LIST_ENTRY:
+				this.ENTRY_LIST_ENTRY_time_stamp = me.timestamp;
+				break;
+			case ENTRY_LIST_EXIT:
+				this.ENTRY_LIST_EXIT_time_stamp = me.timestamp;
+				break;
+			case SERVICE_TIME_START:
+				this.SERVICE_TIME_START_time_stamp = me.timestamp;
+				break;
+			case SERVICE_TIME_END:
+				this.SERVICE_TIME_END_time_stamp = me.timestamp;
+				break;
+			case READY_LIST_ENTRY:
+				this.READY_LIST_ENTRY_time_stamp = me.timestamp;
+				break;
+			case TRANSMITTER_ENTRY:
+				this.TRANSMITTER_ENTRY_time_stamp = me.timestamp;
+				break;
+			case TRANSMITTER_EXIT:
+				this.TRANSMITTER_EXIT_time_stamp = me.timestamp;
+				break;
+		}
+	}
+}
+
 class TimeStampComparator implements Comparator<MeasurementEntry> {
 	public int compare(MeasurementEntry e1, MeasurementEntry e2) {
 		return Math.toIntExact(e1.timestamp - e2.timestamp);
+	}
+}
+
+class RequestComparator implements Comparator<IORequest>{
+	public int compare(IORequest r1, IORequest r2) {
+		return Math.toIntExact(r1.STORAGE_API_ENTRY_time_stamp - r2.STORAGE_API_ENTRY_time_stamp);
 	}
 }
 

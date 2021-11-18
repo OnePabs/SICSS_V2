@@ -4,6 +4,7 @@ import common.ApplicationInterface;
 import common.JsonToCsv;
 import common.StorageAPIInterface;
 
+import java.io.File;
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
 
@@ -22,7 +23,7 @@ public class TechAConstant extends ParentScript{
 	private int runTimeConversionFactorToMillis; //conversion factor to milliseconds
 	private String storageAPIaddress;
 	private String applicationAddress;
-	private String resultsFileName;
+	private String resultsFolderPath;
 	private boolean isVerbose;
 	private int interOperationWaitTime = 1000;
 	
@@ -41,7 +42,7 @@ public class TechAConstant extends ParentScript{
 			int runTimeConversionFactorToMillis,
 			String storageAPIaddress,
 			String applicationAddress,
-			String resultsFileName,
+			String resultsFolderPath,
 			boolean isVerbose
 			) {
 		this.interArrivalTime = interArrivalTime;
@@ -50,7 +51,7 @@ public class TechAConstant extends ParentScript{
 		this.runTimeConversionFactorToMillis = runTimeConversionFactorToMillis;
 		this.storageAPIaddress = storageAPIaddress;
 		this.applicationAddress = applicationAddress;
-		this.resultsFileName = resultsFileName;
+		this.resultsFolderPath = resultsFolderPath;
 		this.isVerbose = isVerbose;
 	}
 	
@@ -66,7 +67,7 @@ public class TechAConstant extends ParentScript{
 		
 		// Storage API Set up
 		String jr = "{"
-				+ "\"isVerbose\":true,"
+				+ "\"isVerbose\":" + String.valueOf(isVerbose) + ","
 				+ "\"dataTransferTechnique\":\"a\","
 				+ "\"dataTransferTechniqueSettings\":{},"
 				+ "\"serviceTimeDistribution\":\"CONSTANT\","
@@ -90,7 +91,7 @@ public class TechAConstant extends ParentScript{
 		//Application Set up
 		String jr2 = "{"
 				+ "\"receiverAddress\":\""+storageAPIaddress+"\","
-				+ "\"isVerbose\":true,"
+				+ "\"isVerbose\":" + String.valueOf(isVerbose) + ","
 				+"\"useSleepForMockProcessing\":true,"
 				+"\"interGenerationTimeDistribution\":\"CONSTANT\","
 				+"\"interGenerationTimeDistributionSettings\":"+interArrivalTime
@@ -104,99 +105,14 @@ public class TechAConstant extends ParentScript{
 			e.printStackTrace();
 		}
 		
+		double serviceRate = 1/(double)serviceTime;
 		
-		for(int i=0; i<runTimes.length;i++) {
-			System.out.println("Running experiment for: " + runTimes[i]);
-			
-			//start Storage API
-			System.out.println("Starting storage API");
-			sapi.start();
-			try {
-				Thread.sleep(interOperationWaitTime);
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			//Start Application
-			System.out.println("Starting application");
-			ai.start();
-			
-			//wait for experiment runtime
-			try {
-				Thread.sleep(runTimes[i]*runTimeConversionFactorToMillis);
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			//stop application
-			System.out.println("Stopping application");
-			ai.stop();
-			try {
-				Thread.sleep(interOperationWaitTime);
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			//stop Storage API
-			System.out.println("Stopping storage api");
-			sapi.stop();
-			try {
-				Thread.sleep(interOperationWaitTime);
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			
-			//Read measurements
-			System.out.println("Reading Measurements");
-			String measurements = sapi.getMeasurements();
-			//System.out.println("JSON string received with measurements: ");
-			
-			//perform calculations and write measurements to file
-			JsonToCsv.writeMeasurementsAndCalculations(measurements,resultsFileName,isVerbose);
-			
-			//clear measurements
-			System.out.println("clearing storage API");
-			sapi.clear();
-			
-			//trying to get measurements again
-			System.out.println("trying to get measurements again");
-			String measurements2 = sapi.getMeasurements();
-			System.out.println("Measurements after clearing:");
-			System.out.println(measurements2);
-			
-			
-			
-	        /*
-			//writing measurements
-	        System.out.println("writing Measurements");
-		    try {
-		        FileWriter myWriter = new FileWriter("TechAConst-ia"+interArrivalTime+"-st"+serviceTime+"-rt"+runTimes[i]+".txt");
-		        if(jasonObject == null) {
-		        	//there was a parsing error, write the string
-		        	myWriter.write(measurements);
-		        }else {
-		        	//write measurements in csv format
-		        	
-		            Set<Object> keys = jsonObject.keySet();
-		            for (Object key : keys) {
-		            	String valueStr = jsonObject.get(key).toString();
-		            	String keyStr = String.valueOf(key);
-		            	String fileEntry = 
-		            	myWriter.write(measurements);
-		            }
-		        }
-		        
-		        myWriter.close();
-		        System.out.println("Successfully wrote to the file.");
-		      } catch (IOException e) {
-		        System.out.println("An error occurred.");
-		        e.printStackTrace();
-		      }
-			System.out.println("Obtained measurements.");
-			*/
-			
-		}
+		//create results directory
+		String resultsDirectory = resultsFolderPath + "/Tech-A-const-iat-"+String.valueOf(interArrivalTime) +"-st-" + String.valueOf(serviceTime);
+		new File(resultsDirectory).mkdirs();
+		
+		String resultsBasePath = resultsDirectory + "/";
+		RunExperimentScript.RunExperiment(ai, sapi,serviceRate , runTimes, runTimeConversionFactorToMillis, resultsBasePath, false, isVerbose);
 	}
 	
 }
