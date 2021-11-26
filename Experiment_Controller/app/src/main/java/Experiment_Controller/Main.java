@@ -34,23 +34,45 @@ public class Main {
 		
 		
 		/******* Technique B Constant  ********/
-		long interArrivalTimeBConstant = (long)2000;
-		long serviceTimeBConstant = (long)1600;
-		long periodBConstant = interArrivalTimeBConstant;
-		Long[] runtimesBConstant = {(long) 30/*,(long)30,(long)60*/};
-		String resultsFileNameBConstant = "/home/juancontreras/Downloads/results";
-		ParentScript scriptBConstant = new TechBConstant(
-				interArrivalTimeBConstant,
-				serviceTimeBConstant,
-				periodBConstant,
-				runtimesBConstant,
+//		long interArrivalTimeBConstant = (long)2000;
+//		long serviceTimeBConstant = (long)1600;
+//		long periodBConstant = interArrivalTimeBConstant;
+//		Long[] runtimesBConstant = {(long) 30/*,(long)30,(long)60*/};
+//		String resultsFileNameBConstant = "/home/juancontreras/Downloads/results";
+//		ParentScript scriptBConstant = new TechBConstant(
+//				interArrivalTimeBConstant,
+//				serviceTimeBConstant,
+//				periodBConstant,
+//				runtimesBConstant,
+//				runTimesConversionFactor,
+//				storageApiAddress,
+//				applicationAddress,
+//				resultsFileNameBConstant,
+//				isVerbose
+//				);
+//		scriptBConstant.run();
+		
+		
+		/******* Technique C Constant  ********/
+		long interArrivalTimeCConstant = (long)2000;
+		long serviceTimeCConstant = (long)1600;
+		long periodCConstant = interArrivalTimeCConstant*2;
+		long maxsizeCConstant = 100;
+		Long[] runtimesCConstant = {(long) 30/*,(long)30,(long)60*/};
+		String resultsFileNameCConstant = "/home/juancontreras/Downloads/results";
+		ParentScript scriptCConstant = new TechCConstant(
+				interArrivalTimeCConstant,
+				serviceTimeCConstant,
+				periodCConstant,
+				maxsizeCConstant,
+				runtimesCConstant,
 				runTimesConversionFactor,
 				storageApiAddress,
 				applicationAddress,
-				resultsFileNameBConstant,
+				resultsFileNameCConstant,
 				isVerbose
 				);
-		scriptBConstant.run();
+		scriptCConstant.run();
 
 		
 	}

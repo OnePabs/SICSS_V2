@@ -30,10 +30,11 @@ public class Application implements Runnable{
         this.settingsController = settingsController;
         this.naturalNumberGenerator = naturalNumberGenerator;
         this.receiverAddress = receiverAddress;
-        this.content = new byte[2];
+        this.content = new byte[100];
         content[0] = 1;
         content[1] = 1;
         this.isFinished = false;
+        this.isVerbose = isVerbose;
     }
 
     @Override
