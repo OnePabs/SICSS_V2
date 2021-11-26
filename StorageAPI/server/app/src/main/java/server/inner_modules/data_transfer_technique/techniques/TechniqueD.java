@@ -30,7 +30,6 @@ public class TechniqueD extends ParentDataTransferTechnique {
     public void actualize(IORequest request){
         performTransfer = request.isApplicationComplete();
         if(performTransfer){
-            System.out.println("app complete");
             batchId = request.getBatchId();
             appId = request.getAppId();
         }
