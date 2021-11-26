@@ -51,7 +51,7 @@ public class ParentDataTransferTechnique implements Runnable{
     //METHODS that MUST be Overridden by child
     public boolean initialize(){return true;}
     public boolean isTransferConditionSatisfied(){return true;} //condition for sending ready IO requests
-    public void actualize(IORequest request){} //can be ommited. used to update number of bytes in technique B
+    public void actualize(IORequest request){} //can be omitted by some technique
     public void transmit(){}
 
 

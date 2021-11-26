@@ -66,13 +66,13 @@ public class IORequest {
 
 	//Completness of batch/application
 	public boolean isBatchComplete() {
-		if(getBatchCompleteByte() == (byte)0)
+		if(getBatchCompleteByte() == (byte)1)
 			return true;
 		return false;
 	}
 	
 	public boolean isApplicationComplete() {
-		if(getAppCompleteByte() == (byte)0)
+		if(getAppCompleteByte() == (byte)1)
 			return true;
 		return false;
 	}

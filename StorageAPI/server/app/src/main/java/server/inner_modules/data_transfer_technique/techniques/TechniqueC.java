@@ -61,19 +61,19 @@ public class TechniqueC extends ParentDataTransferTechnique {
         SyncIORequestLinkedList requestToTransmit = readyLists.getAndRemoveFromAllBatches();
         if(requestToTransmit == null){
             if(settingsController.getIsVerbose()){
-                System.out.println("Technique B: requestToTransmit is null");
+                System.out.println("Technique C: requestToTransmit is null");
             }
             return;
         }
         int size = requestToTransmit.getSize();
 
         if(transmitter == null){
-            System.out.println("Technique B: transmitter null");
+            System.out.println("Technique C: transmitter null");
             return;
         }
         transmitter.transmit(requestToTransmit);
         if(settingsController.getIsVerbose()){
-            System.out.println("Technique B transmitted " + size + " IO Requests.");
+            System.out.println("Technique C transmitted " + size + " IO Requests.");
         }
     }
 }

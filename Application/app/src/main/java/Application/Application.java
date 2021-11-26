@@ -33,6 +33,8 @@ public class Application implements Runnable{
         this.content = new byte[100];
         content[0] = 1;
         content[1] = 1;
+        content[2] = 1;
+        content[3] = 1;
         this.isFinished = false;
         this.isVerbose = isVerbose;
     }
