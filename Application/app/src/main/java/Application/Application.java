@@ -15,6 +15,7 @@ public class Application implements Runnable{
     private SettingsController settingsController;
     private String receiverAddress;
     private boolean isFinished;
+    private boolean isVerbose;
     private byte[] content;
 
 
@@ -22,7 +23,8 @@ public class Application implements Runnable{
             StateController stateController,
             SettingsController settingsController,
             ParentNaturalNumberGenerator naturalNumberGenerator,
-            String receiverAddress
+            String receiverAddress,
+            boolean isVerbose
             ){
         this.stateController= stateController;
         this.settingsController = settingsController;
@@ -45,7 +47,10 @@ public class Application implements Runnable{
             if(stateController.getCurrentState()==PROGRAM_STATE.RUNNING){
                 try {
                     long sleepTime = naturalNumberGenerator.generate();
-                    System.out.println("Application: sleeping for: " + String.valueOf(sleepTime) + " milliseconds");
+                    if(isVerbose){
+                    	System.out.println("Application: sleeping for: " + String.valueOf(sleepTime) + " milliseconds");
+                    }
+                    
                     if(sleepTime == 0)return;
                     Thread.sleep(sleepTime);
 
@@ -53,11 +58,14 @@ public class Application implements Runnable{
                             .uri(uri)
                             .POST(HttpRequest.BodyPublishers.ofByteArray(content))
                             .build();
-                    System.out.println("Application: sending data to receiver...");
+                    if(isVerbose){
+                    	System.out.println("Application: sending data to receiver...");
+                    }
+                    
                     HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.discarding());
                     if(response.statusCode() != 200 && settingsController.getIsVerbose()==true) {
                         System.out.println("Application: Error Code other than 200 was received when sending data");
-                    }else{
+                    }else if(isVerbose){
                         System.out.println("Application: data send successfully ");
                     }
 

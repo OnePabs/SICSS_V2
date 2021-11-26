@@ -19,33 +19,28 @@ public class JsonToCsv {
 	private LinkedList<IORequest> requests;
 	private boolean isVerbose;
 	
-	public JsonToCsv(String jsonArrayStr, boolean isVerbose) {
+	public JsonToCsv(String jsonArrayStr, boolean isVerbose) throws Exception {
 		//parse Json array into measurements and requests
 		
 		//parse json array string into a JSONArray
+		if(isVerbose) {
+			System.out.println("Parsing jsonArrayStr");
+		}
 		JSONArray mesJsonArray = parseJsonArrayStr(jsonArrayStr);
 		
 		//map JSONArray into a linked list of MeasurementEntry objects
 		measurements = mapJsonMeasurementsToMeasurementEntries(mesJsonArray);
 		
+		if(measurements==null || measurements.isEmpty()) {
+			throw new Exception("JSON to CSV received empty measurements");
+		}
+		
 		//sort measurement entries by time stamp
 		Collections.sort(measurements, new TimeStampComparator());
-		if(isVerbose) {
-			System.out.println();
-			System.out.println("---");
-			System.out.println("Measurements sorted by time stamp");
-			printMeasurementEntries(measurements);
-		}
 		
 		//map measurements to IORequests
         requests = getIORequestsFromMeasurements(measurements);
         Collections.sort(requests, new RequestComparator());
-        if(isVerbose) {
-        	System.out.println();
-			System.out.println("---");
-			System.out.println("Requests sorted by arrival time");
-        	printIORequests(requests);
-        }
         
         //set isVerbose
         this.isVerbose = isVerbose;
@@ -270,7 +265,7 @@ public class JsonToCsv {
 	
 	
 	private static JSONArray parseJsonArrayStr(String jsonArrayStr) {
-		System.out.println("Parsing jsonArrayStr");
+
 		JSONParser parser = new JSONParser();
 		JSONArray jsonArray;
         try {
@@ -386,7 +381,16 @@ class IORequest{
 
 class TimeStampComparator implements Comparator<MeasurementEntry> {
 	public int compare(MeasurementEntry e1, MeasurementEntry e2) {
-		return Math.toIntExact(e1.timestamp - e2.timestamp);
+		long longComparisonResult = e1.timestamp - e2.timestamp;
+		int intComparisonResult;
+		if(longComparisonResult > 0) {
+			intComparisonResult = 1;
+		}else if(longComparisonResult == 0) {
+			intComparisonResult = 0;
+		}else {
+			intComparisonResult = -1;
+		}
+		return intComparisonResult;
 	}
 }
 

@@ -33,7 +33,7 @@ public class StubTransmitter extends ParentTransmitter {
             }
             request.addTimeStamp(TRANSMITTER_EXIT);
             if(settingsController.getIsVerbose()){
-                System.out.println("Transmitting IORequest: " + request.getRequestId());
+                System.out.println("Stub Transmitter: IORequest " + request.getRequestId() + " leaving storage  API");
             }
             measurementController.addMeasurement(request.getTimeStamp(TRANSMITTER_EXIT));
         }

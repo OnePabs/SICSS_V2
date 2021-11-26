@@ -44,7 +44,9 @@ public class TechniqueB extends ParentDataTransferTechnique {
     public void transmit(){
         SyncIORequestLinkedList requestToTransmit = readyLists.getAndRemoveFromAllBatches();
         if(requestToTransmit == null){
-            System.out.println("Technique B: requestToTransmit is null");
+            if(settingsController.getIsVerbose()){
+                System.out.println("Technique B: requestToTransmit is null");
+            }
             return;
         }
         int size = requestToTransmit.getSize();

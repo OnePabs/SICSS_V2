@@ -43,6 +43,9 @@ public class Server {
                 synchronized (settingsController.changeOfSettingsNotifier){
                     settingsController.changeOfSettingsNotifier.wait();
                 }
+                if(settingsController.getIsVerbose()){
+                	System.out.println("Server: change of settings catched");
+                }
 
                 if(app!=null){
                     app.finishApplication();
@@ -50,11 +53,9 @@ public class Server {
 
                 generator = NaturalNumberDistributionGeneratorBuilder.build(settingsController);
                 receiverAddress =  settingsController.getSetting("receiverAddress").toString();
-                app = new Application(stateController,settingsController,generator,receiverAddress);
+                app = new Application(stateController,settingsController,generator,receiverAddress,settingsController.getIsVerbose());
                 Thread tp = new Thread(app);
                 tp.start();
-
-                System.out.println("Server: change of settings catched");
             }
 
             System.out.println("hello");

@@ -21,7 +21,6 @@ public class MeasurementController {
     }
 
     public TimeStamp[] getMeasurements(){
-        System.out.println("Measurement controller num measurements: " + measurements.size());
         return measurements.toArray(new TimeStamp[measurements.size()]);
     }
 

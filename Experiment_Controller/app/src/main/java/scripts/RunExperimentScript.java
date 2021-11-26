@@ -19,7 +19,7 @@ public class RunExperimentScript {
 	 * @param isVerbose
 	 * Storage API state after running the experiments is STOPPED
 	 */
-	public static void RunExperiment(
+	public static void RunExperiment (
 			ApplicationInterface ai, 
 			StorageAPIInterface sapi,
 			double storageApiServiceRate,
@@ -28,11 +28,11 @@ public class RunExperimentScript {
 			String baseResultspath, 
 			boolean includeExpectedMM1Values,
 			boolean isVerbose
-		) {
+		) throws Exception{
 		for(int i=0; i<runTimes.length;i++) {
-			if(isVerbose) {
-				System.out.println("Running experiment for: " + runTimes[i]);
-			}
+			
+			System.out.println("Running experiment for: " + runTimes[i]); //always display the experiment runtime. for user purposes
+			
 			
 			//start Storage API
 			if(isVerbose) {
@@ -97,7 +97,9 @@ public class RunExperimentScript {
 			jcsv.writeBasicCalculationsToFile(storageApiServiceRate,baseResultspath,includeExpectedMM1Values);
 			
 			//clear storage api
-			System.out.println("clearing storage API");
+			if(isVerbose) {
+				System.out.println("clearing storage API");
+			}
 			sapi.clear();
 			
 			//resulting last state is STOPPED

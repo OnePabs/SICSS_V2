@@ -82,7 +82,10 @@ public class ParentDataTransferTechnique implements Runnable{
                         try{
                             //Take a request from the Entry List
                             IORequest request = this.ioEntryList.take();
-                            System.out.println("data transfer took from entry list");
+                            if(settingsController.getIsVerbose()){
+                                System.out.println("Parent data transfer: took request " + request.getRequestId() + " from entry list");
+                            }
+
 
                             //add timestamp to request
                             request.addTimeStamp(TIMESTAMP_NAME.ENTRY_LIST_EXIT);
@@ -96,8 +99,12 @@ public class ParentDataTransferTechnique implements Runnable{
                             request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
 
                             readyLists.add(request);
-                            System.out.println("data transfer technique put request in readyLists.");
+                            if(settingsController.getIsVerbose()){
+                                System.out.println("Parent data transfer: put request " + request.getRequestId() + " in readyLists.");
+                            }
+
                         /*
+                        //Print Request body
                         if(settingsController.getIsVerbose()){
                             StringBuilder sb = new StringBuilder();
                             for (byte b : request.getContent()) {

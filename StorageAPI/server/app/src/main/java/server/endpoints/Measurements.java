@@ -35,7 +35,9 @@ public class Measurements implements HttpHandler {
             TimeStamp[] timeStamps = measurementController.getMeasurements();
 
             JSONArray cont = new JSONArray();
-            System.out.println("Number of measurements: " + timeStamps.length);
+            if(settingsController.getIsVerbose()){
+                System.out.println("Number of measurements: " + timeStamps.length);
+            }
             for(int i=0;i<timeStamps.length;i++){
                 TimeStamp tp = timeStamps[i];
                 JSONObject inner = new JSONObject();
