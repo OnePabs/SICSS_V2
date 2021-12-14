@@ -7,6 +7,9 @@ package StorageManager;
 
 import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import StorageManager.Endpoints.*;
 
@@ -19,17 +22,31 @@ public class App {
         HttpServer server;
 
         try{
+            //set up mysql
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = null;
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Destination_v2?" +
+                            "user=root&password=Printsessa<3");
+
             //initialize server
             server = HttpServer.create(new InetSocketAddress("localhost",port), 0);
 
-            server.createContext("/data", new Data());
+            server.createContext("/data", new Data(conn));
             /*
             server.createContext("/start", new Start(stateController, settingsController));
             server.createContext("/stop", new Stop(stateController, settingsController));
             */
             server.setExecutor(null);
+
+            //start server
             server.start();
-            }catch(Exception e){
+
+        }catch(SQLException ex){
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
     }

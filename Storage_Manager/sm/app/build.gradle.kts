@@ -23,6 +23,10 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.0-jre")
+
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation("mysql:mysql-connector-java:8.0.27")
+
 }
 
 application {
