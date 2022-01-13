@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS STORAGEDB;
+
+USE STORAGEDB;
+
+CREATE TABLE IF NOT EXISTS content (
+	requestId INTEGER,
+    appId INTEGER,
+    batchId INTEGER,
+    content BLOB
+);
+
+TRUNCATE content;
+
