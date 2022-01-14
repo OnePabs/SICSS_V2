@@ -16,7 +16,7 @@ import StorageManager.Endpoints.*;
 public class App {
 
     public static void main(String[] args) {
-        int port = 80;
+        int port = 8080;
         System.out.println("Resource Manager Running on port: " + port);
 
         HttpServer server;
