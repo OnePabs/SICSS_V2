@@ -20,18 +20,16 @@ public class App {
         System.out.println("Resource Manager Running on port: " + port);
 
         HttpServer server;
+        MysqlApi mysqlapi = new MysqlApi();
 
         try{
-            //set up mysql
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = null;
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Destination_v2?" +
-                            "user=root&password=Printsessa<3");
 
             //initialize server
             server = HttpServer.create(new InetSocketAddress("localhost",port), 0);
 
-            server.createContext("/data", new Data(conn));
+            //server.createContext("/data", new Data(conn));
+            server.createContext("/insertone", new InsertOne(mysqlapi));
+
             /*
             server.createContext("/start", new Start(stateController, settingsController));
             server.createContext("/stop", new Stop(stateController, settingsController));
@@ -41,13 +39,9 @@ public class App {
             //start server
             server.start();
 
-        }catch(SQLException ex){
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-        catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
+
     }
 }
