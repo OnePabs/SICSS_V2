@@ -1,0 +1,2 @@
+USE STORAGEDB;
+SELECT * FROM content;

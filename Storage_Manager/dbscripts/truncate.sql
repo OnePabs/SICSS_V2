@@ -1,0 +1,2 @@
+USE STORAGEDB;
+TRUNCATE content;

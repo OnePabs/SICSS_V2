@@ -1,0 +1,38 @@
+//connect to instance
+in powershell, cd to aws key pair folder in documents
+ssh -i storagemanagerpair.pem ubuntu@ec2-18-188-173-210.us-east-2.compute.amazonaws.com
+
+//update package manager
+sudo apt update
+
+//install java
+sudo apt install default-jre
+java -version
+sudo apt install default-jdk
+javac -version
+
+
+//install gradle
+sudo apt install gradle
+
+
+//install mysql
+sudo apt install mysql-server
+sudo mysql_secure_installation
+// do not remove test user, do not disallow remote root login, do update tables
+
+
+//download project
+git clone https://github.com/OnePabs/SICSS_V2.git
+
+//create mysql database and table
+cd ~/SICSS_V2/Storage_Manager
+mysql -u root -p
+	//enter password
+
+
+
+
+
+
+
