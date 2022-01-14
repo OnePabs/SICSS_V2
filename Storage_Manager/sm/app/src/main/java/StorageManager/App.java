@@ -17,6 +17,9 @@ public class App {
 
     public static void main(String[] args) {
         int port = 8080;
+        if(args.length == 1){
+            port = Integer.valueOf(args[0]);
+        }
         System.out.println("Resource Manager Running on port: " + port);
 
         HttpServer server;
