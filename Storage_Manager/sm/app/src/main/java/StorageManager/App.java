@@ -29,11 +29,7 @@ public class App {
 
             //server.createContext("/data", new Data(conn));
             server.createContext("/insertone", new InsertOne(mysqlapi));
-
-            /*
-            server.createContext("/start", new Start(stateController, settingsController));
-            server.createContext("/stop", new Stop(stateController, settingsController));
-            */
+            server.createContext("/commitall", new CommitAll(mysqlapi));
             server.setExecutor(null);
 
             //start server
