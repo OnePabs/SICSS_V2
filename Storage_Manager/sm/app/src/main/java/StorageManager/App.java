@@ -30,6 +30,7 @@ public class App {
             //server.createContext("/data", new Data(conn));
             server.createContext("/insertone", new InsertOne(mysqlapi));
             server.createContext("/commitall", new CommitAll(mysqlapi));
+            server.createContext("/test", new Test());
             server.setExecutor(null);
 
             //start server
