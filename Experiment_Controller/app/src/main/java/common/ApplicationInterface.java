@@ -30,9 +30,8 @@ public class ApplicationInterface {
         	if(response.statusCode() == 200) {
         		return true;
         	}
-        }catch(IOException ioe){
-        	
-        }catch(InterruptedException ie) {
+        }catch(Exception e){
+			e.printStackTrace();
         	
         }
         return false;
@@ -48,11 +47,10 @@ public class ApplicationInterface {
         	if(response.statusCode() == 200) {
         		return true;
         	}
-        }catch(IOException ioe){
-        	
-        }catch(InterruptedException ie) {
-        	
-        }
+        }catch(Exception e){
+			e.printStackTrace();
+
+		}
         return false;
 	}
 	
@@ -66,11 +64,9 @@ public class ApplicationInterface {
         	if(response.statusCode() == 200) {
         		return true;
         	}
-        }catch(IOException ioe){
-        	
-        }catch(InterruptedException ie) {
-        	
-        }
+        }catch(Exception e){
+			e.printStackTrace();
+		}
         return false;
 	}
 	

@@ -9,8 +9,8 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 		
-		String storageApiAddress = "http://localhost:8080";
-		String applicationAddress = "http://localhost:8000";
+		String storageApiAddress = "http://localhost:80";
+		String applicationAddress = "http://ec2-3-133-130-15.us-east-2.compute.amazonaws.com:80";
 		String storageManagerAddress = "http://ec2-18-223-143-129.us-east-2.compute.amazonaws.com:80";
 		int runTimesConversionFactor = 1000;
 		boolean isVerbose = true;

@@ -34,7 +34,7 @@ public class Server {
 
         try{
             //initialize server
-            server = HttpServer.create(new InetSocketAddress("localhost",port), 0);
+            server = HttpServer.create(new InetSocketAddress("0.0.0.0",port), 0);
             server.createContext("/settings", new Settings(settingsController));
             server.createContext("/start", new Start(stateController, settingsController));
             server.createContext("/stop", new Stop(stateController, settingsController));
