@@ -17,7 +17,10 @@ import endpoints.Settings;
 public class Server {
 
     public static void main(String[] args) {
-        int port = 8000;
+        int port = 80;
+        if(args.length == 1){
+            port = Integer.valueOf(args[0]);
+        }
         System.out.println("Application Running on port: " + port);
 
         StateController stateController = new StateController();
