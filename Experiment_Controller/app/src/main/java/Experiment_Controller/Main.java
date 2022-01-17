@@ -11,6 +11,7 @@ public class Main {
 		
 		String storageApiAddress = "http://localhost:8080";
 		String applicationAddress = "http://localhost:8000";
+		String storageManagerAddress = "http://ec2-18-223-143-129.us-east-2.compute.amazonaws.com:80";
 		int runTimesConversionFactor = 1000;
 		boolean isVerbose = true;
 		
@@ -96,9 +97,10 @@ public class Main {
 		
 		
 		/******* Technique E Constant  ********/
+		/*
 		long interArrivalTimeEConstant = (long)2000;
 		long serviceTimeEConstant = (long)1600;
-		Long[] runtimesEConstant = {(long) 30/*,(long)30,(long)60*/};
+		Long[] runtimesEConstant = {(long) 30,(long)30,(long)60};
 		String resultsFileNameEConstant = "/home/juancontreras/Downloads/results";
 		ParentScript scriptEConstant = new TechEConstant(
 				interArrivalTimeEConstant,
@@ -111,6 +113,22 @@ public class Main {
 				isVerbose
 				);
 		scriptEConstant.run();
-	}
+		*/
 
-}
+
+		/******* App and strg manager test constant  ********/
+		storageManagerAddress += "/insertone";
+		long interArrivalTimeConstant = (long)2000;
+		Long[] runtimes = {(long) 30};
+		ParentScript ApplicationStorageManagerTestScript = new ApplicationStorageManagerTest(
+				interArrivalTimeConstant,
+				runtimes,
+				runTimesConversionFactor,
+				applicationAddress,
+				storageManagerAddress,
+				isVerbose
+		);
+		ApplicationStorageManagerTestScript.run();
+
+	}//end main
+}//end class

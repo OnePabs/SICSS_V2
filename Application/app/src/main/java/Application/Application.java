@@ -47,7 +47,10 @@ public class Application implements Runnable{
         int mostSignificant;
         naturalNumberGenerator.initialize();
         HttpClient client = HttpClient.newBuilder().build();
-        URI uri = URI.create(receiverAddress + "/data");
+        if(isVerbose){
+            System.out.println("Receiver address: " + receiverAddress);
+        }
+        URI uri = URI.create(receiverAddress);
         HttpRequest request;
         while(!isFinished && stateController.getCurrentState()!= PROGRAM_STATE.FINISHED){
             if(stateController.getCurrentState()==PROGRAM_STATE.RUNNING){
@@ -65,6 +68,7 @@ public class Application implements Runnable{
                     mostSignificant = (requestNum-leastSignificant)/256;
                     content[0] = (byte)(((byte)mostSignificant) & 0xFF);
                     content[1] = (byte)(((byte)leastSignificant) & 0xFF);
+                    requestNum++;
                     request = HttpRequest.newBuilder()
                             .uri(uri)
                             .POST(HttpRequest.BodyPublishers.ofByteArray(content))
