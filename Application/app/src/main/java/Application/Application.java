@@ -31,8 +31,8 @@ public class Application implements Runnable{
         this.naturalNumberGenerator = naturalNumberGenerator;
         this.receiverAddress = receiverAddress;
         this.content = new byte[100];
-        content[0] = 1;
-        content[1] = 1;
+        content[0] = 0;
+        content[1] = 0;
         content[2] = 1;
         content[3] = 1;
         this.isFinished = false;
@@ -42,6 +42,9 @@ public class Application implements Runnable{
     @Override
     public void run(){
         //set up
+        int requestNum = 0;
+        int leastSignificant;
+        int mostSignificant;
         naturalNumberGenerator.initialize();
         HttpClient client = HttpClient.newBuilder().build();
         URI uri = URI.create(receiverAddress + "/data");
@@ -54,9 +57,14 @@ public class Application implements Runnable{
                     	System.out.println("Application: sleeping for: " + String.valueOf(sleepTime) + " milliseconds");
                     }
                     
-                    if(sleepTime == 0)return;
-                    Thread.sleep(sleepTime);
+                    if(sleepTime != 0){
+                        Thread.sleep(sleepTime);
+                    }
 
+                    leastSignificant = requestNum % 255;
+                    mostSignificant = (requestNum-leastSignificant)/256;
+                    content[0] = (byte)(((byte)mostSignificant) & 0xFF);
+                    content[1] = (byte)(((byte)leastSignificant) & 0xFF);
                     request = HttpRequest.newBuilder()
                             .uri(uri)
                             .POST(HttpRequest.BodyPublishers.ofByteArray(content))
