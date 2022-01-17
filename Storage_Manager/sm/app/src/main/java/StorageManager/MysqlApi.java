@@ -13,7 +13,7 @@ public class MysqlApi {
     private String user = "root";
     private String password = "milo";
     private String dbname = "STORAGEDB";
-    private String dburl = "jdbc:mysql://" + host + "/"+dbname+":3306?verifyServerCertificate=false&amp;requireSSL=true&amp;useSSL=true";
+    private String dburl = "jdbc:mysql://" + host + "/"+dbname+":3306?verifyServerCertificate=false";
     private String query = "INSERT INTO content (requestId, appId, batchId, content) VALUES (?,?,?,?)";
 
     public MysqlApi(){}
