@@ -27,9 +27,9 @@ git clone https://github.com/OnePabs/SICSS_V2.git
 
 //create mysql database and table
 cd ~/SICSS_V2/Storage_Manager
-mysql -u root -p
+sudo mysql -u root -p
 	//enter password
-
+source create_db_and_table.sql
 
 
 
