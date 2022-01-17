@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 public class MysqlApi {
 
     //db connection info
-    private String host = "127.0.0.1";
+    private String host = "localhost";
     private String user = "root";
     private String password = "milo";
     private String dbname = "STORAGEDB";
