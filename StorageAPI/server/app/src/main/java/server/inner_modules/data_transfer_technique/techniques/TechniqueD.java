@@ -6,8 +6,8 @@ import server.inner_modules.data_transfer_technique.ParentDataTransferTechnique;
 
 public class TechniqueD extends ParentDataTransferTechnique {
     boolean performTransfer;
-    byte batchId;
-    byte appId;
+    int batchId;
+    int appId;
 
     @Override
     public boolean initialize(){

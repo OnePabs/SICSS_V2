@@ -4,31 +4,41 @@ import java.util.*;
 import server.enumerators.TIMESTAMP_NAME;
 
 public class IORequest {
-	private long requestId;
 	private byte[] content;
 	private LinkedList<TimeStamp> timeStamps;
 	
-	public IORequest(long requestId, byte[] content) {
-		this.requestId = requestId;
+	public IORequest(byte[] content) {
 		this.content = content;
 		this.timeStamps = new LinkedList<TimeStamp>();
 	}
 	
 	//Getters
-	public byte getBatchId() {
-		return content[0];
+	public int getRequestId(){
+		//uses big endian to parse first two bytes to get the request Id
+		int least_significant = content[1] & 0xFF;
+		int most_significant = content[0] & 0xFF;
+
+		//System.out.println("first byte: " + most_significant);
+		//System.out.println("second byte: " + least_significant);
+		int requestId = most_significant*16*16 + least_significant;
+		//System.out.println("requestID: " + requestId);
+		return requestId;
+	}
+
+	public int getAppId() {
+		return content[2] & 0xFF;
+	}
+
+	public int getBatchId() {
+		return content[3] & 0xFF;
 	}
 	
-	public byte getAppId() {
-		return content[1];
+	public int getBatchCompleteByte() {
+		return content[4] & 0xFF;
 	}
 	
-	public byte getBatchCompleteByte() {
-		return content[2];
-	}
-	
-	public byte getAppCompleteByte() {
-		return content[3];
+	public int getAppCompleteByte() {
+		return content[5] & 0xFF;
 	}
 	
 	public byte[] getContent() {
@@ -38,16 +48,12 @@ public class IORequest {
 	public LinkedList<TimeStamp> getTimeStamps(){
 		return this.timeStamps;
 	}
-
-	public long getRequestId(){
-		return this.requestId;
-	}
 	
 	
 	//Add time stamp
 	public void addTimeStamp(TIMESTAMP_NAME name, long timeStamp)
 	{
-		this.timeStamps.add(new TimeStamp(requestId,name,timeStamp));
+		this.timeStamps.add(new TimeStamp(this.getRequestId(),name,timeStamp));
 	}
 	
 	public void addTimeStamp(TIMESTAMP_NAME name) {

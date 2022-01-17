@@ -19,14 +19,12 @@ public class Data implements HttpHandler {
     private SettingsController settingsController;
     private MeasurementController measurementController;
     private SyncIORequestLinkedList IoEntryList;
-    private long requestNum;
 
     public Data(StateController stateController, SettingsController settingsController, MeasurementController measurementController, SyncIORequestLinkedList IoEntryList){
         this.stateController = stateController;
         this.settingsController = settingsController;
         this.measurementController = measurementController;
         this.IoEntryList = IoEntryList;
-        this.requestNum = 0;
     }
 
 
@@ -35,7 +33,7 @@ public class Data implements HttpHandler {
         Long arrival_time = System.nanoTime();
 
         if(settingsController.getIsVerbose()){
-            System.out.println("data endpoint reached. IORequest Id: " + requestNum);
+            System.out.println("data endpoint reached.");
         }
 
         int returnCode;
@@ -45,7 +43,7 @@ public class Data implements HttpHandler {
                 byte[] content = input_stream.readAllBytes();
 
                 //to IORequest
-                IORequest req = new IORequest(requestNum++,content);
+                IORequest req = new IORequest(content);
                 Long enqueueTime = System.nanoTime();
 
                 //add time measurements to IO request

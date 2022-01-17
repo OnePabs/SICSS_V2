@@ -20,7 +20,8 @@ import static server.enumerators.TIMESTAMP_NAME.TRANSMITTER_EXIT;
 
 public class StorageManagerTransmitter extends ParentTransmitter {
     private HttpClient client;
-    private URI uri;
+    private URI uri_insertone;
+    private URI uri_comitall;
     private HttpRequest httpRequest;
 
 
@@ -33,7 +34,8 @@ public class StorageManagerTransmitter extends ParentTransmitter {
         super(stateController,settingsController,readyLists,measurementController);
         String uriStr = settingsController.getSetting("destination").toString();;
         client = HttpClient.newBuilder().build();
-        uri = URI.create(uriStr);
+        uri_insertone = URI.create(uriStr + "/insertone");
+        uri_comitall = URI.create(uriStr + "/commitall");
     }
 
     @Override
@@ -51,7 +53,7 @@ public class StorageManagerTransmitter extends ParentTransmitter {
             //send request
             try{
                 httpRequest = HttpRequest.newBuilder()
-                        .uri(uri)
+                        .uri(uri_insertone)
                         .POST(HttpRequest.BodyPublishers.ofByteArray(request.getContent()))
                         .build();
                 HttpResponse<?> response = client.send(httpRequest, HttpResponse.BodyHandlers.discarding());
@@ -74,20 +76,51 @@ public class StorageManagerTransmitter extends ParentTransmitter {
 
     @Override
     public void transmit(SyncIORequestLinkedList requests){
-        if(settingsController.getIsVerbose()){
-            System.out.println("Transmitting SyncIORequestLinkedList");
-        }
         if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
-            int numRequests = requests.getSize();
-            for(int i=0;i<numRequests;i++){
-                try{
-                    IORequest request = requests.take();
-                    transmit(request);
-                }catch (Exception e){
-                    if(settingsController.getIsVerbose()){
-                        System.out.println("Problem in stub transmitter. Cannot transmit request");
-                        e.printStackTrace();
+            if(settingsController.getIsVerbose()){
+                System.out.println("Transmitting SyncIORequestLinkedList");
+            }
+
+            try{
+                IORequest request;
+                String jsonstr = "[";
+                int numRequests = requests.getSize();
+                for(int i=0;i<numRequests;i++){
+                    if(i != 0){
+                        jsonstr += ",";
                     }
+                    request = requests.take();
+                    jsonstr += "{";
+                    jsonstr += "\"requestId\":";
+                    jsonstr += request.getRequestId();
+                    jsonstr += ",";
+                    jsonstr += "\"appId\":";
+                    jsonstr += request.getAppId();
+                    jsonstr += ",";
+                    jsonstr += "\"batchId\":";
+                    jsonstr += request.getBatchId();
+                    jsonstr += ",";
+                    jsonstr += "\"content\":\"";
+                    jsonstr += request.getContent().toString();
+                    jsonstr += "\"";
+                    jsonstr += "}";
+                }
+                jsonstr += "]";
+
+                httpRequest = HttpRequest.newBuilder()
+                        .uri(uri_comitall)
+                        .POST(HttpRequest.BodyPublishers.ofByteArray(jsonstr.getBytes()))
+                        .build();
+                HttpResponse<?> response = client.send(httpRequest, HttpResponse.BodyHandlers.discarding());
+                if(response.statusCode() != 200 && settingsController.getIsVerbose()==true) {
+                    System.out.println("strg manager transmitter: Error Code other than 200 was received when sending data");
+                }else if(settingsController.getIsVerbose()){
+                    System.out.println("strg manager transmitter: data send successfully ");
+                }
+            }catch (Exception e){
+                if(settingsController.getIsVerbose()){
+                    System.out.println("Problem in stub transmitter. Cannot transmit request");
+                    e.printStackTrace();
                 }
             }
         }

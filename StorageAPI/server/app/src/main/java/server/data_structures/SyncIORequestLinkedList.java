@@ -8,17 +8,17 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class SyncIORequestLinkedList {
-	private byte linkedListId;
+	private int linkedListId;
 	private LinkedList<IORequest> requests;
 	private StateController stateController;
 	
-	public SyncIORequestLinkedList(byte linkedListId, StateController stateController) {
+	public SyncIORequestLinkedList(int linkedListId, StateController stateController) {
 		this.linkedListId = linkedListId;
 		requests = new LinkedList<IORequest>();
 		this.stateController = stateController;
 	}
 	
-	public byte getLinkedListId() {
+	public int getLinkedListId() {
 		return linkedListId;
 	}
 	

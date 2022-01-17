@@ -7,21 +7,21 @@ import java.util.Hashtable;
 import java.util.Set;
 
 public class ReadyLists {
-    private Hashtable<Byte,Hashtable<Byte,SyncIORequestLinkedList>> readylists;
+    private Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> readylists;
     private StateController stateController;
 
     public ReadyLists(StateController stateController){
-        readylists = new Hashtable<Byte,Hashtable<Byte,SyncIORequestLinkedList>>();
+        readylists = new Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>>();
         this.stateController = stateController;
     }
 
-    synchronized public void add(IORequest request, Byte batchId, Byte appId){
+    synchronized public void add(IORequest request, Integer batchId, Integer appId){
         SyncIORequestLinkedList applicationIORequestList;
         if(!readylists.containsKey(batchId) || readylists.get(batchId)==null){
             //batch does not exist. create it
-            readylists.put(batchId, new Hashtable<Byte,SyncIORequestLinkedList>());
+            readylists.put(batchId, new Hashtable<Integer,SyncIORequestLinkedList>());
         }
-        Hashtable<Byte,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+        Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
         if(!batch.containsKey(appId) || batch.get(appId)==null){
             //batch does not have an application with that id. create it
             batch.put(appId, new SyncIORequestLinkedList(appId,stateController));
@@ -32,25 +32,25 @@ public class ReadyLists {
     }
 
     synchronized public void add(IORequest request){
-        Byte batchId = request.getBatchId();
-        Byte appId = request.getAppId();
+        Integer batchId = request.getBatchId();
+        Integer appId = request.getAppId();
         add(request,batchId,appId);
     }
 
-    synchronized public SyncIORequestLinkedList removeAllFromApp(Byte batchId, Byte appId){
+    synchronized public SyncIORequestLinkedList removeAllFromApp(Integer batchId, Integer appId){
         if(readylists.containsKey(batchId)){
-            Hashtable<Byte,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
             return batch.remove(appId);
         }
         return null;
     }
 
-    synchronized public SyncIORequestLinkedList getAndRemoveAllFromBatch(Byte batchId){
+    synchronized public SyncIORequestLinkedList getAndRemoveAllFromBatch(Integer batchId){
         SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList(batchId,stateController);
         if(readylists.containsKey(batchId)){
-            Hashtable<Byte,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
-            Set<Byte> appListIds = batch.keySet();
-            for(Byte appListId : appListIds){
+            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+            Set<Integer> appListIds = batch.keySet();
+            for(Integer appListId : appListIds){
                 requestsList.add(removeAllFromApp(batchId,appListId));
             }
         }
@@ -58,16 +58,16 @@ public class ReadyLists {
     }
 
     synchronized public SyncIORequestLinkedList getAndRemoveFromAllBatches(){
-        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList((byte)0,stateController);
-        Set<Byte> batchesIds = readylists.keySet();
-        for(Byte batchId : batchesIds){
+        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList(Integer.valueOf(0),stateController);
+        Set<Integer> batchesIds = readylists.keySet();
+        for(Integer batchId : batchesIds){
             requestsList.add(getAndRemoveAllFromBatch(batchId));
         }
         return requestsList;
     }
 
     synchronized public SyncIORequestLinkedList getAndRemoveAllFromBatch(){
-        Byte batchId = (byte)0;
+        Integer batchId = Integer.valueOf(0);
         return getAndRemoveAllFromBatch(batchId);
     }
 
