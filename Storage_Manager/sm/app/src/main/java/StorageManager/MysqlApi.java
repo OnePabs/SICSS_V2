@@ -13,7 +13,7 @@ public class MysqlApi {
     private String user = "root";
     private String password = "milo";
     private String dbname = "STORAGEDB";
-    private String dburl = "jdbc:mysql://" + host + "/"+dbname;
+    private String dburl = "jdbc:mysql://" + host + "/"+dbname+":3306?verifyServerCertificate=false&amp;requireSSL=true&amp;useSSL=true";
     private String query = "INSERT INTO content (requestId, appId, batchId, content) VALUES (?,?,?,?)";
 
     public MysqlApi(){}
@@ -26,6 +26,7 @@ public class MysqlApi {
         int appId = Parser.getAppId(content);
         int batchId = Parser.getBatchId(content);
         try {
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(dburl, user, password);
             con.setAutoCommit(false);
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -48,6 +49,7 @@ public class MysqlApi {
 
     public synchronized boolean comitAll(JSONArray arr){
         try{
+            Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(dburl, user, password);
             con.setAutoCommit(false);
             PreparedStatement preparedStmt = con.prepareStatement(query);
