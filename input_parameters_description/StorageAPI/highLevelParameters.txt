@@ -3,8 +3,8 @@ Obligatory Params
 	Object dataTransferTechniqueSettings
 	String serviceTimeDistribution
 	Object serviceTimeDistributionSettings
-	    
 	String transmitter
+	String destination	//Storage Manager url, only necessary if transmitter is storageManagerTransmitter
 
 
 Optional Params
