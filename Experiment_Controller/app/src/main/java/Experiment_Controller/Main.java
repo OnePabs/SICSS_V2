@@ -13,7 +13,7 @@ public class Main {
 		String applicationAddress = "http://localhost:8000";
 		String storageManagerAddress = "http://localhost:8040";
 		int runTimesConversionFactor = 1000;
-		boolean isVerbose = true;
+		boolean isVerbose = false;
 		
 		/******* Technique A Constant  ********/
 		long interArrivalTimeAConstant = (long)2000;

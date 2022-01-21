@@ -12,18 +12,23 @@ import java.sql.ResultSet;
 import StorageManager.MysqlApi;
 
 public class InsertOne implements HttpHandler{
-
+    private boolean  isVerbose;
     private MysqlApi mysqlapi;
 
-    public InsertOne(MysqlApi mysqlapi){
+    public InsertOne(MysqlApi mysqlapi, boolean  isVerbose){
         this.mysqlapi = mysqlapi;
+        this.isVerbose = isVerbose;
     }
 
     @Override
     public void handle(HttpExchange t) {
         //insert one row to db table content
+
+        if(isVerbose){
+            System.out.println("Storage Manager: InsertOne endpoint reached");
+        }
+
         boolean success = false;
-        System.out.println("Storage Manager: InsertOne endpoint reached");
         Statement stmt = null;
         InputStream input_stream = t.getRequestBody();
 

@@ -33,7 +33,7 @@ public class TechniqueA extends ParentDataTransferTechnique{
             try{
                 IORequest request = requestToTransmit.take();
                 transmitter.transmit(request);
-                System.out.println("Technique A transmitted an IO Request.");
+                //System.out.println("Technique A transmitted an IO Request.");
             }catch(Exception e){
                 e.printStackTrace();
             }

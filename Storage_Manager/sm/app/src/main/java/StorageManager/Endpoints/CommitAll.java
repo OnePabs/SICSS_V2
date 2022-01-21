@@ -10,20 +10,24 @@ import org.json.simple.parser.JSONParser;
 import StorageManager.MysqlApi;
 
 public class CommitAll implements HttpHandler{
-
+    private boolean  isVerbose;
     private MysqlApi mysqlapi;
 
-    public CommitAll(MysqlApi mysqlapi){
+    public CommitAll(MysqlApi mysqlapi, boolean  isVerbose){
         this.mysqlapi = mysqlapi;
+        this.isVerbose = isVerbose;
     }
 
     @Override
     public void handle(HttpExchange t) {
         //insert one row to db table content
-        boolean success = false;
-        System.out.println("Storage Manager: commitall endpoint reached");
-        InputStream input_stream = t.getRequestBody();
 
+        if(isVerbose){
+            System.out.println("Storage Manager: commitall endpoint reached");
+        }
+
+        boolean success = false;
+        InputStream input_stream = t.getRequestBody();
         try{
             byte[] content = input_stream.readAllBytes();
             JSONParser parser = new JSONParser();

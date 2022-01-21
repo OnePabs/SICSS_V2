@@ -17,10 +17,16 @@ public class App {
 
     public static void main(String[] args) {
         int port = 8080;
-        if(args.length == 1){
+        if(args.length >= 1){
             port = Integer.valueOf(args[0]);
         }
         System.out.println("Resource Manager Running on port: " + port);
+
+        boolean isVerbose = false;
+        if(args.length >= 2){
+            isVerbose = Boolean.valueOf(args[1]);
+        }
+        System.out.println("Resource Manager isVerbose: " + isVerbose);
 
         HttpServer server;
         MysqlApi mysqlapi = new MysqlApi();
@@ -31,8 +37,8 @@ public class App {
             server = HttpServer.create(new InetSocketAddress("0.0.0.0",port), 0);
 
             //server.createContext("/data", new Data(conn));
-            server.createContext("/insertone", new InsertOne(mysqlapi));
-            server.createContext("/commitall", new CommitAll(mysqlapi));
+            server.createContext("/insertone", new InsertOne(mysqlapi,isVerbose));
+            server.createContext("/commitall", new CommitAll(mysqlapi,isVerbose));
             server.createContext("/test", new Test());
             server.setExecutor(null);
 
