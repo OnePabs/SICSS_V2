@@ -7,21 +7,23 @@ import java.nio.charset.StandardCharsets;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import StorageManager.MysqlApi;
+import StorageManager.*;
 
 public class CommitAll implements HttpHandler{
     private boolean  isVerbose;
     private MysqlApi mysqlapi;
+    private MeasurementController measurementController;
 
-    public CommitAll(MysqlApi mysqlapi, boolean  isVerbose){
+    public CommitAll(MysqlApi mysqlapi, MeasurementController measurementController, boolean  isVerbose){
         this.mysqlapi = mysqlapi;
         this.isVerbose = isVerbose;
+        this.measurementController = measurementController;
     }
 
     @Override
     public void handle(HttpExchange t) {
         //insert one row to db table content
-
+        measurementController.addMeasurement(new TimeStamp(0,"ENTRY",System.nanoTime()));
         if(isVerbose){
             System.out.println("Storage Manager: commitall endpoint reached");
         }
@@ -44,6 +46,7 @@ public class CommitAll implements HttpHandler{
         try{
             if(success){
                 t.sendResponseHeaders(200,-1);
+                measurementController.addMeasurement(new TimeStamp(0,"EXIT",System.nanoTime()));
             }else{
                 t.sendResponseHeaders(400,-1);
             }

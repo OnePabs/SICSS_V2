@@ -9,21 +9,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-import StorageManager.MysqlApi;
+import StorageManager.*;
 
 public class InsertOne implements HttpHandler{
     private boolean  isVerbose;
     private MysqlApi mysqlapi;
+    private MeasurementController measurementController;
 
-    public InsertOne(MysqlApi mysqlapi, boolean  isVerbose){
+    public InsertOne(MysqlApi mysqlapi, MeasurementController measurementController, boolean  isVerbose){
         this.mysqlapi = mysqlapi;
         this.isVerbose = isVerbose;
+        this.measurementController = measurementController;
     }
 
     @Override
     public void handle(HttpExchange t) {
         //insert one row to db table content
-
+        measurementController.addMeasurement(new TimeStamp(0,"ENTRY",System.nanoTime()));
         if(isVerbose){
             System.out.println("Storage Manager: InsertOne endpoint reached");
         }
@@ -45,6 +47,7 @@ public class InsertOne implements HttpHandler{
         try{
             if(success){
                 t.sendResponseHeaders(200,-1);
+                measurementController.addMeasurement(new TimeStamp(0,"EXIT",System.nanoTime()));
             }else{
                 t.sendResponseHeaders(400,-1);
             }

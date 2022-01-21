@@ -30,6 +30,7 @@ public class App {
 
         HttpServer server;
         MysqlApi mysqlapi = new MysqlApi();
+        MeasurementController measurementController = new MeasurementController();
 
         try{
 
@@ -37,8 +38,10 @@ public class App {
             server = HttpServer.create(new InetSocketAddress("0.0.0.0",port), 0);
 
             //server.createContext("/data", new Data(conn));
-            server.createContext("/insertone", new InsertOne(mysqlapi,isVerbose));
-            server.createContext("/commitall", new CommitAll(mysqlapi,isVerbose));
+            server.createContext("/insertone", new InsertOne(mysqlapi,measurementController,isVerbose));
+            server.createContext("/commitall", new CommitAll(mysqlapi,measurementController,isVerbose));
+            server.createContext("/measurements", new Measurements(measurementController,isVerbose));
+
             server.createContext("/test", new Test());
             server.setExecutor(null);
 

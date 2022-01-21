@@ -75,5 +75,23 @@ public class MysqlApi {
     }
 
 
+    public synchronized boolean clear(){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(dburl, user, password);
+            con.setAutoCommit(false);
+            Statement statement = con.createStatement();
+            statement.executeUpdate("TRUNCATE STORAGEDB.content");
+            con.commit();
+            statement.close();
+            con.close();
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
 
