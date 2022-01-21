@@ -19,12 +19,15 @@ public class TransmitterBuilder {
         switch(transmitterType){
             case "STUB":
                 transmitter = new StubTransmitter(stateController,settingsController,readyLists,measurementController);
+                System.out.println("Builing Stub Transmitter");
                 break;
-            case "StorageManagerTransmitter":
+            case "STORAGEMANAGERTRANSMITTER":
                 transmitter = new StorageManagerTransmitter(stateController,settingsController,readyLists,measurementController);
+                System.out.println("Builing Storage Manager Transmitter");
                 break;
             default:
                 transmitter = new ParentTransmitter(stateController,settingsController,readyLists,measurementController);
+                System.out.println("Builing Parent Transmitter: ERROR!!!");
         }
         return transmitter;
     }

@@ -25,12 +25,19 @@ public class TechniqueA extends ParentDataTransferTechnique{
         SyncIORequestLinkedList requestToTransmit = readyLists.getAndRemoveFromAllBatches();
         if(requestToTransmit == null){
             System.out.println("requestToTransmit is null");
+        }else if(requestToTransmit.getSize() != 1){
+            System.out.println("Technique A: number of requests to transmit is not one");
+        }else if(transmitter == null){
+            System.out.println("transmitter null");
+        }else{
+            try{
+                IORequest request = requestToTransmit.take();
+                transmitter.transmit(request);
+                System.out.println("Technique A transmitted an IO Request.");
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
-        if(transmitter == null){
-            System.out.println("transmitter null");
-        }
-        transmitter.transmit(requestToTransmit);
-        System.out.println("Technique A transmitted an IO Request.");
     }
 }

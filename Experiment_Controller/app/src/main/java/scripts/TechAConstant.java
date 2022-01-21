@@ -23,9 +23,10 @@ public class TechAConstant extends ParentScript{
 	private int runTimeConversionFactorToMillis; //conversion factor to milliseconds
 	private String storageAPIaddress;
 	private String applicationAddress;
+	private String storageManagerAddress;
 	private String resultsFolderPath;
 	private boolean isVerbose;
-	private int interOperationWaitTime = 1000;
+	private int interOperationWaitTime = 3000;
 	
 	
 	
@@ -42,6 +43,7 @@ public class TechAConstant extends ParentScript{
 			int runTimeConversionFactorToMillis,
 			String storageAPIaddress,
 			String applicationAddress,
+			String storageManagerAddress,
 			String resultsFolderPath,
 			boolean isVerbose
 			) {
@@ -51,6 +53,7 @@ public class TechAConstant extends ParentScript{
 		this.runTimeConversionFactorToMillis = runTimeConversionFactorToMillis;
 		this.storageAPIaddress = storageAPIaddress;
 		this.applicationAddress = applicationAddress;
+		this.storageManagerAddress = storageManagerAddress;
 		this.resultsFolderPath = resultsFolderPath;
 		this.isVerbose = isVerbose;
 	}
@@ -73,7 +76,8 @@ public class TechAConstant extends ParentScript{
 				+ "\"serviceTimeDistribution\":\"CONSTANT\","
 				+ "\"serviceTimeDistributionSettings\":"+ serviceTime +","
 				+"\"useSleepForMockProcessing\":true,"
-				+ "\"transmitter\":\"stub\""
+				+ "\"transmitter\":\"StorageManagerTransmitter\","
+				+ "\"destination\":\"" + storageManagerAddress + "\","
 				+ "}";
 		
 		StorageAPIInterface sapi = new StorageAPIInterface(storageAPIaddress);
@@ -90,7 +94,7 @@ public class TechAConstant extends ParentScript{
 		
 		//Application Set up
 		String jr2 = "{"
-				+ "\"receiverAddress\":\""+storageAPIaddress+"\","
+				+ "\"receiverAddress\":\""+storageAPIaddress+"/data"+"\","
 				+ "\"isVerbose\":" + String.valueOf(isVerbose) + ","
 				+"\"useSleepForMockProcessing\":true,"
 				+"\"interGenerationTimeDistribution\":\"CONSTANT\","

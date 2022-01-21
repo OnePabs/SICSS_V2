@@ -54,7 +54,7 @@ public class InnerModulesContainer {
 
     public boolean initServer(){
         try{
-            server = HttpServer.create(new InetSocketAddress("localhost",portNumber), 0);
+            server = HttpServer.create(new InetSocketAddress("0.0.0.0",portNumber), 0);
             server.createContext("/settings", new Settings(stateCtrl,settingsCtrl));
             server.createContext("/start", new Start(stateCtrl,settingsCtrl));
             server.createContext("/stop", new Stop(stateCtrl,settingsCtrl));

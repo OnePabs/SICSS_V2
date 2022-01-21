@@ -9,28 +9,29 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 		
-		String storageApiAddress = "http://localhost:80";
-		String applicationAddress = "http://ec2-3-133-130-15.us-east-2.compute.amazonaws.com:80";
-		String storageManagerAddress = "http://ec2-18-223-143-129.us-east-2.compute.amazonaws.com:80";
+		String storageApiAddress = "http://localhost:8080";
+		String applicationAddress = "http://localhost:8000";
+		String storageManagerAddress = "http://localhost:8040";
 		int runTimesConversionFactor = 1000;
 		boolean isVerbose = true;
 		
 		/******* Technique A Constant  ********/
-//		long interArrivalTimeAConstant = (long)2000;
-//		long serviceTimeAConstant = (long)1600;
-//		Long[] runtimesAConstant = {(long) 10,(long)30};
-//		String resultsFileNameAConstant = "/home/juancontreras/Downloads/results";
-//		ParentScript scriptAConstant = new TechAConstant(
-//				interArrivalTimeAConstant,
-//				serviceTimeAConstant,
-//				runtimesAConstant,
-//				runTimesConversionFactor,
-//				storageApiAddress,
-//				applicationAddress,
-//				resultsFileNameAConstant,
-//				isVerbose
-//				);
-//		scriptAConstant.run();
+		long interArrivalTimeAConstant = (long)2000;
+		long serviceTimeAConstant = (long)1600;
+		Long[] runtimesAConstant = {(long) 10};
+		String resultsFileNameAConstant = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\techadeb";
+		ParentScript scriptAConstant = new TechAConstant(
+				interArrivalTimeAConstant,
+				serviceTimeAConstant,
+				runtimesAConstant,
+				runTimesConversionFactor,
+				storageApiAddress,
+				applicationAddress,
+				storageManagerAddress,
+				resultsFileNameAConstant,
+				isVerbose
+				);
+		scriptAConstant.run();
 		
 		
 		
@@ -117,6 +118,7 @@ public class Main {
 
 
 		/******* App and strg manager test constant  ********/
+		/*
 		storageManagerAddress += "/insertone";
 		long interArrivalTimeConstant = (long)2000;
 		Long[] runtimes = {(long) 30};
@@ -129,6 +131,7 @@ public class Main {
 				isVerbose
 		);
 		ApplicationStorageManagerTestScript.run();
+		 */
 
 	}//end main
 }//end class

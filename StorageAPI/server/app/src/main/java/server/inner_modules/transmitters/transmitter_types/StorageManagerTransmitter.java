@@ -78,7 +78,7 @@ public class StorageManagerTransmitter extends ParentTransmitter {
     public void transmit(SyncIORequestLinkedList requests){
         if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
             if(settingsController.getIsVerbose()){
-                System.out.println("Transmitting SyncIORequestLinkedList");
+                System.out.println("Storage Manager Transmitter: commitall");
             }
 
             try{
