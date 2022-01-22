@@ -15,38 +15,31 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class JsonToCsv {
-	private LinkedList<MeasurementEntry> measurements;
-	private LinkedList<IORequest> requests;
 	private boolean isVerbose;
 	
-	public JsonToCsv(String jsonArrayStr, boolean isVerbose) throws Exception {
-		//parse Json array into measurements and requests
-		
-		//parse json array string into a JSONArray
-		if(isVerbose) {
-			System.out.println("Parsing jsonArrayStr");
-		}
-		JSONArray mesJsonArray = parseJsonArrayStr(jsonArrayStr);
-		
-		//map JSONArray into a linked list of MeasurementEntry objects
-		measurements = mapJsonMeasurementsToMeasurementEntries(mesJsonArray);
-		
-		if(measurements==null || measurements.isEmpty()) {
-			throw new Exception("JSON to CSV received empty measurements");
-		}
-		
-		//sort measurement entries by time stamp
-		Collections.sort(measurements, new TimeStampComparator());
-		
-		//map measurements to IORequests
-        requests = getIORequestsFromMeasurements(measurements);
-        Collections.sort(requests, new RequestComparator());
-        
+	public JsonToCsv(boolean isVerbose) throws Exception {
         //set isVerbose
         this.isVerbose = isVerbose;
 	}
-	
-	public boolean writeMeasurementsToFile(String basePath) {
+
+	public static void getAndStoreMeasurements(String jsonArrayStr, String resultsFolderpath, String moduleName){
+		LinkedList<MeasurementEntry> measurements = getMeasurements();
+		String basepath = resultsFolderpath + "/measurements/" + moduleName + ".txt";
+		writeMeasurementsToFile(basepath, measurements);
+	}
+
+	public static LinkedList<MeasurementEntry> getMeasurements(String jsonArrayStr) throws Exception{
+		JSONArray mesJsonArray = parseJsonArrayStr(jsonArrayStr);
+		LinkedList<MeasurementEntry> measurements = mapJsonMeasurementsToMeasurementEntries(mesJsonArray);
+		if(measurements==null || measurements.isEmpty()) {
+			throw new Exception("JSON to CSV received empty measurements");
+		}
+		Collections.sort(measurements, new TimeStampComparator());
+		return measurements;
+	}
+
+
+	public static boolean writeMeasurementsToFile(String filename, LinkedList<MeasurementEntry> measurements) {
 		//write measurements to a file in csv format
 		
 		if( measurements == null || measurements.isEmpty()) {
@@ -54,7 +47,7 @@ public class JsonToCsv {
 		}
 		
 		try {
-	        FileWriter myWriter = new FileWriter(basePath + "measurements.txt");
+	        FileWriter myWriter = new FileWriter(filename);
 	        
 	        //write headers
 	        myWriter.write("Request ID");
@@ -69,7 +62,7 @@ public class JsonToCsv {
 	        for(MeasurementEntry me: measurements) {
 	        	myWriter.write(String.valueOf(me.id));
 	        	myWriter.write(",");
-	        	myWriter.write(String.valueOf(me.timestampName));
+	        	myWriter.write(me.timestampName);
 	        	myWriter.write(",");
 	        	myWriter.write(String.valueOf(me.timestamp));
 	        	myWriter.write("\n");
@@ -81,11 +74,83 @@ public class JsonToCsv {
 	        e.printStackTrace();
 	      }
 	    return true;
-		
 	}
 	
-	
-	
+	public static void writeModulePerformanceMetrics(
+			String resultsBasePath,
+			String moduleName,
+			int numExperiments,
+			long[] experimentRuntimes,
+			LinkedList<Double> arrivalRates,
+			LinkedList<Double> serviceTimes,
+			LinkedList<Double> throughputs,
+			LinkedList<Double> utilizations,
+			LinkedList<Double> averageNumberOfjobs,
+	{
+		try{
+			//create file
+			Path basic_calculations_path = Paths.get(resultsBasePath + moduleName + ".txt");
+			if (Files.notExists(basic_calculations_path)) {
+				FileWriter myHeaderWriter = new FileWriter(resultsBasePath+ moduleName + ".txt");
+
+				//headers
+				myHeaderWriter.write("Experiment Runtime (minutes)");
+				myHeaderWriter.write(",");
+				myHeaderWriter.write(moduleName + "Arrival Rate (requests per second)");
+				myHeaderWriter.write(",");
+				myHeaderWriter.write(moduleName + "Storage API Residence time (milliseconds)");
+				myHeaderWriter.write(",");
+				myHeaderWriter.write(moduleName + "Throughput (requests per second)");
+				myHeaderWriter.write(",");
+				myHeaderWriter.write(moduleName + "Utilization");
+				myHeaderWriter.write(",");
+				myHeaderWriter.write(moduleName + "Average Number of jobs in the system");
+				myHeaderWriter.write("\n");
+				myHeaderWriter.close();
+			}
+
+			//write data
+			FileWriter myWriter = new FileWriter(resultsBasePath + moduleName + ".txt",true);
+			for(int i=0; i<numExperiments; i++){
+				myWriter.write(String.valueOf(experimentRuntimes[i]));
+				myWriter.write(",");
+				myWriter.write(String.valueOf(arrivalRates.get(i)));
+				myWriter.write(",");
+				myWriter.write(String.valueOf(serviceTimes.get(i)));
+				myWriter.write(",");
+				myWriter.write(String.valueOf(throughputs.get(i)));
+				myWriter.write(",");
+				myWriter.write(String.valueOf(utilizations.get(i)));
+				myWriter.write(",");
+				myWriter.write(String.valueOf(averageNumberOfjobs.get(i)));
+				myWriter.write("\n");
+			}
+			myWriter.close();
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static double getAvrgInterTime(String timeStampName, <LinkedList<MeasurementEntry> measurements){
+		MeasurementEntry current;
+		long sum;
+
+		for(int i=0; i<measurements.size();i++){
+			if(i!=0){
+				sum += measurements.get(i).timestamp - current.timestamp;
+			}
+			current = measurements.get(i);
+		}
+		return sum/((double)measurements.size());
+	}
+
+	public static double getRate(String timeStampName, <LinkedList<MeasurementEntry> measurements){
+		return 1/getAvrgInterTime(timeStampName,measurements);
+	}
+}
+
+	/*
 	public boolean writeBasicCalculationsToFile(double serviceRate, String resultsBasePath, boolean includeMM1Expected) {
 		//writes basic general calculations from the measurements
 		//headers are: 
@@ -241,14 +306,14 @@ public class JsonToCsv {
 	    
 	    return true;
 	}
-	
+	*/
 	private static void printMeasurementEntries(LinkedList<MeasurementEntry> mes) {
 		System.out.println("Number of measurement entries: " + mes.size());
 		for(MeasurementEntry me: mes) {
 			System.out.println("Id:"+me.id+" , TimeStamp Name: " + me.timestampName.toString() +" , TimeStamp value: " + me.timestamp);
 		}
 	}
-	
+
 	private static LinkedList<MeasurementEntry> mapJsonMeasurementsToMeasurementEntries(JSONArray jsonArray){
 		LinkedList<MeasurementEntry> entries = new LinkedList<MeasurementEntry>();
 		 Iterator i = jsonArray.iterator();
@@ -263,7 +328,7 @@ public class JsonToCsv {
 		return entries;
 	}
 	
-	
+
 	private static JSONArray parseJsonArrayStr(String jsonArrayStr) {
 
 		JSONParser parser = new JSONParser();
@@ -330,13 +395,6 @@ public class JsonToCsv {
 }
 
 
-
-
-class MeasurementEntry {
-	public long id;
-	public TIMESTAMP_NAME timestampName;
-	public long timestamp;
-}
 
 class IORequest{
 	public long id;

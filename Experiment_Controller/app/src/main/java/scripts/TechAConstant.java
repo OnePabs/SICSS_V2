@@ -66,7 +66,11 @@ public class TechAConstant extends ParentScript{
 		System.out.println("Inter Arrival times distribution: Constant");
 		System.out.println("Inter Arrival time: " + interArrivalTime);
 		System.out.println("Service time: " + serviceTime);
-		
+
+
+		//Storage Manager set up
+		StorageManagerInterface smi = new StorageManagerInterface(storageManagerAddress);
+		smi.clear();
 		
 		// Storage API Set up
 		String jr = "{"
