@@ -10,8 +10,15 @@ import java.util.LinkedList;
 public class RunExperimentScript {
 	private static long interOperationWaitTime = 1000; //1 second
 
+	public static void runExperiment(LinkedList<ExperimentParameter> experimentParameters, String result_folder_path) throws Exception{
+		for(ExperimentParameter exp:experimentParameters){
+			runExperiment(exp,result_folder_path);
+		}
+	}
 
-	public static void runExperiment(LinkedList<ExperimentParameter> experimentParameters, String result_folder_path){
+	public static void runExperiment(ExperimentParameter experimentParameters, String result_folder_path) throws Exception{
+		/*
+		//print parameters
 		System.out.println("results folder path="+result_folder_path);
 		System.out.println();
 		for(ExperimentParameter expara:experimentParameters){
@@ -21,8 +28,111 @@ public class RunExperimentScript {
 		}
 		System.out.println();
 		System.out.println();
+		 */
+
+		//change application settings
+		for(ApplicationInterface api:experimentParameters.applications_interfaces){
+			api.changeSettings(experimentParameters.applications_parameters);
+		}
+
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//change storage api settings
+		experimentParameters.storageApis_interface.changeSettings(experimentParameters.storageApi_parameters);
+
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//start storage manager
+		experimentParameters.storageManager_interface.clear();
+
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//start storage api
+		experimentParameters.storageApis_interface.start();
+
+		//inter operation time
+		try{
+			Thread.sleep(1000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//start applications
+		for(ApplicationInterface api:experimentParameters.applications_interfaces){
+			api.start();
+		}
+
+		//sleep for experiment runtime
+		try{
+			Thread.sleep(experimentParameters.experimentRuntime);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//stop applications
+		for(ApplicationInterface api:experimentParameters.applications_interfaces){
+			api.stop();
+		}
+
+		//inter operation time
+		try{
+			Thread.sleep(1000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//stop storage API
+		experimentParameters.storageApis_interface.stop();
+
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//get storage api measurements
+		String storageApi_measurements = experimentParameters.storageApis_interface.getMeasurements();
+
+		//store storage api measurements
+		String experiment_results_folder = result_folder_path + "/" + experimentParameters.experimentName;
+		LinkedList<MeasurementEntry> strgApi_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageApi_measurements,experiment_results_folder,"strgapi");
+
+		//get storage manager measurements
+		String storageManager_measurements = experimentParameters.storageManager_interface.getMeasurements();
+
+		//store storage manager measurements
+		LinkedList<MeasurementEntry> strgMngr_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageManager_measurements,experiment_results_folder,"strgMngr");
+
+		//get and store storage api performance metrics
+		JsonToCsv.writeStorageApiPerformanceMetrics(strgApi_EntryMeasurements,experiment_results_folder);
+
+		//get and store storage manager performance metrics
+		JsonToCsv.writeStorageManagerPerformanceMetrics(strgMngr_EntryMeasurements,experiment_results_folder);
+
+		//clear storage api
+		experimentParameters.storageApis_interface.clear();
+
+		//clear storage manager
+		experimentParameters.storageManager_interface.clear();
 	}
 
+	/*
 	public static void runExperiment(
 		String[] application_locations,
 		boolean is_num_app_runs_binomial,	//if true run: app 1, then app1 AND app2, then App1 AND app2 AND app3,..., if false, run app1, then run only app2, then only app3...
@@ -89,6 +199,8 @@ public class RunExperimentScript {
 			System.out.println("Wrong binomial parameters... not implemented yet");
 		}
 	}
+	*/
+
 	
 	/*
 	public static void RunSaturationExperiment (

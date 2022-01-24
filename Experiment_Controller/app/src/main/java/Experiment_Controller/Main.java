@@ -12,14 +12,13 @@ public class Main {
 		String[] applicationAddresses = {"http://localhost:8000"};
 		String[] storageApiAddress = {"http://localhost:8080"};
 		String storageManagerAddress = "http://localhost:8090";
-		int runTimesConversionFactor = 1000;
 		boolean isVerbose = true;
-		String resultsFolderPath = "/home/juancontreras/Documents/results";
+		String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\expres";
 
 
 		// Tech A constant Saturation experiment
-		long runtime = 10;
-		int[] interArrivalTimesInt = {200,100,80};
+		long runtime = 10000; //10 sec
+		int[] interArrivalTimesInt = {200,150,100,80,70};
 		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
 			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);

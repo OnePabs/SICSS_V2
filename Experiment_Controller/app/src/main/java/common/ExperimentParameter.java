@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 public class ExperimentParameter {
     public String experimentName;
+    public long experimentRuntime;
     public LinkedList<ApplicationInterface> applications_interfaces;
     public String applications_parameters;
     public StorageAPIInterface storageApis_interface;
@@ -12,6 +13,7 @@ public class ExperimentParameter {
 
     public ExperimentParameter(
         String experimentName,
+        long experimentRuntime, //in milliseconds
         String[] applications_addresses,
         String applications_parameters,
         String storageApis_access_address,
@@ -19,6 +21,7 @@ public class ExperimentParameter {
         String storageManager_access_address
     ){
         this.experimentName = experimentName;
+        this.experimentRuntime = experimentRuntime;
         applications_interfaces = new LinkedList<ApplicationInterface>();
         for(String application_addresse: applications_addresses){
             applications_interfaces.add(new ApplicationInterface(application_addresse));

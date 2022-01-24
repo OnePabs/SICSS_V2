@@ -1,9 +1,11 @@
 package common;
 
+import java.util.LinkedList;
+
 public class PerformanceMetrics {
-    /*
+
     public static double getAverateInterTime(LinkedList<MeasurementEntry> measurements, String timestampName){
-        MeasurementEntry prev;
+        MeasurementEntry prev = null;
         long sum = (long)0;
 
         for(int i=0; i<measurements.size(); i++){
@@ -25,7 +27,7 @@ public class PerformanceMetrics {
     }
 
     public static double getAverageDifference(LinkedList<MeasurementEntry> measurements, String startStampName, String endStampName){
-        MeasurementEntry currentStart;
+        MeasurementEntry currentStart = null;
         long sum = (long)0;
         int numDifferences = 0;
 
@@ -52,6 +54,10 @@ public class PerformanceMetrics {
         double transferTime = getAverageDifference(measurements, "TRANSMITTER_ENTRY", "TRANSMITTER_EXIT");
         double total = entrySortingTime + programmedDelay + transferTime;
         return total;
+    }
+
+    public static double getStorageApiResidenceTime(LinkedList<MeasurementEntry> measurements){
+        return getAverageDifference(measurements, "STORAGE_API_ENTRY","TRANSMITTER_EXIT");
     }
 
     public static double getStorageApiThroughput(LinkedList<MeasurementEntry> measurements){
@@ -84,8 +90,16 @@ public class PerformanceMetrics {
 
     public static double getStorageManagerUtilization(LinkedList<MeasurementEntry> measurements){
         double throughput = getStorageManagerThroughput(measurements);
-        return 1.2;
+        double serviceTime = getStorageManagerServiceTime(measurements);
+        return getUtilization(throughput,serviceTime);
     }
+
+    public static double getStorageManagerJobsInSystem(LinkedList<MeasurementEntry> measurements){
+        double arrivalRate = getStorageManagerArrivalRate(measurements);
+        double totalTimeInSystem = getStorageManagerServiceTime(measurements);
+        return getJobsInSystem(arrivalRate,totalTimeInSystem);
+    }
+
 
     public static double getUtilization(double throughput, double serviceTime){
         return throughput*serviceTime;
@@ -94,6 +108,6 @@ public class PerformanceMetrics {
     public static double getJobsInSystem(double arrivalRate, double totalTimeInSystem){
         return arrivalRate*totalTimeInSystem;
     }
-    */
+
 
 }

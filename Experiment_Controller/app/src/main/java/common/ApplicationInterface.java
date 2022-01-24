@@ -49,7 +49,6 @@ public class ApplicationInterface {
         	}
         }catch(Exception e){
 			e.printStackTrace();
-
 		}
         return false;
 	}

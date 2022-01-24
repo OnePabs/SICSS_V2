@@ -61,6 +61,7 @@ public class TechAConstant extends ParentScript{
 	
 	@Override
 	public void run() {
+		/*
 		System.out.println("Script:Technique A Constant script");
 		System.out.println("Technique: A");
 		System.out.println("Inter Arrival times distribution: Constant");
@@ -88,6 +89,7 @@ public class TechAConstant extends ParentScript{
 			runTimes,
 			result_folder_path
 		);
+		*/
 
 		/*
 		//Storage Manager set up

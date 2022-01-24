@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class JsonToCsv {
-	/*
+
 	private boolean isVerbose;
 	
 	public JsonToCsv(boolean isVerbose) throws Exception {
@@ -23,10 +23,11 @@ public class JsonToCsv {
         this.isVerbose = isVerbose;
 	}
 
-	public static void getAndStoreMeasurements(String jsonArrayStr, String resultsFolderpath, String moduleName){
-		LinkedList<MeasurementEntry> measurements = getMeasurements();
+	public static LinkedList<MeasurementEntry> getAndStoreMeasurements(String jsonArrayStr, String resultsFolderpath, String moduleName) throws Exception{
+		LinkedList<MeasurementEntry> measurements = getMeasurements(jsonArrayStr);
 		String basepath = resultsFolderpath + "/measurements/" + moduleName + ".txt";
 		writeMeasurementsToFile(basepath, measurements);
+        return measurements;
 	}
 
 	public static LinkedList<MeasurementEntry> getMeasurements(String jsonArrayStr) throws Exception{
@@ -35,7 +36,7 @@ public class JsonToCsv {
 		if(measurements==null || measurements.isEmpty()) {
 			throw new Exception("JSON to CSV received empty measurements");
 		}
-		Collections.sort(measurements, new TimeStampComparator());
+		//Collections.sort(measurements, new TimeStampComparator());
 		return measurements;
 	}
 
@@ -76,7 +77,104 @@ public class JsonToCsv {
 	      }
 	    return true;
 	}
-	
+
+
+
+    public static void writeStorageApiPerformanceMetrics( LinkedList<MeasurementEntry> measurements,String resultsBasePath){
+        try{
+            String path = resultsBasePath + "/performance_metrics/" + "strgapi" + ".txt";
+            //create file
+            Path basic_calculations_path = Paths.get(path);
+            if (Files.notExists(basic_calculations_path)) {
+                FileWriter myHeaderWriter = new FileWriter(path);
+
+                //headers
+                myHeaderWriter.write("Arrival Rate (requests per second)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Average Service time (milliseconds)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Average Residence time (milliseconds)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Throughput (requests per second)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Utilization");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Average Number of jobs in the system");
+                myHeaderWriter.write("\n");
+                myHeaderWriter.close();
+            }
+
+
+
+            //write data
+            FileWriter myWriter = new FileWriter(path,true);
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiArrivalRate(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiServiceTime(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiResidenceTime(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiThroughput(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiUtilization(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiJobsInSystem(measurements)));
+
+            myWriter.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void writeStorageManagerPerformanceMetrics(LinkedList<MeasurementEntry> measurements,String resultsBasePath){
+        try{
+            String path = resultsBasePath + "/performance_metrics/" + "strgMngr" + ".txt";
+            //create file
+            Path basic_calculations_path = Paths.get(path);
+            if (Files.notExists(basic_calculations_path)) {
+                FileWriter myHeaderWriter = new FileWriter(path);
+
+                //headers
+                myHeaderWriter.write("Arrival Rate (requests per second)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Average Service time (milliseconds)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Average Residence time (milliseconds)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Throughput (requests per second)");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Utilization");
+                myHeaderWriter.write(",");
+                myHeaderWriter.write("Average Number of jobs in the system");
+                myHeaderWriter.write("\n");
+                myHeaderWriter.close();
+            }
+
+
+
+            //write data
+            FileWriter myWriter = new FileWriter(path,true);
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerArrivalRate(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerServiceTime(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerServiceTime(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerThroughput(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerUtilization(measurements)));
+            myWriter.write(",");
+            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerJobsInSystem(measurements)));
+
+            myWriter.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /*
 	public static void writeModulePerformanceMetrics(
 			String resultsBasePath,
 			String moduleName,
@@ -132,7 +230,8 @@ public class JsonToCsv {
 			e.printStackTrace();
 		}
 	}
-
+     */
+    /*
 	public static double getAvrgInterTime(String timeStampName, <LinkedList<MeasurementEntry> measurements){
 		MeasurementEntry current;
 		long sum;
@@ -314,21 +413,21 @@ public class JsonToCsv {
 			System.out.println("Id:"+me.id+" , TimeStamp Name: " + me.timestampName.toString() +" , TimeStamp value: " + me.timestamp);
 		}
 	}
-
+*/
 	private static LinkedList<MeasurementEntry> mapJsonMeasurementsToMeasurementEntries(JSONArray jsonArray){
 		LinkedList<MeasurementEntry> entries = new LinkedList<MeasurementEntry>();
 		 Iterator i = jsonArray.iterator();
 		 while(i.hasNext()) {
 			 JSONObject jobj = (JSONObject)i.next();
 			 MeasurementEntry me = new MeasurementEntry();
-			 me.id = (long)jobj.get("requestId");
-			 me.timestampName = TIMESTAMP_NAME.valueOf((String)jobj.get("TIMESTAMP_NAME"));
+			 me.id = (int)jobj.get("requestId");
+			 me.timestampName = jobj.get("TIMESTAMP_NAME").toString();
 			 me.timestamp = (long)jobj.get("timeStamp");
 			 entries.add(me);
 		 }
 		return entries;
 	}
-	
+
 
 	private static JSONArray parseJsonArrayStr(String jsonArrayStr) {
 
@@ -343,6 +442,7 @@ public class JsonToCsv {
         }
         return jsonArray;
 	}
+    /*
 	
 	private static void printIORequests(LinkedList<IORequest> requests) {
 		if(requests == null || requests.isEmpty()) {
@@ -452,6 +552,7 @@ class TimeStampComparator implements Comparator<MeasurementEntry> {
 		return intComparisonResult;
 	}
 }
+
 
 class RequestComparator implements Comparator<IORequest>{
 	public int compare(IORequest r1, IORequest r2) {
