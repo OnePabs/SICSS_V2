@@ -2,6 +2,7 @@ package scripts;
 
 import common.*;
 import java.util.LinkedList;
+import java.io.File;
 
 /**
  * @author juancontreras
