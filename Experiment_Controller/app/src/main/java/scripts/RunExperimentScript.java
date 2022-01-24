@@ -110,7 +110,7 @@ public class RunExperimentScript {
 		String storageApi_measurements = experimentParameters.storageApis_interface.getMeasurements();
 
 		//store storage api measurements
-		String experiment_results_folder = result_folder_path + "/" + experimentParameters.experimentName;
+		String experiment_results_folder = result_folder_path + File.separator + experimentParameters.experimentName;
 		LinkedList<MeasurementEntry> strgApi_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageApi_measurements,experiment_results_folder,"strgapi");
 
 		//get storage manager measurements

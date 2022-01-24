@@ -12,7 +12,7 @@ public class Main {
 		String[] applicationAddresses = {"http://localhost:8000"};
 		String[] storageApiAddress = {"http://localhost:8080"};
 		String storageManagerAddress = "http://localhost:8090";
-		boolean isVerbose = true;
+		boolean isVerbose = false;
 		String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\expres";
 
 

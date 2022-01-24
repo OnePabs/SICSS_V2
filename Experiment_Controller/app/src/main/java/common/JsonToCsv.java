@@ -25,7 +25,7 @@ public class JsonToCsv {
 
 	public static LinkedList<MeasurementEntry> getAndStoreMeasurements(String jsonArrayStr, String resultsFolderpath, String moduleName) throws Exception{
 		LinkedList<MeasurementEntry> measurements = getMeasurements(jsonArrayStr);
-		String basepath = resultsFolderpath + "/measurements/" + moduleName + ".txt";
+		String basepath = resultsFolderpath + File.separator + "measurements" + File.separator + moduleName + ".txt";
 		writeMeasurementsToFile(basepath, measurements);
         return measurements;
 	}
@@ -82,7 +82,7 @@ public class JsonToCsv {
 
     public static void writeStorageApiPerformanceMetrics( LinkedList<MeasurementEntry> measurements,String resultsBasePath){
         try{
-            String path = resultsBasePath + "/performance_metrics/" + "strgapi" + ".txt";
+            String path = resultsBasePath + File.separator + "performance_metrics" + File.separator + "strgapi" + ".txt";
             //create file
             Path basic_calculations_path = Paths.get(path);
             if (Files.notExists(basic_calculations_path)) {
@@ -129,7 +129,7 @@ public class JsonToCsv {
 
     public static void writeStorageManagerPerformanceMetrics(LinkedList<MeasurementEntry> measurements,String resultsBasePath){
         try{
-            String path = resultsBasePath + "/performance_metrics/" + "strgMngr" + ".txt";
+            String path = resultsBasePath + File.separator + "performance_metrics" + File.separator + "strgMngr" + ".txt";
             //create file
             Path basic_calculations_path = Paths.get(path);
             if (Files.notExists(basic_calculations_path)) {
@@ -420,7 +420,7 @@ public class JsonToCsv {
 		 while(i.hasNext()) {
 			 JSONObject jobj = (JSONObject)i.next();
 			 MeasurementEntry me = new MeasurementEntry();
-			 me.id = (int)jobj.get("requestId");
+			 me.id = (int)((long)jobj.get("requestId"));
 			 me.timestampName = jobj.get("TIMESTAMP_NAME").toString();
 			 me.timestamp = (long)jobj.get("timeStamp");
 			 entries.add(me);
