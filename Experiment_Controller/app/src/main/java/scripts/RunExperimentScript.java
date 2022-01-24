@@ -1,6 +1,7 @@
 package scripts;
 
 import common.*;
+import java.util.LinkedList;
 
 /**
  * @author juancontreras
@@ -8,8 +9,88 @@ import common.*;
  */
 public class RunExperimentScript {
 	private static long interOperationWaitTime = 1000; //1 second
-	
 
+
+	public static void runExperiment(LinkedList<ExperimentParameter> experimentParameters, String result_folder_path){
+		System.out.println("results folder path="+result_folder_path);
+		System.out.println();
+		for(ExperimentParameter expara:experimentParameters){
+			expara.print();
+			System.out.println();
+			System.out.println();
+		}
+		System.out.println();
+		System.out.println();
+	}
+
+	public static void runExperiment(
+		String[] application_locations,
+		boolean is_num_app_runs_binomial,	//if true run: app 1, then app1 AND app2, then App1 AND app2 AND app3,..., if false, run app1, then run only app2, then only app3...
+		String[] app_json_parameter_configurations,
+		String[] storageApi_locations,
+		boolean is_num_storageApi_runs_binomial,
+		String[] storageApi_json_parameter_configurations,
+		String storageManager_location,
+		long[] runTimes,
+		String result_folder_path
+	){
+		int application_location_idx;
+		int app_json_parameter_configurations_idx;
+		int storageApi_locations_idx;
+		int storageApi_json_parameter_configurations_idx;
+		int runTimes_idx;
+
+		if(is_num_app_runs_binomial && !is_num_storageApi_runs_binomial){
+			for(application_location_idx = 0; application_location_idx < application_locations.length; application_location_idx++){
+				System.out.print("Applications: ");
+
+				//create application interfaces
+				String apps = "";
+				for(int i=0; i<=application_location_idx; i++){
+					apps += application_locations[i];
+					apps += ",";
+				}
+				System.out.println();
+
+				//Application parameters
+				for(app_json_parameter_configurations_idx=0; app_json_parameter_configurations_idx<app_json_parameter_configurations.length; app_json_parameter_configurations_idx++){
+					//storage api locations
+					for(storageApi_locations_idx=0;storageApi_locations_idx<storageApi_locations.length;storageApi_locations_idx++){
+						//storage api parameters
+						for(storageApi_json_parameter_configurations_idx=0;storageApi_json_parameter_configurations_idx<storageApi_json_parameter_configurations.length;storageApi_json_parameter_configurations_idx++){
+							
+							//Run experiment(s)
+							for(runTimes_idx=0;runTimes_idx<runTimes.length;runTimes_idx++){
+								System.out.println("runtime: " + String.valueOf(runTimes[runTimes_idx]));
+								System.out.println("applications: " + apps);
+								System.out.println("app_config: " + app_json_parameter_configurations[app_json_parameter_configurations_idx]);
+								System.out.println("storageApi location: " + storageApi_locations[storageApi_locations_idx]);
+								System.out.println("storageApi config: " + storageApi_json_parameter_configurations[storageApi_json_parameter_configurations_idx]);
+								
+								String folder_name = "exp_";
+								folder_name += String.valueOf(application_location_idx) + "_";
+								folder_name += String.valueOf(app_json_parameter_configurations_idx) + "_";
+								folder_name += String.valueOf(storageApi_locations_idx) + "_";
+								folder_name += String.valueOf(storageApi_json_parameter_configurations_idx) + "_";
+								folder_name += String.valueOf(runTimes_idx) + "_exp";
+
+								System.out.println("folder_name: " + folder_name);
+								System.out.println();
+								System.out.println();
+							}
+						}
+					}
+				}
+
+
+				System.out.println();
+			}
+		}else{
+			System.out.println("Wrong binomial parameters... not implemented yet");
+		}
+	}
+	
+	/*
 	public static void RunSaturationExperiment (
 			double[] applicationsTrhoughput,
 			double storageApiProgrammedDelay,

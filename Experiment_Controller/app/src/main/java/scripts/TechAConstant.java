@@ -66,8 +66,30 @@ public class TechAConstant extends ParentScript{
 		System.out.println("Inter Arrival times distribution: Constant");
 		System.out.println("Inter Arrival time: " + interArrivalTime);
 		System.out.println("Service time: " + serviceTime);
+		
+		String[] app_locations = {"app_location_1", "app_location_2"};
+		boolean is_num_app_runs_binomial = true;
+		String[] app_json_parameter_configurations = {"app_config_1", "app_config_2", "app_config_3"};
+		String[] storageApi_locations = {"storageApi_location_1", "storageApi_location_2"};
+		boolean is_num_storageApi_runs_binomial = false;
+		String[] storageApi_json_parameter_configurations = {"storageApi_config_1", "storageApi_config_2", "storageApi_config_3"};
+		String storageManager_location = "storageManager_location";
+		String result_folder_path = "home";
+		long[] runTimes = {(long)10, (long)20};
 
+		RunExperimentScript.runExperiment(
+			app_locations,
+			is_num_app_runs_binomial,
+			app_json_parameter_configurations,
+			storageApi_locations,
+			is_num_storageApi_runs_binomial,
+			storageApi_json_parameter_configurations,
+			storageManager_location,
+			runTimes,
+			result_folder_path
+		);
 
+		/*
 		//Storage Manager set up
 		StorageManagerInterface smi = new StorageManagerInterface(storageManagerAddress);
 		smi.clear();
@@ -128,6 +150,7 @@ public class TechAConstant extends ParentScript{
 			}
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 }

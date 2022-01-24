@@ -36,7 +36,7 @@ public class TechBConstant extends ParentScript{
 	
 	@Override
 	public void run() {
-		
+		/*
 		System.out.println("Script:Technique B Constant");
 		System.out.println("Inter Arrival time: " + interArrivalTime);
 		System.out.println("Service time: " + serviceTime);
@@ -102,6 +102,6 @@ public class TechBConstant extends ParentScript{
 			}
 			e.printStackTrace();
 		}
-		
+		*/
 	}
 }

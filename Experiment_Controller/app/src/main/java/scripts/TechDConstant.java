@@ -37,6 +37,7 @@ public class TechDConstant extends ParentScript{
 
 	@Override
 	public void run() {
+		/*
 		// TODO Auto-generated method stub
 		System.out.println("Script: Technique D Constant");
 		System.out.println("Inter Arrival time: " + interArrivalTime);
@@ -103,5 +104,6 @@ public class TechDConstant extends ParentScript{
 			}
 			e.printStackTrace();
 		}
+		*/
 	}
 }

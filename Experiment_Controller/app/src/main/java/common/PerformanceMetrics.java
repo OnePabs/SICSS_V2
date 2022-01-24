@@ -1,6 +1,7 @@
 package common;
 
 public class PerformanceMetrics {
+    /*
     public static double getAverateInterTime(LinkedList<MeasurementEntry> measurements, String timestampName){
         MeasurementEntry prev;
         long sum = (long)0;
@@ -83,7 +84,7 @@ public class PerformanceMetrics {
 
     public static double getStorageManagerUtilization(LinkedList<MeasurementEntry> measurements){
         double throughput = getStorageManagerThroughput(measurements);
-        double
+        return 1.2;
     }
 
     public static double getUtilization(double throughput, double serviceTime){
@@ -93,5 +94,6 @@ public class PerformanceMetrics {
     public static double getJobsInSystem(double arrivalRate, double totalTimeInSystem){
         return arrivalRate*totalTimeInSystem;
     }
+    */
 
 }

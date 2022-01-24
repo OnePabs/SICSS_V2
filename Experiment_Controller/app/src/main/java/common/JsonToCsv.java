@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class JsonToCsv {
+	/*
 	private boolean isVerbose;
 	
 	public JsonToCsv(boolean isVerbose) throws Exception {
@@ -85,8 +86,8 @@ public class JsonToCsv {
 			LinkedList<Double> serviceTimes,
 			LinkedList<Double> throughputs,
 			LinkedList<Double> utilizations,
-			LinkedList<Double> averageNumberOfjobs,
-	{
+			LinkedList<Double> averageNumberOfjobs
+	){
 		try{
 			//create file
 			Path basic_calculations_path = Paths.get(resultsBasePath + moduleName + ".txt");
@@ -306,7 +307,7 @@ public class JsonToCsv {
 	    
 	    return true;
 	}
-	*/
+	
 	private static void printMeasurementEntries(LinkedList<MeasurementEntry> mes) {
 		System.out.println("Number of measurement entries: " + mes.size());
 		for(MeasurementEntry me: mes) {
@@ -391,10 +392,10 @@ public class JsonToCsv {
 		return requests;
 	}
 	
-	
+	*/
 }
 
-
+/*
 
 class IORequest{
 	public long id;
@@ -459,3 +460,5 @@ class RequestComparator implements Comparator<IORequest>{
 }
 
 
+
+*/

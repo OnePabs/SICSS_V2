@@ -9,13 +9,34 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 		
-		String storageApiAddress = "http://localhost:8080";
-		String applicationAddress = "http://localhost:8000";
-		String storageManagerAddress = "http://localhost:8040";
+		String[] applicationAddresses = {"http://localhost:8000"};
+		String[] storageApiAddress = {"http://localhost:8080"};
+		String storageManagerAddress = "http://localhost:8090";
 		int runTimesConversionFactor = 1000;
-		boolean isVerbose = false;
+		boolean isVerbose = true;
+		String resultsFolderPath = "/home/juancontreras/Documents/results";
+
+
+		// Tech A constant Saturation experiment
+		long runtime = 10;
+		int[] interArrivalTimesInt = {200,100,80};
+		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
+			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
+		}
+		TechAConstantSaturation techaconstsaturation = new TechAConstantSaturation(
+			isVerbose,
+			runtime,
+			interArrivalTimesStr,
+			applicationAddresses,
+			storageApiAddress,
+			storageManagerAddress,
+			resultsFolderPath
+		);
+		techaconstsaturation.run();
 		
-		/******* Technique A Constant  ********/
+		/*
+		// Technique A Constant  
 		long interArrivalTimeAConstant = (long)2000;
 		long serviceTimeAConstant = (long)1600;
 		Long[] runtimesAConstant = {(long) 10};
@@ -33,7 +54,7 @@ public class Main {
 				);
 		scriptAConstant.run();
 		
-		
+		*/
 		
 		/******* Technique B Constant  ********/
 //		long interArrivalTimeBConstant = (long)2000;
