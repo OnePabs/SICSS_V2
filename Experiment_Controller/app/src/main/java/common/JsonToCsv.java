@@ -50,6 +50,9 @@ public class JsonToCsv {
 		}
 		
 		try {
+            Path p = Paths.get(filename);
+            Files.createDirectories(p.getParent());
+
 	        FileWriter myWriter = new FileWriter(filename);
 	        
 	        //write headers
@@ -83,43 +86,44 @@ public class JsonToCsv {
 
     public static void writeStorageApiPerformanceMetrics( LinkedList<MeasurementEntry> measurements,String resultsBasePath){
         try{
-            String path = resultsBasePath + File.separator + "performance_metrics" + File.separator + "strgapi" + ".txt";
-            //create file
-            Path basic_calculations_path = Paths.get(path);
-            if (Files.notExists(basic_calculations_path)) {
-                FileWriter myHeaderWriter = new FileWriter(path);
+            String pathName = resultsBasePath + File.separator + "performance_metrics" + File.separator + "strgapi" + ".txt";
+            Path p = Paths.get(pathName);
+            Files.createDirectories(p.getParent());
 
-                //headers
-                myHeaderWriter.write("Arrival Rate (requests per second)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Average Service time (milliseconds)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Average Residence time (milliseconds)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Throughput (requests per second)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Utilization");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Average Number of jobs in the system");
-                myHeaderWriter.write("\n");
-                myHeaderWriter.close();
-            }
+            FileWriter myHeaderWriter = new FileWriter(pathName);
+
+            //headers
+            myHeaderWriter.write("Arrival Rate (requests per second)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Average Service time (milliseconds)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Average Residence time (milliseconds)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Throughput (requests per second)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Utilization");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Average Number of jobs in the system");
+            myHeaderWriter.write("\n");
+            myHeaderWriter.close();
 
 
+            int conversionFactorToSeconds = 1000000000;
+            int conversionFactorToMillis = 1000000;
 
             //write data
-            FileWriter myWriter = new FileWriter(path,true);
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiArrivalRate(measurements)));
+            FileWriter myWriter = new FileWriter(pathName,true);
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageApiArrivalRate(measurements,conversionFactorToSeconds)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiServiceTime(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageApiServiceTime(measurements,conversionFactorToMillis)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiResidenceTime(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageApiResidenceTime(measurements,conversionFactorToMillis)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiThroughput(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageApiThroughput(measurements,conversionFactorToSeconds)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiUtilization(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageApiUtilization(measurements,conversionFactorToSeconds)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageApiJobsInSystem(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageApiJobsInSystem(measurements,conversionFactorToSeconds)));
 
             myWriter.close();
         }catch (Exception e) {
@@ -130,43 +134,44 @@ public class JsonToCsv {
 
     public static void writeStorageManagerPerformanceMetrics(LinkedList<MeasurementEntry> measurements,String resultsBasePath){
         try{
-            String path = resultsBasePath + File.separator + "performance_metrics" + File.separator + "strgMngr" + ".txt";
+            String pathName = resultsBasePath + File.separator + "performance_metrics" + File.separator + "strgMngr" + ".txt";
+            Path p = Paths.get(pathName);
+            Files.createDirectories(p.getParent());
             //create file
-            Path basic_calculations_path = Paths.get(path);
-            if (Files.notExists(basic_calculations_path)) {
-                FileWriter myHeaderWriter = new FileWriter(path);
+            FileWriter myHeaderWriter = new FileWriter(pathName);
 
-                //headers
-                myHeaderWriter.write("Arrival Rate (requests per second)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Average Service time (milliseconds)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Average Residence time (milliseconds)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Throughput (requests per second)");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Utilization");
-                myHeaderWriter.write(",");
-                myHeaderWriter.write("Average Number of jobs in the system");
-                myHeaderWriter.write("\n");
-                myHeaderWriter.close();
-            }
+            //headers
+            myHeaderWriter.write("Arrival Rate (requests per second)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Average Service time (milliseconds)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Average Residence time (milliseconds)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Throughput (requests per second)");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Utilization");
+            myHeaderWriter.write(",");
+            myHeaderWriter.write("Average Number of jobs in the system");
+            myHeaderWriter.write("\n");
+            myHeaderWriter.close();
 
 
+            int conversionFactorToSeconds = 1000000000;
+            int conversionFactorToMillis = 1000000;
 
             //write data
-            FileWriter myWriter = new FileWriter(path,true);
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerArrivalRate(measurements)));
+            FileWriter myWriter = new FileWriter(pathName,true);
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerArrivalRate(measurements,conversionFactorToSeconds)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerServiceTime(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerServiceTime(measurements,conversionFactorToMillis)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerServiceTime(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerServiceTime(measurements,conversionFactorToMillis)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerThroughput(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerThroughput(measurements,conversionFactorToSeconds)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerUtilization(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerUtilization(measurements,conversionFactorToSeconds)));
             myWriter.write(",");
-            myWriter.write(String.valueOf(PerformanceMetrics.getStorageManagerJobsInSystem(measurements)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerJobsInSystem(measurements,conversionFactorToSeconds)));
 
             myWriter.close();
         }catch (Exception e) {

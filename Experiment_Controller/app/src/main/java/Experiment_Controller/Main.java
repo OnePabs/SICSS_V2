@@ -3,6 +3,7 @@ package Experiment_Controller;
 import common.ApplicationInterface;
 import common.StorageAPIInterface;
 import scripts.*;
+import java.io.File;
 
 public class Main {
 
@@ -13,16 +14,17 @@ public class Main {
 		String[] storageApiAddress = {"http://localhost:8080"};
 		String storageManagerAddress = "http://localhost:8090";
 		boolean isVerbose = false;
-		String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\expres";
+		String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults";
 
 
 		// Tech A constant Saturation experiment
-		long runtime = 10000; //10 sec
-		int[] interArrivalTimesInt = {200,150,100,80,70};
+		long runtime = 60000; //60 sec
+		int[] interArrivalTimesInt = {1000,500,250,150,120,100,80,70,60};
 		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
 			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
 		}
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A";
 		TechAConstantSaturation techaconstsaturation = new TechAConstantSaturation(
 			isVerbose,
 			runtime,
@@ -30,7 +32,7 @@ public class Main {
 			applicationAddresses,
 			storageApiAddress,
 			storageManagerAddress,
-			resultsFolderPath
+			aResultsFolderPath
 		);
 		techaconstsaturation.run();
 		
