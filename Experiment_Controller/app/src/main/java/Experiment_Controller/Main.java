@@ -10,16 +10,16 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 		
-		String[] applicationAddresses = {"http://localhost:8000"};
-		String[] storageApiAddress = {"http://localhost:8080"};
-		String storageManagerAddress = "http://localhost:8090";
+		String[] applicationAddresses = {"http://ec2-13-59-203-39.us-east-2.compute.amazonaws.com:80"};
+		String[] storageApiAddress = {"http://ec2-3-137-173-19.us-east-2.compute.amazonaws.com:80", "http://ec2-18-119-165-22.us-east-2.compute.amazonaws.com:80"};
+		String storageManagerAddress = "http://ec2-3-21-34-81.us-east-2.compute.amazonaws.com:80";
 		boolean isVerbose = false;
 		String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults";
 
 
 		// Tech A constant Saturation experiment
-		long runtime = 60000; //60 sec
-		int[] interArrivalTimesInt = {1000,500,250,150,120,100,80,70,60};
+		long runtime = 180000; //180 sec
+		int[] interArrivalTimesInt = {280,250,220};
 		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
 			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);

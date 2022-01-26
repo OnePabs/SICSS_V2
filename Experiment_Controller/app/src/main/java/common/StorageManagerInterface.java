@@ -46,7 +46,7 @@ public class StorageManagerInterface {
             if(response.statusCode() == 200) {
                 return response.body();
             }else {
-                System.out.println("getMeasurements: Error code received: " + response.statusCode());
+                System.out.println("Storage manager getMeasurements: Error code received: " + response.statusCode());
             }
         }catch(Exception e){
             e.printStackTrace();

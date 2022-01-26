@@ -53,8 +53,6 @@ public class RunExperimentScript {
 			e.printStackTrace();
 		}
 
-		//start storage manager
-		experimentParameters.storageManager_interface.clear();
 
 		//inter operation time
 		try{
