@@ -4,29 +4,29 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import common.*;
 
-public class TechAConstantSaturation extends ParentScript{
+public class TechAExponentialStubSaturation extends ParentScript{
     private boolean isVerbose;
-    private boolean usemysql;
     private long runtime;
+    private long meanServiceTime;
     private String[] inter_arrival_times;
     private String[] application_locations;
     private String[] storageApi_locations;
     private String storageManager_location;
-	private String result_folder_path;
+    private String result_folder_path;
 
-    public TechAConstantSaturation(
-        boolean isVerbose,
-        boolean usemysql,
-        long runtime,       //in milliseconds
-        String[] inter_arrival_times,
-        String[] application_locations,
-        String[] storageApi_locations,
-        String storageManager_location,
-        String result_folder_path
+    public TechAExponentialStubSaturation(
+            boolean isVerbose,
+            long runtime,       //in milliseconds
+            long meanServiceTime, //in milliseconds
+            String[] inter_arrival_times,
+            String[] application_locations,
+            String[] storageApi_locations,
+            String storageManager_location,
+            String result_folder_path
     ){
         this.isVerbose = isVerbose;
-        this.usemysql = usemysql;
         this.runtime = runtime;
+        this.meanServiceTime = meanServiceTime;
         this.inter_arrival_times = Arrays.copyOf(inter_arrival_times, inter_arrival_times.length);
         this.application_locations = Arrays.copyOf(application_locations, application_locations.length);
         this.storageApi_locations = Arrays.copyOf(storageApi_locations, storageApi_locations.length);
@@ -36,7 +36,7 @@ public class TechAConstantSaturation extends ParentScript{
 
 
     @Override
-	public void run() {
+    public void run() {
         try{
             //create parameters
             LinkedList<ExperimentParameter> experiment_parameters = new LinkedList<ExperimentParameter>();
@@ -56,7 +56,7 @@ public class TechAConstantSaturation extends ParentScript{
                                 + "\"receiverAddress\":\""+storageApi_access_address+"/data"+"\","
                                 + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
                                 +"\"useSleepForMockProcessing\":true,"
-                                +"\"interGenerationTimeDistribution\":\"CONSTANT\","
+                                +"\"interGenerationTimeDistribution\":\"GEOMETRIC\","
                                 +"\"interGenerationTimeDistributionSettings\":"+inter_arrival_time
                                 + "}";
 
@@ -74,9 +74,9 @@ public class TechAConstantSaturation extends ParentScript{
                         String storageManager_parameters = "{"
                                 + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
                                 + "\"platform\":\"stub\","
-                                + "\"serviceTimeDistribution\":\"CONSTANT\","
-                                + "\"serviceTimeDistributionSettings\":"+ 40 +","
-                                +"\"useSleepForMockProcessing\":true,"
+                                + "\"serviceTimeDistribution\":\"EXPONENTIAL\","
+                                + "\"serviceTimeDistributionSettings\":"+ String.valueOf(meanServiceTime) +","
+                                +"\"useSleepForMockProcessing\":true"
                                 + "}";
 
                         String experimentName = "A-"+String.valueOf(application_address_idx)+"-"+String.valueOf(storageApi_idx)+"-"+inter_arrival_time;

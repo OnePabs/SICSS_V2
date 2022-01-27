@@ -9,8 +9,7 @@ import Application.JsonAPI;
 
 public class NaturalGeometricGenerator extends ParentNaturalNumberGenerator{
     //private Hashtable<String,Object> generatorSettings;
-    private Long lambda;
-    private Random r;
+    private Long mean;
 
     public NaturalGeometricGenerator(SettingsController settingsController){
         super(settingsController);
@@ -19,30 +18,23 @@ public class NaturalGeometricGenerator extends ParentNaturalNumberGenerator{
     @Override
     public boolean initialize() {
         try{
-            Object settingsObj = settingsController.getSetting("interGenerationTimeDistributionSettings");
-            Hashtable<String,Object> generatorSettings = JsonAPI.jsonToHashTable(settingsObj);
-
-            lambda = (Long)generatorSettings.get("lambda");
-
-            long seed;
-            if(generatorSettings.containsKey("seed")){
-                seed = (Long)generatorSettings.get("seed");
-            }else{
-                seed = 0;
-            }
-
-            r = new Random(seed);
-
+            String lambdaStr = settingsController.getSetting("interGenerationTimeDistributionSettings").toString();
+            mean = Long.valueOf(lambdaStr);
+            System.out.println("mean: " + mean);
             return true;
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println(e + " ");
             return false;
         }
     }
 
     @Override
     public long generate() {
-        return  Math.round(Math.log(1-r.nextDouble())/(-lambda));
+        //System.out.println("mean: " + mean);
+        double numgen = Math.log(1-Math.random())*(-mean);
+        //System.out.println("double Generated: " + numgen);
+        long num = (long)numgen;
+        //System.out.println("long Generated: " + num);
+        return  num;
     }
 }

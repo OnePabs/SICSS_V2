@@ -2,7 +2,7 @@ package StorageManager.service_time_creators;
 
 
 import StorageManager.SettingsController;
-import StorageManager.service_time_creators.creators.ConstantServiceTimeCreator;
+import StorageManager.service_time_creators.creators.*;
 
 public class ServiceTimeCreatorBuilder {
     public static ParentServiceTimeCreator build(SettingsController settingsController){
@@ -15,6 +15,7 @@ public class ServiceTimeCreatorBuilder {
                 break;
             case "EXPONENTIAL":
                 stc = new ExponentialServiceTimeCreator();
+                break;
             default:
                 stc = new ParentServiceTimeCreator();
         }

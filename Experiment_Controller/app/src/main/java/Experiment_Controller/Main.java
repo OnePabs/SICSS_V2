@@ -1,7 +1,5 @@
 package Experiment_Controller;
 
-import common.ApplicationInterface;
-import common.StorageAPIInterface;
 import scripts.*;
 import java.io.File;
 
@@ -13,31 +11,53 @@ public class Main {
 		String[] applicationAddresses = {"http://localhost:8000"};
 		String[] storageApiAddress = {"http://localhost:8080"};
 		String storageManagerAddress = "http://localhost:8090";
-		boolean usemysql = false;
 		boolean isVerbose = true;
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
 
 
 		// Tech A constant Saturation experiment
+		/*
 		long runtime = 10000; //in millis
 		int[] interArrivalTimesInt = {1000};
+		long serviceTime = 40;
 		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
 			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
 		}
 		String aResultsFolderPath = resultsFolderPath + File.separator + "A";
-		TechAConstantSaturation techaconstsaturation = new TechAConstantSaturation(
+		TechAConstantStubSaturation techaconststubsaturation = new TechAConstantStubSaturation(
 			isVerbose,
-			usemysql,
 			runtime,
+			serviceTime,
 			interArrivalTimesStr,
 			applicationAddresses,
 			storageApiAddress,
 			storageManagerAddress,
 			aResultsFolderPath
 		);
-		techaconstsaturation.run();
-		
+		techaconststubsaturation.run();
+		 */
+
+		long runtime = 60000; //in millis
+		int[] interArrivalTimesInt = {100};
+		long serviceTime = 40;
+		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
+			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
+		}
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A";
+		TechAExponentialStubSaturation techAExponentialStubSaturationstubsaturation = new TechAExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				interArrivalTimesStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				aResultsFolderPath
+		);
+		techAExponentialStubSaturationstubsaturation.run();
+
 		/*
 		// Technique A Constant  
 		long interArrivalTimeAConstant = (long)2000;

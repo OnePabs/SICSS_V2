@@ -15,7 +15,9 @@ public class ParentServiceTimeCreator {
 
     //child must @Override these
     public void init(){}
-    public void createServiceTime(){}
+    public void createServiceTime(){
+        System.out.println("Parent Service Time Creator createServiceTime()");
+    }
 
     //child common methods
     public void createTimLapse(long numMillis){
