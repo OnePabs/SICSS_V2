@@ -100,9 +100,15 @@ public class PerformanceMetrics {
     }
 
     public static double getStorageManagerServiceTime(LinkedList<MeasurementEntry> measurements, int conversionFactor){
-        double serv = getAverageDifference(measurements, "ENTRY", "EXIT");
+        double serv = getAverageDifference(measurements, "QueueExitTime", "EXIT");
         serv = serv / conversionFactor;
         return serv;
+    }
+
+    public static double getStorageManagerResidenceTime(LinkedList<MeasurementEntry> measurements, int conversionFactor){
+        double res = getAverageDifference(measurements, "ENTRY", "EXIT");
+        res = res / conversionFactor;
+        return res;
     }
 
     public static double getStorageManagerThroughput(LinkedList<MeasurementEntry> measurements, int conversionFactor){

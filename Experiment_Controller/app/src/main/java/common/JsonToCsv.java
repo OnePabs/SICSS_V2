@@ -165,7 +165,7 @@ public class JsonToCsv {
             myWriter.write(",");
             myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerServiceTime(measurements,conversionFactorToMillis)));
             myWriter.write(",");
-            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerServiceTime(measurements,conversionFactorToMillis)));
+            myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerResidenceTime(measurements,conversionFactorToMillis)));
             myWriter.write(",");
             myWriter.write(String.format("%32.12f",PerformanceMetrics.getStorageManagerThroughput(measurements,conversionFactorToSeconds)));
             myWriter.write(",");

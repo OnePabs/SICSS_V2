@@ -11,11 +11,18 @@ public class StorageManager implements Runnable {
     private SyncStringLinkedList commitAllEntryQueue;
     private StorageCommitAllExecutor commitAllExecutor;
     private StorageInsertOneExecutor insertOneExecutor;
+    private MeasurementController measurementController;
 
-    public StorageManager(SettingsController settingsController, SyncIORequestLinkedList insertOneEntryQueue, SyncStringLinkedList commitAllEntryQueue){
+    public StorageManager(
+            SettingsController settingsController,
+            SyncIORequestLinkedList insertOneEntryQueue,
+            SyncStringLinkedList commitAllEntryQueue,
+            MeasurementController measurementController
+    ){
         this.settingsController  = settingsController;
         this.insertOneEntryQueue = insertOneEntryQueue;
         this.commitAllEntryQueue = commitAllEntryQueue;
+        this.measurementController = measurementController;
         this.commitAllExecutor = null;
         this.insertOneExecutor = null;
     }
@@ -59,8 +66,8 @@ public class StorageManager implements Runnable {
                 commitAllEntryQueue.clear();
 
                 //create executors
-                insertOneExecutor = new StorageInsertOneExecutor(insertOneEntryQueue,platform);
-                commitAllExecutor = new StorageCommitAllExecutor(commitAllEntryQueue,platform);
+                insertOneExecutor = new StorageInsertOneExecutor(insertOneEntryQueue,platform,measurementController);
+                commitAllExecutor = new StorageCommitAllExecutor(commitAllEntryQueue,platform,measurementController);
 
                 //run executors
                 new Thread(insertOneExecutor).start();

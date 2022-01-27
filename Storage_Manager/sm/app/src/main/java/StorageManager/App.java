@@ -47,7 +47,8 @@ public class App {
             StorageManager storageManager = new StorageManager(
                     settingsController,
                     insertOneEntryQueue,
-                    commitAllEntryQueue
+                    commitAllEntryQueue,
+                    measurementController
             );
             new Thread(storageManager).start();
 
