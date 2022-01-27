@@ -37,7 +37,7 @@ public class App {
 
             server.createContext("/insertone", new InsertOne(insertOneEntryQueue,measurementController,settingsController));
             server.createContext("/commitall", new CommitAll(commitAllEntryQueue,measurementController,settingsController));
-            server.createContext("/measurements", new Measurements(measurementController,isVerbose));
+            server.createContext("/measurements", new Measurements(measurementController,settingsController));
             server.createContext("/settings", new Settings(settingsController));
             server.createContext("/clear", new Clear(insertOneEntryQueue,commitAllEntryQueue,measurementController,settingsController));
             server.createContext("/test", new Test());

@@ -15,7 +15,7 @@ public class Main {
 		String storageManagerAddress = "http://localhost:8090";
 		boolean usemysql = false;
 		boolean isVerbose = true;
-		String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults";
+		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
 
 
 		// Tech A constant Saturation experiment

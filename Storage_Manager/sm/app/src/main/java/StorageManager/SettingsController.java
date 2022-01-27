@@ -85,6 +85,10 @@ public class SettingsController {
 		return isVerbose;
 	}
 
+	public String getString(String settingName){
+		return getSetting(settingName).toString();
+	}
+
 
 	public boolean getBoolean(String settingName){
 		Object settingValue;

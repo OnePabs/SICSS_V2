@@ -2,7 +2,8 @@ package StorageManager;
 
 import StorageManager.data_structures.*;
 import StorageManager.executors.*;
-import StorageManager.storage_platforms.ParentStoragePlatform;
+import StorageManager.storage_platforms.*;
+
 
 public class StorageManager implements Runnable {
     private SettingsController settingsController;
@@ -39,7 +40,19 @@ public class StorageManager implements Runnable {
 
                 //Todo: change this to include settings from settings controller
                 //create platform
-                ParentStoragePlatform platform = new ParentStoragePlatform();
+                ParentStoragePlatform platform;
+                String platformName = settingsController.getString("platform");
+                switch(platformName){
+                    case "mysql":
+                        platform = new MysqlApi();
+                        break;
+                    case "stub":
+                        platform = new StubPlatform(settingsController);
+                        break;
+                    default:
+                        platform = new ParentStoragePlatform();
+                }
+
 
                 //clear entry queues
                 insertOneEntryQueue.clear();

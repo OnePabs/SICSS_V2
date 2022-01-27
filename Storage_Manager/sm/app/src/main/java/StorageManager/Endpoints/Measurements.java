@@ -10,25 +10,26 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Measurements implements HttpHandler {
+    private SettingsController settingsController;
     private MeasurementController measurementController;
     private boolean isVerbose;
 
-    public Measurements(MeasurementController measurementController, boolean isVerbose){
+    public Measurements(MeasurementController measurementController, SettingsController settingsController){
         this.measurementController = measurementController;
-        this.isVerbose = isVerbose;
+        this.settingsController = settingsController;
     }
 
     @Override
     public void handle(HttpExchange t) throws IOException {
 
-        if(isVerbose){
+        if(settingsController.getIsVerbose()){
             System.out.println("Measurements endpoint reached");
         }
 
         TimeStamp[] timeStamps = measurementController.getMeasurements();
 
         JSONArray cont = new JSONArray();
-        if(isVerbose){
+        if(settingsController.getIsVerbose()){
             System.out.println("Number of measurements: " + timeStamps.length);
         }
         for(int i=0;i<timeStamps.length;i++){

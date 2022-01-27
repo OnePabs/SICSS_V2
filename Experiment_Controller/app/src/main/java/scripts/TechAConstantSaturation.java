@@ -72,7 +72,11 @@ public class TechAConstantSaturation extends ParentScript{
                                 + "}";
 
                         String storageManager_parameters = "{"
-                                + "\"isVerbose\":" + String.valueOf(isVerbose)
+                                + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
+                                + "\"platform\":\"stub\","
+                                + "\"serviceTimeDistribution\":\"CONSTANT\","
+                                + "\"serviceTimeDistributionSettings\":"+ 40 +","
+                                +"\"useSleepForMockProcessing\":true,"
                                 + "}";
 
                         String experimentName = "A-"+String.valueOf(application_address_idx)+"-"+String.valueOf(storageApi_idx)+"-"+inter_arrival_time;
