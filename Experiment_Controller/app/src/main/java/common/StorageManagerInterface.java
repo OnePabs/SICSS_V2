@@ -17,6 +17,27 @@ public class StorageManagerInterface {
         this.address = address;
     }
 
+    public boolean changeSettings(String jsonStr) {
+
+        URI uri = URI.create(address + "/settings");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Content-Type", "text/plain; charset=UTF-8")
+                .POST(BodyPublishers.ofString(jsonStr))
+                .build();
+        try {
+            HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
+            if(response.statusCode() == 200) {
+                return true;
+            }
+        }catch(IOException ioe){
+
+        }catch(InterruptedException ie) {
+
+        }
+        return false;
+    }
+
 
     public boolean clear() {
         URI uri = URI.create(address + "/clear");

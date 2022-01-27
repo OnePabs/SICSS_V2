@@ -61,6 +61,16 @@ public class RunExperimentScript {
 			e.printStackTrace();
 		}
 
+		//change storage manager settings
+		experimentParameters.storageManager_interface.changeSettings(experimentParameters.storageManager_parameters);
+
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
 		//start storage api
 		experimentParameters.storageApis_interface.start();
 

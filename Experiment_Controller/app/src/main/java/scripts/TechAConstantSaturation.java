@@ -6,6 +6,7 @@ import common.*;
 
 public class TechAConstantSaturation extends ParentScript{
     private boolean isVerbose;
+    private boolean usemysql;
     private long runtime;
     private String[] inter_arrival_times;
     private String[] application_locations;
@@ -15,6 +16,7 @@ public class TechAConstantSaturation extends ParentScript{
 
     public TechAConstantSaturation(
         boolean isVerbose,
+        boolean usemysql,
         long runtime,       //in milliseconds
         String[] inter_arrival_times,
         String[] application_locations,
@@ -23,6 +25,7 @@ public class TechAConstantSaturation extends ParentScript{
         String result_folder_path
     ){
         this.isVerbose = isVerbose;
+        this.usemysql = usemysql;
         this.runtime = runtime;
         this.inter_arrival_times = Arrays.copyOf(inter_arrival_times, inter_arrival_times.length);
         this.application_locations = Arrays.copyOf(application_locations, application_locations.length);
@@ -65,7 +68,11 @@ public class TechAConstantSaturation extends ParentScript{
                                 + "\"serviceTimeDistributionSettings\":"+ 0 +","
                                 +"\"useSleepForMockProcessing\":true,"
                                 + "\"transmitter\":\"StorageManagerTransmitter\","
-                                + "\"destination\":\"" + storageManager_location + "\","
+                                + "\"destination\":\"" + storageManager_location + "\""
+                                + "}";
+
+                        String storageManager_parameters = "{"
+                                + "\"isVerbose\":" + String.valueOf(isVerbose)
                                 + "}";
 
                         String experimentName = "A-"+String.valueOf(application_address_idx)+"-"+String.valueOf(storageApi_idx)+"-"+inter_arrival_time;
@@ -76,7 +83,8 @@ public class TechAConstantSaturation extends ParentScript{
                                 application_parameters,
                                 storageApi_access_address,
                                 storageApi_parameters,
-                                storageManager_location
+                                storageManager_location,
+                                storageManager_parameters
                         );
                         experiment_parameters.add(expara);
                     }

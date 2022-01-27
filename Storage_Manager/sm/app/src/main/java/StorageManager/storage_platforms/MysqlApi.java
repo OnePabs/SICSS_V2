@@ -1,12 +1,15 @@
 //keeps the state of the application
-package StorageManager;
+package StorageManager.storage_platforms;
 
 import java.sql.*;
 import java.util.LinkedList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import java.nio.charset.StandardCharsets;
+import org.json.simple.parser.JSONParser;
+import StorageManager.*;
 
-public class MysqlApi {
+public class MysqlApi extends ParentStoragePlatform {
 
     //db connection info
     private String host = "localhost";
@@ -18,7 +21,7 @@ public class MysqlApi {
 
     public MysqlApi(){}
 
-    public synchronized boolean insertone(byte[] content){
+    public synchronized boolean insertOne(byte[] content){
         if(content==null || content.length < 4){
             return false;
         }
@@ -47,8 +50,12 @@ public class MysqlApi {
     }
 
 
-    public synchronized boolean comitAll(JSONArray arr){
+    public synchronized boolean comitAll(String content){
         try{
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(content);
+            JSONArray arr = (JSONArray)obj;
+
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(dburl, user, password);
             con.setAutoCommit(false);

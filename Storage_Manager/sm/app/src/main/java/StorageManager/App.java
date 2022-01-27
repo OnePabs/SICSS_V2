@@ -11,7 +11,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import StorageManager.data_structures.*;
 import StorageManager.Endpoints.*;
+import StorageManager.storage_platforms.*;
 
 public class App {
 
@@ -22,28 +24,32 @@ public class App {
         }
         System.out.println("Resource Manager Running on port: " + port);
 
-        boolean isVerbose = false;
-        if(args.length >= 2){
-            isVerbose = Boolean.valueOf(args[1]);
-        }
-        System.out.println("Resource Manager isVerbose: " + isVerbose);
-
         HttpServer server;
-        MysqlApi mysqlapi = new MysqlApi();
+        //MysqlApi mysqlapi = new MysqlApi();
         MeasurementController measurementController = new MeasurementController();
+        SettingsController settingsController = new SettingsController();
+        SyncIORequestLinkedList insertOneEntryQueue = new SyncIORequestLinkedList(0);
+        SyncStringLinkedList commitAllEntryQueue = new SyncStringLinkedList(0);
 
         try{
-
             //initialize server
             server = HttpServer.create(new InetSocketAddress("0.0.0.0",port), 0);
 
-            //server.createContext("/data", new Data(conn));
-            server.createContext("/insertone", new InsertOne(mysqlapi,measurementController,isVerbose));
-            server.createContext("/commitall", new CommitAll(mysqlapi,measurementController,isVerbose));
+            server.createContext("/insertone", new InsertOne(insertOneEntryQueue,measurementController,settingsController));
+            server.createContext("/commitall", new CommitAll(commitAllEntryQueue,measurementController,settingsController));
             server.createContext("/measurements", new Measurements(measurementController,isVerbose));
-
+            server.createContext("/settings", new Settings(settingsController));
+            server.createContext("/clear", new Clear(insertOneEntryQueue,commitAllEntryQueue,measurementController,settingsController));
             server.createContext("/test", new Test());
             server.setExecutor(null);
+
+            //start Storage Manager
+            StorageManager storageManager = new StorageManager(
+                    settingsController,
+                    insertOneEntryQueue,
+                    commitAllEntryQueue
+            );
+            new Thread(storageManager).start();
 
             //start server
             server.start();

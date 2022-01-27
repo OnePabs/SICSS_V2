@@ -10,34 +10,39 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 import StorageManager.*;
+import StorageManager.data_structures.*;
 
 public class InsertOne implements HttpHandler{
-    private boolean  isVerbose;
-    private MysqlApi mysqlapi;
     private MeasurementController measurementController;
+    private SettingsController settingsController;
+    private SyncIORequestLinkedList insertOneEntryQueue;
 
-    public InsertOne(MysqlApi mysqlapi, MeasurementController measurementController, boolean  isVerbose){
-        this.mysqlapi = mysqlapi;
-        this.isVerbose = isVerbose;
+    public InsertOne(
+            SyncIORequestLinkedList insertOneEntryQueue,
+            MeasurementController measurementController,
+            SettingsController settingsController){
+        this.insertOneEntryQueue = insertOneEntryQueue;
         this.measurementController = measurementController;
+        this.settingsController = settingsController;
     }
 
     @Override
     public void handle(HttpExchange t) {
         //insert one row to db table content
-        measurementController.addMeasurement(new TimeStamp(0,"ENTRY",System.nanoTime()));
-        if(isVerbose){
+        long entry_time = System.nanoTime();
+        if(settingsController.getIsVerbose()){
             System.out.println("Storage Manager: InsertOne endpoint reached");
         }
 
         boolean success = false;
-        Statement stmt = null;
         InputStream input_stream = t.getRequestBody();
-
 
         try{
             byte[] content = input_stream.readAllBytes();
-            success = mysqlapi.insertone(content);
+            IORequest req = new IORequest(content);
+            measurementController.addMeasurement(new TimeStamp(req.getRequestId(),"ENTRY",entry_time));
+            insertOneEntryQueue.add(req);
+            success = true;
         }catch(Exception e){
             success = false;
             e.printStackTrace();
@@ -47,7 +52,6 @@ public class InsertOne implements HttpHandler{
         try{
             if(success){
                 t.sendResponseHeaders(200,-1);
-                measurementController.addMeasurement(new TimeStamp(0,"EXIT",System.nanoTime()));
             }else{
                 t.sendResponseHeaders(400,-1);
             }
