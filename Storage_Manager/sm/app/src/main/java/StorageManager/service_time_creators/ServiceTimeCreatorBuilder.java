@@ -13,6 +13,8 @@ public class ServiceTimeCreatorBuilder {
             case "CONSTANT":
                 stc = new ConstantServiceTimeCreator();
                 break;
+            case "EXPONENTIAL":
+                stc = new ExponentialServiceTimeCreator();
             default:
                 stc = new ParentServiceTimeCreator();
         }
