@@ -100,7 +100,7 @@ public class RunExperimentScript {
 
 		//inter operation time
 		try{
-			Thread.sleep(1000);
+			Thread.sleep(experimentParameters.experimentRuntime); //wait for experiment run time to allow all requests to be transmitted from storage API to storage Manager and stats to be taken
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -129,9 +129,12 @@ public class RunExperimentScript {
 		LinkedList<MeasurementEntry> strgMngr_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageManager_measurements,experiment_results_folder,"strgMngr");
 
 		//get and store storage api performance metrics
+		MeasurementsComparator comp = new MeasurementsComparator();
+		strgApi_EntryMeasurements.sort(comp);
 		JsonToCsv.writeStorageApiPerformanceMetrics(strgApi_EntryMeasurements,experiment_results_folder);
 
 		//get and store storage manager performance metrics
+		strgMngr_EntryMeasurements.sort(comp);
 		JsonToCsv.writeStorageManagerPerformanceMetrics(strgMngr_EntryMeasurements,experiment_results_folder);
 
 		//clear storage api

@@ -77,5 +77,11 @@ public class SyncIORequestLinkedList {
 		}
 		System.out.print("\n");
 	}
-	
+
+	public IORequest[] getAsArray(){
+		IORequest[] requestArray = new IORequest[requests.size()];
+		requests.toArray(requestArray);
+		return requestArray;
+	}
+
 }

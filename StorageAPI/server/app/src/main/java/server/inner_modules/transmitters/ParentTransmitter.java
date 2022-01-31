@@ -29,4 +29,12 @@ public class ParentTransmitter {
     //METHODS TO OVERRIDE
     public void transmit(IORequest request){}
     public void transmit(SyncIORequestLinkedList requestList){}
+
+    public void addMeasurementsToMeasurementController(IORequest request){
+
+    }
+
+    public void addMeasurementsToMeasurementController(SyncIORequestLinkedList requestList){
+        //todo
+    }
 }

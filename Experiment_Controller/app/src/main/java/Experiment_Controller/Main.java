@@ -1,5 +1,6 @@
 package Experiment_Controller;
 
+import common.PerformanceMetrics;
 import scripts.*;
 import java.io.File;
 
@@ -11,8 +12,28 @@ public class Main {
 		String[] applicationAddresses = {"http://localhost:8000"};
 		String[] storageApiAddress = {"http://localhost:8080"};
 		String storageManagerAddress = "http://localhost:8090";
-		boolean isVerbose = true;
+		boolean isVerbose = false;
+		long minutes_to_millis = (long)60000;
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
+
+		/*
+		String[] measurementFolders = {
+				"C:\\Users\\juanp\\Documents\\experiment_results\\A_test3\\A-0-0-50\\measurements"
+		};
+		String resultsFolder = "C:\\Users\\juanp\\Documents\\experiment_results\\performance";
+
+		for(int i=0; i<measurementFolders.length;i++){
+			System.out.println("working on: " + measurementFolders[i]);
+			String apiMeasurementsFile = measurementFolders[i] + "\\"+ "strgapi.txt";
+			String apiResultsFile = resultsFolder + "\\" + "api-"+String.valueOf(i) + ".txt";
+			PerformanceMetrics.writeStorageApiPerformanceMetrics(apiMeasurementsFile,apiResultsFile);
+
+			String mngrMeasurementsFile =  measurementFolders[i] + "\\"+ "strgMngr.txt";
+			String mngrResultsFile = resultsFolder + "\\" + "mngr-"+String.valueOf(i) + ".txt";
+			PerformanceMetrics.writeStorageManagerPerformanceMetrics(mngrMeasurementsFile,mngrResultsFile);
+		}
+*/
+
 
 
 		// Tech A constant Saturation experiment
@@ -38,14 +59,16 @@ public class Main {
 		techaconststubsaturation.run();
 		 */
 
-		long runtime = 60000; //in millis
-		int[] interArrivalTimesInt = {100};
+		/////////  TECH A EXPONENTIAL ////////////
+		/*
+		long runtime = 45*minutes_to_millis; //in millis
+		int[] interArrivalTimesInt = {50};
 		long serviceTime = 40;
 		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
 			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
 		}
-		String aResultsFolderPath = resultsFolderPath + File.separator + "A";
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp";
 		TechAExponentialStubSaturation techAExponentialStubSaturationstubsaturation = new TechAExponentialStubSaturation(
 				isVerbose,
 				runtime,
@@ -57,6 +80,41 @@ public class Main {
 				aResultsFolderPath
 		);
 		techAExponentialStubSaturationstubsaturation.run();
+
+		 */
+
+
+		/*
+		//Technique B exponential stub
+		long runtime = 45*minutes_to_millis; //in millis
+		int[] interArrivalTimesInt = {1000,500,200,100,80,50};//{200,100,80,50,45,40};
+		long serviceTime = 40;
+		long[] periods = {1000};
+		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
+			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
+		}
+		String aResultsFolderPath = resultsFolderPath + File.separator + "B-exp";
+		TechBExponentialStubSaturation techBExponentialStubSaturationstubsaturation = new TechBExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				periods,
+				interArrivalTimesStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				aResultsFolderPath
+		);
+		techBExponentialStubSaturationstubsaturation.run();
+		 */
+
+
+		//technique C exponential stub
+
+
+
+
 
 		/*
 		// Technique A Constant  

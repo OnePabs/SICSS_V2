@@ -34,16 +34,27 @@ public class CommitAll implements HttpHandler{
         try{
             byte[] content = input_stream.readAllBytes();
             String jstr = new String(content,StandardCharsets.UTF_8);
-            measurementController.addMeasurement(new TimeStamp(0,"ENTRY",entry_time));
+
+            //add entry measurements
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(jstr);
+            JSONArray arr = (JSONArray)obj;
+            long requestId;
+            for (int i=0; i < arr.size(); i++) {
+                JSONObject jobj = (JSONObject)arr.get(i);
+                requestId = (long)jobj.get("requestId");
+                measurementController.addMeasurement(new TimeStamp(((int)requestId),"ENTRY",entry_time));
+            }
+
+            //COMMIT all requests
             commitAllEntryQueue.add(jstr);
             success = true;
         }catch(Exception e){
             success = false;
             e.printStackTrace();
         }
-
-
         try{
+            //send respond back
             if(success){
                 t.sendResponseHeaders(200,-1);
             }else{

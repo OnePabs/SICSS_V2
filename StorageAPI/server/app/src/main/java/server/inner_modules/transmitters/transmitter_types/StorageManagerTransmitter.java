@@ -5,11 +5,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import server.data_structures.IORequest;
-import server.data_structures.ReadyLists;
-import server.data_structures.SyncIORequestLinkedList;
-import server.data_structures.TimeStamp;
-import server.enumerators.PROGRAM_STATE;
+import server.data_structures.*;
+import server.enumerators.*;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
@@ -45,7 +42,7 @@ public class StorageManagerTransmitter extends ParentTransmitter {
             for(TimeStamp t: request.getTimeStamps()){
                 measurementController.addMeasurement(t);
             }
-            request.addTimeStamp(TRANSMITTER_EXIT);
+
             if(settingsController.getIsVerbose()){
                 System.out.println("Storage Manager Transmitter: IORequest " + request.getRequestId() + " leaving storage  API");
             }
@@ -70,6 +67,7 @@ public class StorageManagerTransmitter extends ParentTransmitter {
                 }
             }
 
+            request.addTimeStamp(TRANSMITTER_EXIT);
             measurementController.addMeasurement(request.getTimeStamp(TRANSMITTER_EXIT));
         }
     }
@@ -77,6 +75,19 @@ public class StorageManagerTransmitter extends ParentTransmitter {
     @Override
     public void transmit(SyncIORequestLinkedList requests){
         if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
+
+            //get requests in an array
+            IORequest[] requestArray = requests.getAsArray();
+
+            //add measurements
+            for(IORequest req:requestArray){
+                req.addTimeStamp(TRANSMITTER_ENTRY);
+                for(TimeStamp t: req.getTimeStamps()){
+                    measurementController.addMeasurement(t);
+                }
+            }
+
+
             if(settingsController.getIsVerbose()){
                 System.out.println("Storage Manager Transmitter: commitall");
             }
@@ -86,10 +97,12 @@ public class StorageManagerTransmitter extends ParentTransmitter {
                 String jsonstr = "[";
                 int numRequests = requests.getSize();
                 for(int i=0;i<numRequests;i++){
+                    request = requests.take();
+
                     if(i != 0){
                         jsonstr += ",";
                     }
-                    request = requests.take();
+
                     jsonstr += "{";
                     jsonstr += "\"requestId\":";
                     jsonstr += request.getRequestId();
@@ -117,6 +130,15 @@ public class StorageManagerTransmitter extends ParentTransmitter {
                 }else if(settingsController.getIsVerbose()){
                     System.out.println("strg manager transmitter: data send successfully ");
                 }
+
+
+                //add exit timestamp
+                long exitTime = System.nanoTime();
+                for(int i=0;i<numRequests;i++){
+                    request = requestArray[i];
+                    measurementController.addMeasurement(new TimeStamp(request.getRequestId(),TIMESTAMP_NAME.TRANSMITTER_EXIT,exitTime));
+                }
+
             }catch (Exception e){
                 if(settingsController.getIsVerbose()){
                     System.out.println("Problem in stub transmitter. Cannot transmit request");

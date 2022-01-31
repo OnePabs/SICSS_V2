@@ -27,7 +27,7 @@ public class ReadyLists {
             batch.put(appId, new SyncIORequestLinkedList(appId,stateController));
         }
         applicationIORequestList = batch.get(appId);
-        request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
+        //request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
         applicationIORequestList.add(request);
     }
 

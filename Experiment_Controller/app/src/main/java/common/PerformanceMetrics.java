@@ -1,6 +1,9 @@
 package common;
 
 import java.util.LinkedList;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
 
 public class PerformanceMetrics {
 
@@ -136,5 +139,83 @@ public class PerformanceMetrics {
         return arrivalRate*totalTimeInSystem;
     }
 
+
+    public static void writeStorageApiPerformanceMetrics(String measurementsFileName, String performanceResultsFileName){
+        try {
+            LinkedList<MeasurementEntry> measurements = new LinkedList<MeasurementEntry>();
+
+            //read measurements
+            File myObj = new File(measurementsFileName);
+            Scanner myReader = new Scanner(myObj);
+            boolean isFirst = true;
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                if(!isFirst && data != null && !data.isBlank()){
+                    String[] values = data.split(",");
+                    //System.out.println(values[0]);
+                    int id = Integer.valueOf(values[0]);
+                    //System.out.println(values[1]);
+                    String timestampName = values[1];
+                    //System.out.println(values[2]);
+                    long timeStamp = Long.valueOf(values[2]);
+                    MeasurementEntry measurement = new MeasurementEntry(id,timestampName,timeStamp);
+                    measurements.add(measurement);
+                    //System.out.println();
+                }else{
+                    isFirst = false;
+                }
+            }
+            myReader.close();
+
+            measurements.sort(new MeasurementsComparator());
+
+
+            //write performance metrics
+            JsonToCsv.writeStorageApiPerformanceMetrics(measurements,performanceResultsFileName);
+            //JsonToCsv.writeStorageManagerPerformanceMetrics(measurements,performanceResultsFileName);
+
+
+        } catch (Exception e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void writeStorageManagerPerformanceMetrics(String measurementsFileName, String performanceResultsFileName){
+        try {
+            LinkedList<MeasurementEntry> measurements = new LinkedList<MeasurementEntry>();
+
+            //read measurements
+            File myObj = new File(measurementsFileName);
+            Scanner myReader = new Scanner(myObj);
+            boolean isFirst = true;
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                if(!isFirst && data != null && !data.isBlank()){
+                    String[] values = data.split(",");
+                    int id = Integer.valueOf(values[0]);
+                    String timestampName = values[1];
+                    long timeStamp = Long.valueOf(values[2]);
+                    MeasurementEntry measurement = new MeasurementEntry(id,timestampName,timeStamp);
+                    measurements.add(measurement);
+                }else{
+                    isFirst = false;
+                }
+            }
+            myReader.close();
+
+            measurements.sort(new MeasurementsComparator());
+
+
+            //write performance metrics
+            //JsonToCsv.writeStorageApiPerformanceMetrics(measurements,performanceResultsFileName);
+            JsonToCsv.writeStorageManagerPerformanceMetrics(measurements,performanceResultsFileName);
+
+        } catch (Exception e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
 
 }
