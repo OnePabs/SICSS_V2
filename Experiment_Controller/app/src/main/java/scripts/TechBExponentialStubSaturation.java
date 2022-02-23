@@ -60,7 +60,7 @@ public class TechBExponentialStubSaturation extends ParentScript{
                             String application_parameters = "{"
                                     + "\"receiverAddress\":\""+storageApi_access_address+"/data"+"\","
                                     + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                    + "\"useSleepForMockProcessing\":true,"
+                                    + "\"useSleepForMockProcessing\":false,"
                                     + "\"interGenerationTimeDistribution\":\"GEOMETRIC\","
                                     + "\"interGenerationTimeDistributionSettings\":"+inter_arrival_time
                                     + "}";
@@ -71,7 +71,7 @@ public class TechBExponentialStubSaturation extends ParentScript{
                                     + "\"dataTransferTechniqueSettings\":{\"period\":" + String.valueOf(periods[period_idx]) + "},"
                                     + "\"serviceTimeDistribution\":\"CONSTANT\","
                                     + "\"serviceTimeDistributionSettings\":"+ 0 +","
-                                    +"\"useSleepForMockProcessing\":true,"
+                                    +"\"useSleepForMockProcessing\":false,"
                                     + "\"transmitter\":\"StorageManagerTransmitter\","
                                     + "\"destination\":\"" + storageManager_location + "\""
                                     + "}";
@@ -81,10 +81,11 @@ public class TechBExponentialStubSaturation extends ParentScript{
                                     + "\"platform\":\"stub\","
                                     + "\"serviceTimeDistribution\":\"EXPONENTIAL\","
                                     + "\"serviceTimeDistributionSettings\":"+ String.valueOf(meanServiceTime) +","
-                                    +"\"useSleepForMockProcessing\":true"
+                                    +"\"useSleepForMockProcessing\":false"
                                     + "}";
 
-                            String experimentName = "B-"+String.valueOf(application_address_idx)+"-"+String.valueOf(storageApi_idx)+"-"+inter_arrival_time;
+                            String experimentName = "B-ia"+String.valueOf(inter_arrival_time)+"-p"+String.valueOf(periods[period_idx]);
+                            //String.valueOf(application_address_idx)+"-"+String.valueOf(storageApi_idx)+"-"+inter_arrival_time;
                             ExperimentParameter expara = new ExperimentParameter(
                                     experimentName,
                                     runtime,

@@ -14,7 +14,134 @@ public class Main {
 		String storageManagerAddress = "http://localhost:8090";
 		boolean isVerbose = false;
 		long minutes_to_millis = (long)60000;
+		long runtime = 45*minutes_to_millis;
+		long serviceTime = 40;
+		long maxperiod = 60000; //for technique C
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
+
+/*
+		//Experiment one - Tech B periods
+		//Technique B - vary periods
+		int[] interArrivalTimesPeriods = {50};//{200,100,80,50,45,40};
+		long[] periods = {200,100};
+		String[] interArrivalTimesBperiodsStr = new String[interArrivalTimesPeriods.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesPeriods.length;interArrivalIdx++){
+			interArrivalTimesBperiodsStr[interArrivalIdx] = String.valueOf(interArrivalTimesPeriods[interArrivalIdx]);
+		}
+		String bPeriodsResultsFolderPath = resultsFolderPath + File.separator + "B-exp-periods";
+		TechBExponentialStubSaturation techBExponentialStubPeriods = new TechBExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				periods,
+				interArrivalTimesBperiodsStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				bPeriodsResultsFolderPath
+		);
+		techBExponentialStubPeriods.run();
+
+*/
+
+/*
+
+		// Experiment 2 - A saturation at 24 requests per second
+		/////////  TECH A EXPONENTIAL ////////////
+		int[] interArrivalTimesA = {40};
+		String[] interArrivalTimesAStr = new String[interArrivalTimesA.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesA.length;interArrivalIdx++){
+			interArrivalTimesAStr[interArrivalIdx] = String.valueOf(interArrivalTimesA[interArrivalIdx]);
+		}
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp-saturation";
+		TechAExponentialStubSaturation techAExponentialStubSaturation = new TechAExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				interArrivalTimesAStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				aResultsFolderPath
+		);
+		techAExponentialStubSaturation.run();
+
+*/
+
+
+
+		//Experiment 2 - B periods experiment at 20 requests per second
+		//Technique B - vary periods
+		int[] interArrivalTimesBsaturation = {50};
+		long[] periodBexp = {40};
+		String[] interArrivalTimesBsaturationStr = new String[interArrivalTimesBsaturation.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesBsaturation.length;interArrivalIdx++){
+			interArrivalTimesBsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesBsaturation[interArrivalIdx]);
+		}
+		String bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-periods-feb09";
+		TechBExponentialStubSaturation techBExponentialStubSaturation = new TechBExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				periodBexp,
+				interArrivalTimesBsaturationStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				bSaturationResultsFolderPath
+		);
+		techBExponentialStubSaturation.run();
+
+
+
+/*
+		//Experiment 2 - C exp point at 24 requests per second
+		int[] interArrivalTimesCSaturation = {42,40};
+		long[] maxsizesCsaturation = {2000}; //when request rate is 20, data transfers will occur one per second
+		String[] interArrivalTimesCsaturationStr = new String[interArrivalTimesCSaturation.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesCSaturation.length;interArrivalIdx++){
+			interArrivalTimesCsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesCSaturation[interArrivalIdx]);
+		}
+		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-saturation";
+		TechCExponentialStubSaturation techCExponentialStubSaturation = new TechCExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				maxperiod,
+				maxsizesCsaturation,
+				interArrivalTimesCsaturationStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				cSaturationResultsFolderPath
+		);
+		techCExponentialStubSaturation.run();
+*/
+
+/*
+		//Experiment 3 - C exp vary max sizes
+		int[] interArrivalTimesCmaxSizes = {50};
+		long[] maxsizesCmaxSizes = {50,30};
+		String[] interArrivalTimesCmaxsizesStr = new String[interArrivalTimesCmaxSizes.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesCmaxSizes.length;interArrivalIdx++){
+			interArrivalTimesCmaxsizesStr[interArrivalIdx] = String.valueOf(interArrivalTimesCmaxSizes[interArrivalIdx]);
+		}
+		String cMaxsizesResultsFolderPath = resultsFolderPath + File.separator + "C-exp-maxsizes-feb07";
+		TechCExponentialStubSaturation techCExponentialStubMaxsizes = new TechCExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				maxperiod,
+				maxsizesCmaxSizes,
+				interArrivalTimesCmaxsizesStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				cMaxsizesResultsFolderPath
+		);
+		techCExponentialStubMaxsizes.run();
+*/
+
 
 		/*
 		String[] measurementFolders = {
@@ -35,12 +162,9 @@ public class Main {
 */
 
 
-
-		// Tech A constant Saturation experiment
 		/*
-		long runtime = 10000; //in millis
-		int[] interArrivalTimesInt = {1000};
-		long serviceTime = 40;
+		// Tech A constant Saturation experiment
+		int[] interArrivalTimesInt = {40};
 		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
 			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
@@ -59,58 +183,45 @@ public class Main {
 		techaconststubsaturation.run();
 		 */
 
-		/////////  TECH A EXPONENTIAL ////////////
-		/*
-		long runtime = 45*minutes_to_millis; //in millis
-		int[] interArrivalTimesInt = {50};
-		long serviceTime = 40;
-		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
-		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
-			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
-		}
-		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp";
-		TechAExponentialStubSaturation techAExponentialStubSaturationstubsaturation = new TechAExponentialStubSaturation(
-				isVerbose,
-				runtime,
-				serviceTime,
-				interArrivalTimesStr,
-				applicationAddresses,
-				storageApiAddress,
-				storageManagerAddress,
-				aResultsFolderPath
-		);
-		techAExponentialStubSaturationstubsaturation.run();
-
-		 */
 
 
-		/*
-		//Technique B exponential stub
-		long runtime = 45*minutes_to_millis; //in millis
-		int[] interArrivalTimesInt = {1000,500,200,100,80,50};//{200,100,80,50,45,40};
-		long serviceTime = 40;
-		long[] periods = {1000};
-		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
-		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
-			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
-		}
-		String aResultsFolderPath = resultsFolderPath + File.separator + "B-exp";
-		TechBExponentialStubSaturation techBExponentialStubSaturationstubsaturation = new TechBExponentialStubSaturation(
-				isVerbose,
-				runtime,
-				serviceTime,
-				periods,
-				interArrivalTimesStr,
-				applicationAddresses,
-				storageApiAddress,
-				storageManagerAddress,
-				aResultsFolderPath
-		);
-		techBExponentialStubSaturationstubsaturation.run();
-		 */
 
 
+
+
+
+
+
+
+
+
+
+
+/*
 		//technique C exponential stub
+		int[] interArrivalTimesInt = {50}; //arrival rates: 1, 2, 5, 10, 12.5, 20
+		long serviceTime = 40;
+		long maxperiod = 60000;
+		long[] maxsizes = {2000}; //when request rate is 20, data transfers will occur one per second
+		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
+			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
+		}
+		String aResultsFolderPath = resultsFolderPath + File.separator + "C-exp";
+		TechCExponentialStubSaturation techCExponentialStubSaturationstubsaturation = new TechCExponentialStubSaturation(
+				isVerbose,
+				runtime,
+				serviceTime,
+				maxperiod,
+				maxsizes,
+				interArrivalTimesStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				aResultsFolderPath
+		);
+		techCExponentialStubSaturationstubsaturation.run();
+
 
 
 

@@ -35,6 +35,9 @@ public class Application implements Runnable{
         content[1] = 0;
         content[2] = 1;
         content[3] = 1;
+        for(int i=4;i<100;i++){
+            content[i] = 1;
+        }
         this.isFinished = false;
         this.isVerbose = isVerbose;
     }

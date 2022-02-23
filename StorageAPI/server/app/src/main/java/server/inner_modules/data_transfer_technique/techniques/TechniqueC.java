@@ -36,13 +36,18 @@ public class TechniqueC extends ParentDataTransferTechnique {
 
     @Override
     public boolean isTransferConditionSatisfied(){ //condition for sending ready IO requests
+        //System.out.println("is Transfer ready current size: " + currentSize + "       max size: " + maxSize);
         boolean isTransferReady = false;
         if((System.currentTimeMillis() - periodStartTime) > period){
             //max period has elapsed
-            periodStartTime = System.currentTimeMillis();
-            return true;
+            isTransferReady = true;
         }else if(currentSize >= maxSize){
             //maximum size reached
+            isTransferReady = true;
+        }
+
+        if(isTransferReady){
+            periodStartTime = System.currentTimeMillis();
             currentSize = (long)0;
             return true;
         }else{
@@ -53,6 +58,7 @@ public class TechniqueC extends ParentDataTransferTechnique {
     @Override
     public void actualize(IORequest request){
         currentSize += request.getContent().length;
+        //System.out.println("Actualize: current size: " + currentSize);
     }
 
 
