@@ -98,7 +98,7 @@ public class RunExperimentScript {
 			api.stop();
 		}
 
-		//inter operation time
+		//Wait for All requests to be serviced
 		try{
 			Thread.sleep(experimentParameters.experimentRuntime); //wait for experiment run time to allow all requests to be transmitted from storage API to storage Manager and stats to be taken
 		}catch(Exception e){

@@ -60,7 +60,7 @@ public class TechBExponentialStubSaturation extends ParentScript{
                             String application_parameters = "{"
                                     + "\"receiverAddress\":\""+storageApi_access_address+"/data"+"\","
                                     + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                    + "\"useSleepForMockProcessing\":false,"
+                                    + "\"useSleepForMockProcessing\":true,"
                                     + "\"interGenerationTimeDistribution\":\"GEOMETRIC\","
                                     + "\"interGenerationTimeDistributionSettings\":"+inter_arrival_time
                                     + "}";
@@ -71,7 +71,7 @@ public class TechBExponentialStubSaturation extends ParentScript{
                                     + "\"dataTransferTechniqueSettings\":{\"period\":" + String.valueOf(periods[period_idx]) + "},"
                                     + "\"serviceTimeDistribution\":\"CONSTANT\","
                                     + "\"serviceTimeDistributionSettings\":"+ 0 +","
-                                    +"\"useSleepForMockProcessing\":false,"
+                                    +"\"useSleepForMockProcessing\":true,"
                                     + "\"transmitter\":\"StorageManagerTransmitter\","
                                     + "\"destination\":\"" + storageManager_location + "\""
                                     + "}";
@@ -81,7 +81,7 @@ public class TechBExponentialStubSaturation extends ParentScript{
                                     + "\"platform\":\"stub\","
                                     + "\"serviceTimeDistribution\":\"EXPONENTIAL\","
                                     + "\"serviceTimeDistributionSettings\":"+ String.valueOf(meanServiceTime) +","
-                                    +"\"useSleepForMockProcessing\":false"
+                                    +"\"useSleepForMockProcessing\":true"
                                     + "}";
 
                             String experimentName = "B-ia"+String.valueOf(inter_arrival_time)+"-p"+String.valueOf(periods[period_idx]);

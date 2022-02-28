@@ -52,7 +52,7 @@ public class ParentDataTransferTechnique implements Runnable{
     public boolean initialize(){return true;}
     public boolean isTransferConditionSatisfied(){return true;} //condition for sending ready IO requests
     public void actualize(IORequest request){} //can be omitted by some technique
-    public void transmit(){}
+    public void transmit() throws Exception{}
 
 
 
@@ -74,9 +74,7 @@ public class ParentDataTransferTechnique implements Runnable{
                         try{
                             transmit();
                         }catch(Exception e){
-                            if(settingsController.getIsVerbose()){
-                                e.printStackTrace();
-                            }
+                            e.printStackTrace();
                         }
                     }else{
                         //take request from Entry List and put it in ready lists
@@ -120,10 +118,7 @@ public class ParentDataTransferTechnique implements Runnable{
                         }
                         */
                         }catch (Exception e){
-                            if(settingsController.getIsVerbose()) {
-                                System.out.println("Error at Parent Data Transfer Technique");
-                                e.printStackTrace();
-                            }
+                            e.printStackTrace();
                         }
                     }
                 }else{

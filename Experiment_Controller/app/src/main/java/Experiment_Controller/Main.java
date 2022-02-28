@@ -15,20 +15,42 @@ public class Main {
 		boolean isVerbose = false;
 		long minutes_to_millis = (long)60000;
 		long runtime = 45*minutes_to_millis;
-		long serviceTime = 40;
+		long[] serviceTime = {40};
 		long maxperiod = 60000; //for technique C
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
 
-/*
+
+		/*
+		// Tech A constant Saturation experiment
+		int[] interArrivalTimesInt = {40};
+		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
+		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
+			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
+		}
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A";
+		TechAConstantStubSaturation techaconststubsaturation = new TechAConstantStubSaturation(
+			isVerbose,
+			runtime,
+			serviceTime,
+			interArrivalTimesStr,
+			applicationAddresses,
+			storageApiAddress,
+			storageManagerAddress,
+			aResultsFolderPath
+		);
+		techaconststubsaturation.run();
+		 */
+
+		/*
 		//Experiment one - Tech B periods
 		//Technique B - vary periods
-		int[] interArrivalTimesPeriods = {50};//{200,100,80,50,45,40};
-		long[] periods = {200,100};
+		int[] interArrivalTimesPeriods = {10000};//{200,100,80,50,45,40};
+		long[] periods = {1000};
 		String[] interArrivalTimesBperiodsStr = new String[interArrivalTimesPeriods.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesPeriods.length;interArrivalIdx++){
 			interArrivalTimesBperiodsStr[interArrivalIdx] = String.valueOf(interArrivalTimesPeriods[interArrivalIdx]);
 		}
-		String bPeriodsResultsFolderPath = resultsFolderPath + File.separator + "B-exp-periods";
+		String bPeriodsResultsFolderPath = resultsFolderPath + File.separator + "B-exp-periods-test";
 		TechBExponentialStubSaturation techBExponentialStubPeriods = new TechBExponentialStubSaturation(
 				isVerbose,
 				runtime,
@@ -41,19 +63,17 @@ public class Main {
 				bPeriodsResultsFolderPath
 		);
 		techBExponentialStubPeriods.run();
-
 */
 
 /*
-
 		// Experiment 2 - A saturation at 24 requests per second
 		/////////  TECH A EXPONENTIAL ////////////
-		int[] interArrivalTimesA = {40};
+		int[] interArrivalTimesA = {50};
 		String[] interArrivalTimesAStr = new String[interArrivalTimesA.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesA.length;interArrivalIdx++){
 			interArrivalTimesAStr[interArrivalIdx] = String.valueOf(interArrivalTimesA[interArrivalIdx]);
 		}
-		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp-saturation";
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp-saturation-feb-23";
 		TechAExponentialStubSaturation techAExponentialStubSaturation = new TechAExponentialStubSaturation(
 				isVerbose,
 				runtime,
@@ -65,20 +85,17 @@ public class Main {
 				aResultsFolderPath
 		);
 		techAExponentialStubSaturation.run();
+		*/
 
-*/
-
-
-
-		//Experiment 2 - B periods experiment at 20 requests per second
-		//Technique B - vary periods
+/*
+		///// TECH B EXPONENTIAL  ///////
 		int[] interArrivalTimesBsaturation = {50};
-		long[] periodBexp = {40};
+		long[] periodBexp = {1000};
 		String[] interArrivalTimesBsaturationStr = new String[interArrivalTimesBsaturation.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesBsaturation.length;interArrivalIdx++){
 			interArrivalTimesBsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesBsaturation[interArrivalIdx]);
 		}
-		String bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-periods-feb09";
+		String bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-saturation-feb-23";
 		TechBExponentialStubSaturation techBExponentialStubSaturation = new TechBExponentialStubSaturation(
 				isVerbose,
 				runtime,
@@ -91,18 +108,17 @@ public class Main {
 				bSaturationResultsFolderPath
 		);
 		techBExponentialStubSaturation.run();
+*/
 
 
-
-/*
-		//Experiment 2 - C exp point at 24 requests per second
-		int[] interArrivalTimesCSaturation = {42,40};
-		long[] maxsizesCsaturation = {2000}; //when request rate is 20, data transfers will occur one per second
+		//Tech C exponential
+		int[] interArrivalTimesCSaturation = {50};
+		long[] maxsizesCsaturation = {20,10}; //when request rate is 20, data transfers will occur one per second
 		String[] interArrivalTimesCsaturationStr = new String[interArrivalTimesCSaturation.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesCSaturation.length;interArrivalIdx++){
 			interArrivalTimesCsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesCSaturation[interArrivalIdx]);
 		}
-		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-saturation";
+		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-saturation-feb-24";
 		TechCExponentialStubSaturation techCExponentialStubSaturation = new TechCExponentialStubSaturation(
 				isVerbose,
 				runtime,
@@ -116,7 +132,6 @@ public class Main {
 				cSaturationResultsFolderPath
 		);
 		techCExponentialStubSaturation.run();
-*/
 
 /*
 		//Experiment 3 - C exp vary max sizes
@@ -160,36 +175,6 @@ public class Main {
 			PerformanceMetrics.writeStorageManagerPerformanceMetrics(mngrMeasurementsFile,mngrResultsFile);
 		}
 */
-
-
-		/*
-		// Tech A constant Saturation experiment
-		int[] interArrivalTimesInt = {40};
-		String[] interArrivalTimesStr = new String[interArrivalTimesInt.length];
-		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesInt.length;interArrivalIdx++){
-			interArrivalTimesStr[interArrivalIdx] = String.valueOf(interArrivalTimesInt[interArrivalIdx]);
-		}
-		String aResultsFolderPath = resultsFolderPath + File.separator + "A";
-		TechAConstantStubSaturation techaconststubsaturation = new TechAConstantStubSaturation(
-			isVerbose,
-			runtime,
-			serviceTime,
-			interArrivalTimesStr,
-			applicationAddresses,
-			storageApiAddress,
-			storageManagerAddress,
-			aResultsFolderPath
-		);
-		techaconststubsaturation.run();
-		 */
-
-
-
-
-
-
-
-
 
 
 

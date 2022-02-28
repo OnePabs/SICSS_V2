@@ -7,7 +7,7 @@ import common.*;
 public class TechAExponentialStubSaturation extends ParentScript{
     private boolean isVerbose;
     private long runtime;
-    private long meanServiceTime;
+    private long[] meanServiceTimes;
     private String[] inter_arrival_times;
     private String[] application_locations;
     private String[] storageApi_locations;
@@ -17,7 +17,7 @@ public class TechAExponentialStubSaturation extends ParentScript{
     public TechAExponentialStubSaturation(
             boolean isVerbose,
             long runtime,       //in milliseconds
-            long meanServiceTime, //in milliseconds
+            long[] meanServiceTimes, //in milliseconds
             String[] inter_arrival_times,
             String[] application_locations,
             String[] storageApi_locations,
@@ -26,7 +26,7 @@ public class TechAExponentialStubSaturation extends ParentScript{
     ){
         this.isVerbose = isVerbose;
         this.runtime = runtime;
-        this.meanServiceTime = meanServiceTime;
+        this.meanServiceTimes =  Arrays.copyOf(meanServiceTimes, meanServiceTimes.length);
         this.inter_arrival_times = Arrays.copyOf(inter_arrival_times, inter_arrival_times.length);
         this.application_locations = Arrays.copyOf(application_locations, application_locations.length);
         this.storageApi_locations = Arrays.copyOf(storageApi_locations, storageApi_locations.length);
@@ -44,53 +44,63 @@ public class TechAExponentialStubSaturation extends ParentScript{
                 for(int storageApi_idx=0;storageApi_idx<storageApi_locations.length;storageApi_idx++){
                     String storageApi_access_address = storageApi_locations[storageApi_idx];
                     for(String inter_arrival_time:inter_arrival_times){
+                        for(long meanServiceTime:meanServiceTimes){
+                            //set up application addresses
+                            String[] applications_addresses = new String[application_address_idx+1];
+                            for(int j=0;j<=application_address_idx;j++){
+                                applications_addresses[j] = application_locations[j];
+                            }
 
-                        //set up application addresses
-                        String[] applications_addresses = new String[application_address_idx+1];
-                        for(int j=0;j<=application_address_idx;j++){
-                            applications_addresses[j] = application_locations[j];
+                            //application parameters
+                            String application_parameters = "{"
+                                    + "\"receiverAddress\":\""+storageApi_access_address+"/data"+"\","
+                                    + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
+                                    +"\"useSleepForMockProcessing\":true,"
+                                    +"\"interGenerationTimeDistribution\":\"GEOMETRIC\","
+                                    +"\"interGenerationTimeDistributionSettings\":"+inter_arrival_time
+                                    + "}";
+
+                            String storageApi_parameters = "{"
+                                    + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
+                                    + "\"dataTransferTechnique\":\"a\","
+                                    + "\"dataTransferTechniqueSettings\":{},"
+                                    + "\"serviceTimeDistribution\":\"CONSTANT\","
+                                    + "\"serviceTimeDistributionSettings\":"+ 0 +","
+                                    +"\"useSleepForMockProcessing\":true,"
+                                    + "\"transmitter\":\"StorageManagerTransmitter\","
+                                    + "\"destination\":\"" + storageManager_location + "\""
+                                    + "}";
+
+                            String storageManager_parameters = "{"
+                                    + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
+                                    + "\"platform\":\"stub\","
+                                    + "\"serviceTimeDistribution\":\"EXPONENTIAL\","
+                                    + "\"serviceTimeDistributionSettings\":"+ String.valueOf(meanServiceTime) +","
+                                    +"\"useSleepForMockProcessing\":true"
+                                    + "}";
+
+                            String experimentName = 
+                            "A-"+
+                            "app-"+String.valueOf(application_address_idx)+"-"+
+                            "api-"+String.valueOf(storageApi_idx)+"-"+
+                            "ia-"+String.valueOf(inter_arrival_time)+"-"+
+                            "st-"+String.valueOf(meanServiceTime)
+                            ;
+                            
+                            
+                            
+                            ExperimentParameter expara = new ExperimentParameter(
+                                    experimentName,
+                                    runtime,
+                                    applications_addresses,
+                                    application_parameters,
+                                    storageApi_access_address,
+                                    storageApi_parameters,
+                                    storageManager_location,
+                                    storageManager_parameters
+                            );
+                            experiment_parameters.add(expara);
                         }
-
-                        //application parameters
-                        String application_parameters = "{"
-                                + "\"receiverAddress\":\""+storageApi_access_address+"/data"+"\","
-                                + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                +"\"useSleepForMockProcessing\":true,"
-                                +"\"interGenerationTimeDistribution\":\"GEOMETRIC\","
-                                +"\"interGenerationTimeDistributionSettings\":"+inter_arrival_time
-                                + "}";
-
-                        String storageApi_parameters = "{"
-                                + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                + "\"dataTransferTechnique\":\"a\","
-                                + "\"dataTransferTechniqueSettings\":{},"
-                                + "\"serviceTimeDistribution\":\"CONSTANT\","
-                                + "\"serviceTimeDistributionSettings\":"+ 0 +","
-                                +"\"useSleepForMockProcessing\":true,"
-                                + "\"transmitter\":\"StorageManagerTransmitter\","
-                                + "\"destination\":\"" + storageManager_location + "\""
-                                + "}";
-
-                        String storageManager_parameters = "{"
-                                + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                + "\"platform\":\"stub\","
-                                + "\"serviceTimeDistribution\":\"EXPONENTIAL\","
-                                + "\"serviceTimeDistributionSettings\":"+ String.valueOf(meanServiceTime) +","
-                                +"\"useSleepForMockProcessing\":true"
-                                + "}";
-
-                        String experimentName = "A-"+String.valueOf(application_address_idx)+"-"+String.valueOf(storageApi_idx)+"-"+inter_arrival_time;
-                        ExperimentParameter expara = new ExperimentParameter(
-                                experimentName,
-                                runtime,
-                                applications_addresses,
-                                application_parameters,
-                                storageApi_access_address,
-                                storageApi_parameters,
-                                storageManager_location,
-                                storageManager_parameters
-                        );
-                        experiment_parameters.add(expara);
                     }
                 }
             }

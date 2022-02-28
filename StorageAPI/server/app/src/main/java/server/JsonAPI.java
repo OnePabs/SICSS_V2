@@ -52,7 +52,7 @@ public class JsonAPI {
     }
 
     public static Long jsonObjectToLong(JSONObject jsonObject){
-        Long l = new Long(0);
+        Long l = Long.valueOf(0);
         //String jsonS = jsonObject.
         return l;
     }
