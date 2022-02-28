@@ -17,7 +17,7 @@ public class Main {
 		long runtime = 45*minutes_to_millis;
 		long[] serviceTime = {40};
 		long maxperiod = 60000; //for technique C
-		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
+		String resultsFolderPath = "C:\Users\Juan Pablo Contreras\Documents\expresults\kubernetesSaturation";
 
 
 		/*
@@ -65,15 +65,15 @@ public class Main {
 		techBExponentialStubPeriods.run();
 */
 
-/*
+
 		// Experiment 2 - A saturation at 24 requests per second
 		/////////  TECH A EXPONENTIAL ////////////
-		int[] interArrivalTimesA = {50};
+		int[] interArrivalTimesA = {80,50,41};
 		String[] interArrivalTimesAStr = new String[interArrivalTimesA.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesA.length;interArrivalIdx++){
 			interArrivalTimesAStr[interArrivalIdx] = String.valueOf(interArrivalTimesA[interArrivalIdx]);
 		}
-		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp-saturation-feb-23";
+		String aResultsFolderPath = resultsFolderPath + File.separator + "A-exp-saturation";
 		TechAExponentialStubSaturation techAExponentialStubSaturation = new TechAExponentialStubSaturation(
 				isVerbose,
 				runtime,
@@ -85,7 +85,7 @@ public class Main {
 				aResultsFolderPath
 		);
 		techAExponentialStubSaturation.run();
-		*/
+
 
 /*
 		///// TECH B EXPONENTIAL  ///////
@@ -112,13 +112,13 @@ public class Main {
 
 
 		//Tech C exponential
-		int[] interArrivalTimesCSaturation = {50};
-		long[] maxsizesCsaturation = {20,10}; //when request rate is 20, data transfers will occur one per second
+		int[] interArrivalTimesCSaturation = {80,50,41};
+		long[] maxsizesCsaturation = {2000}; //when request rate is 20, data transfers will occur one per second
 		String[] interArrivalTimesCsaturationStr = new String[interArrivalTimesCSaturation.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesCSaturation.length;interArrivalIdx++){
 			interArrivalTimesCsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesCSaturation[interArrivalIdx]);
 		}
-		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-saturation-feb-24";
+		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-saturation";
 		TechCExponentialStubSaturation techCExponentialStubSaturation = new TechCExponentialStubSaturation(
 				isVerbose,
 				runtime,

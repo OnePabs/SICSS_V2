@@ -13,7 +13,13 @@ public class RunExperimentScript {
 
 	public static void runExperiment(LinkedList<ExperimentParameter> experimentParameters, String result_folder_path) throws Exception{
 		for(ExperimentParameter exp:experimentParameters){
-			runExperiment(exp,result_folder_path);
+			try{
+				runExperiment(exp,result_folder_path);
+			}catch(Exception e){
+				System.out.println("Error while running or analysis of experiment: " + exp.experimentName);
+				e.printStackTrace();
+			}
+			
 		}
 	}
 
@@ -31,11 +37,39 @@ public class RunExperimentScript {
 		System.out.println();
 		 */
 
+		//stop applications
+		for(ApplicationInterface api:experimentParameters.applications_interfaces){
+			api.stop();
+		}
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
 		//change application settings
 		for(ApplicationInterface api:experimentParameters.applications_interfaces){
 			api.changeSettings(experimentParameters.applications_parameters);
 		}
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
+		//stop storage API
+		experimentParameters.storageApis_interface.stop();
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//clear storage api
+		experimentParameters.storageApis_interface.clear();
 		//inter operation time
 		try{
 			Thread.sleep(500);
@@ -45,7 +79,6 @@ public class RunExperimentScript {
 
 		//change storage api settings
 		experimentParameters.storageApis_interface.changeSettings(experimentParameters.storageApi_parameters);
-
 		//inter operation time
 		try{
 			Thread.sleep(500);
@@ -53,7 +86,8 @@ public class RunExperimentScript {
 			e.printStackTrace();
 		}
 
-
+		//clear storage manager
+		experimentParameters.storageManager_interface.clear();
 		//inter operation time
 		try{
 			Thread.sleep(500);
@@ -63,7 +97,6 @@ public class RunExperimentScript {
 
 		//change storage manager settings
 		experimentParameters.storageManager_interface.changeSettings(experimentParameters.storageManager_parameters);
-
 		//inter operation time
 		try{
 			Thread.sleep(500);
@@ -73,7 +106,6 @@ public class RunExperimentScript {
 
 		//start storage api
 		experimentParameters.storageApis_interface.start();
-
 		//inter operation time
 		try{
 			Thread.sleep(1000);
@@ -86,6 +118,7 @@ public class RunExperimentScript {
 			api.start();
 		}
 
+		//// RUN EXPERIMENT TIME ////
 		//sleep for experiment runtime
 		try{
 			Thread.sleep(experimentParameters.experimentRuntime);
@@ -99,15 +132,14 @@ public class RunExperimentScript {
 		}
 
 		//Wait for All requests to be serviced
-		try{
-			Thread.sleep(experimentParameters.experimentRuntime); //wait for experiment run time to allow all requests to be transmitted from storage API to storage Manager and stats to be taken
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		// try{
+		// 	Thread.sleep(experimentParameters.experimentRuntime); //wait for experiment run time to allow all requests to be transmitted from storage API to storage Manager and stats to be taken
+		// }catch(Exception e){
+		// 	e.printStackTrace();
+		// }
 
 		//stop storage API
 		experimentParameters.storageApis_interface.stop();
-
 		//inter operation time
 		try{
 			Thread.sleep(500);
@@ -128,6 +160,8 @@ public class RunExperimentScript {
 		//store storage manager measurements
 		LinkedList<MeasurementEntry> strgMngr_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageManager_measurements,experiment_results_folder,"strgMngr");
 
+		System.out.println("Experiment " + experimentParameters.experimentName + "finished running and results are stored. Starting Analysis...");
+
 		//get and store storage api performance metrics
 		MeasurementsComparator comp = new MeasurementsComparator();
 		strgApi_EntryMeasurements.sort(comp);
@@ -137,11 +171,25 @@ public class RunExperimentScript {
 		strgMngr_EntryMeasurements.sort(comp);
 		JsonToCsv.writeStorageManagerPerformanceMetrics(strgMngr_EntryMeasurements,experiment_results_folder);
 
+		System.out.println("Experiment " + experimentParameters.experimentName + "finished Analysis");
+
 		//clear storage api
 		experimentParameters.storageApis_interface.clear();
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 		//clear storage manager
 		experimentParameters.storageManager_interface.clear();
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/*
