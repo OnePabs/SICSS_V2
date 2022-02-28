@@ -47,6 +47,7 @@ public class InnerModulesContainer {
 
         ioEntryList = new SyncIORequestLinkedList((byte)0,stateCtrl);
         measurementController = new MeasurementController(stateCtrl);
+
         dataTransferTechniqueController = new DataTransferTechniqueController(stateCtrl,settingsCtrl,ioEntryList,measurementController);
 
         return true;
