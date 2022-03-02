@@ -5,13 +5,10 @@ import server.data_structures.ReadyLists;
 import server.data_structures.SyncIORequestLinkedList;
 import server.data_structures.TimeStamp;
 import server.enumerators.PROGRAM_STATE;
-import server.inner_modules.MeasurementController;
-import server.inner_modules.SettingsController;
-import server.inner_modules.StateController;
+import server.inner_modules.*;
 import server.inner_modules.transmitters.ParentTransmitter;
 
-import static server.enumerators.TIMESTAMP_NAME.TRANSMITTER_ENTRY;
-import static server.enumerators.TIMESTAMP_NAME.TRANSMITTER_EXIT;
+import static server.enumerators.TIMESTAMP_NAME.*;
 
 public class StubTransmitter extends ParentTransmitter {
 
@@ -19,9 +16,10 @@ public class StubTransmitter extends ParentTransmitter {
         StateController stateController,
         SettingsController settingsController,
         ReadyLists readyLists,
+        TransmitionInformationObject transmitionInformationObject,
         MeasurementController measurementController
     ){
-        super(stateController,settingsController,readyLists,measurementController);
+        super(stateController,settingsController,readyLists,transmitionInformationObject,measurementController);
     }
 
     @Override

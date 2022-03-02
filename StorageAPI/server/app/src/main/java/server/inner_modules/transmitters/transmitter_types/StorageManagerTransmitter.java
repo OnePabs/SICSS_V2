@@ -7,13 +7,10 @@ import java.net.http.HttpResponse;
 
 import server.data_structures.*;
 import server.enumerators.*;
-import server.inner_modules.MeasurementController;
-import server.inner_modules.SettingsController;
-import server.inner_modules.StateController;
+import server.inner_modules.*;
 import server.inner_modules.transmitters.ParentTransmitter;
 
-import static server.enumerators.TIMESTAMP_NAME.TRANSMITTER_ENTRY;
-import static server.enumerators.TIMESTAMP_NAME.TRANSMITTER_EXIT;
+import static server.enumerators.TIMESTAMP_NAME.*;
 
 public class StorageManagerTransmitter extends ParentTransmitter {
     private HttpClient client;
@@ -26,9 +23,10 @@ public class StorageManagerTransmitter extends ParentTransmitter {
             StateController stateController,
             SettingsController settingsController,
             ReadyLists readyLists,
+            TransmitionInformationObject transmitionInformationObject,
             MeasurementController measurementController
     ){
-        super(stateController,settingsController,readyLists,measurementController);
+        super(stateController,settingsController,readyLists,transmitionInformationObject,measurementController);
         String uriStr = settingsController.getSetting("destination").toString();;
         client = HttpClient.newBuilder().build();
         uri_insertone = URI.create(uriStr + "/insertone");
@@ -81,6 +79,8 @@ public class StorageManagerTransmitter extends ParentTransmitter {
 
             //add measurements
             for(IORequest req:requestArray){
+                req.addTimeStamp(READY_LIST_EXIT);
+                req.addTimeStamp(SERVICE_TIME_END); 
                 req.addTimeStamp(TRANSMITTER_ENTRY);
                 for(TimeStamp t: req.getTimeStamps()){
                     measurementController.addMeasurement(t);

@@ -7,12 +7,14 @@ import java.util.Hashtable;
 import java.util.Set;
 
 public class ReadyLists {
+    public Object bufferEntryEvent;
     private Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> readylists;
     private StateController stateController;
 
     public ReadyLists(StateController stateController){
         readylists = new Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>>();
         this.stateController = stateController;
+        this.bufferEntryEvent = new Object();
     }
 
     synchronized public void add(IORequest request, Integer batchId, Integer appId){
@@ -29,6 +31,9 @@ public class ReadyLists {
         applicationIORequestList = batch.get(appId);
         //request.addTimeStamp(TIMESTAMP_NAME.READY_LIST_ENTRY);
         applicationIORequestList.add(request);
+        synchronized(bufferEntryEvent){
+            bufferEntryEvent.notifyAll();
+        }
     }
 
     synchronized public void add(IORequest request){
@@ -70,6 +75,43 @@ public class ReadyLists {
         Integer batchId = Integer.valueOf(0);
         return getAndRemoveAllFromBatch(batchId);
     }
+
+    synchronized public int getNumberOfRequestsInBuffer(){
+        if(readylists == null){
+            return 0;
+        }
+
+        int numRequests = 0;
+        Set<Integer> batchesIds = readylists.keySet();
+        for(Integer batchId : batchesIds){
+            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+            Set<Integer> appListIds = batch.keySet();
+            for(Integer appListId : appListIds){
+                SyncIORequestLinkedList appList = batch.get(appListId);
+                numRequests += appList.getNumberOfRequests();
+            }
+        }
+        return numRequests;
+    }
+
+    synchronized public int getNumberOfBytesInBuffer(){
+        if(readylists == null){
+            return 0;
+        }
+
+        int numBytes = 0;
+        Set<Integer> batchesIds = readylists.keySet();
+        for(Integer batchId : batchesIds){
+            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+            Set<Integer> appListIds = batch.keySet();
+            for(Integer appListId : appListIds){
+                SyncIORequestLinkedList appList = batch.get(appListId);
+                numBytes += appList.getNumberOfBytes();
+            }
+        }
+        return numBytes;
+    }
+
 
     synchronized public void clear(){
         readylists.clear();

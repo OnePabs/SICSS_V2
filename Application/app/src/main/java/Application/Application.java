@@ -90,8 +90,7 @@ public class Application implements Runnable{
                 }catch(Exception e){
                     if(settingsController.getIsVerbose()==true) {
                         System.out.println("Application: Exception thrown when sending data");
-                        e.printStackTrace();
-                        return;
+                        //e.printStackTrace();
                     }
                 }
             }else{
@@ -100,7 +99,6 @@ public class Application implements Runnable{
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-
             }
         }
         System.out.println("Finishing application...");

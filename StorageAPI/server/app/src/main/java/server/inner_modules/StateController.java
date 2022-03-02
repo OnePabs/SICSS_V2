@@ -75,5 +75,13 @@ public class StateController {
 		}
 		return isChangeAllowed;
 	}
+
+
+	public boolean isStateRunning(){
+		if(currentState == PROGRAM_STATE.RUNNING){
+			return true;
+		}
+		return false;
+	}
 	
 }

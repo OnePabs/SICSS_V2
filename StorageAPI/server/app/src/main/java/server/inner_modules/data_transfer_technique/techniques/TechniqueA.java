@@ -1,28 +1,23 @@
 package server.inner_modules.data_transfer_technique.techniques;
 
-import server.data_structures.IORequest;
-import server.data_structures.SyncIORequestLinkedList;
+import server.data_structures.*;
+import server.inner_modules.*;
 import server.inner_modules.data_transfer_technique.ParentDataTransferTechnique;
 
 public class TechniqueA extends ParentDataTransferTechnique{
-    boolean sendIORequest = false;
-    IORequest request;
-
-    public TechniqueA() {
-        super();
+    public TechniqueA(
+        StateController stateController, 
+        SettingsController settingsController,
+        ReadyLists buffer,
+        TransmitionInformationObject transmitionInformationObject
+    ) {
+        super(stateController, settingsController, buffer, transmitionInformationObject);
         techniqueName = "techniqueA";
     }
-
-    @Override
-    public boolean isTransferConditionSatisfied(){
-        boolean last = sendIORequest;
-        sendIORequest = !last;
-        return last;
-    }
-
+/*
     @Override
     public void transmit(){
-        SyncIORequestLinkedList requestToTransmit = readyLists.getAndRemoveFromAllBatches();
+        SyncIORequestLinkedList requestToTransmit = buffer.getAndRemoveFromAllBatches();
         if(requestToTransmit == null){
             System.out.println("requestToTransmit is null");
         }else if(requestToTransmit.getSize() != 1){
@@ -40,4 +35,5 @@ public class TechniqueA extends ParentDataTransferTechnique{
         }
 
     }
+    */
 }

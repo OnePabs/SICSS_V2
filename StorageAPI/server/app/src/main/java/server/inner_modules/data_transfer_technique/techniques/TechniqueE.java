@@ -4,39 +4,20 @@ import server.data_structures.IORequest;
 import server.data_structures.SyncIORequestLinkedList;
 import server.inner_modules.data_transfer_technique.ParentDataTransferTechnique;
 
-public class TechniqueE extends ParentDataTransferTechnique {
+public class TechniqueE {
     boolean performTransfer;
     int batchId;
 
-    @Override
+
     public boolean initialize(){
         performTransfer = false;
         return true;
     }
 
-    @Override
-    public boolean isTransferConditionSatisfied(){
-        if(performTransfer){
-            performTransfer = false; //reset
-            return true;
-        }else{
-            return false;
-        }
-    }
 
-
-    @Override
-    public void actualize(IORequest request){
-        performTransfer = request.isBatchComplete();
-        if(performTransfer){
-            batchId = request.getBatchId();
-        }
-    }
-
-
-    @Override
     public void transmit(){
-        SyncIORequestLinkedList requestToTransmit = readyLists.getAndRemoveAllFromBatch(batchId);
+        /*
+        SyncIORequestLinkedList requestToTransmit = buffer.getAndRemoveAllFromBatch(batchId);
         if(requestToTransmit == null){
             if(settingsController.getIsVerbose()){
                 System.out.println("Technique E: requestToTransmit is null");
@@ -53,6 +34,7 @@ public class TechniqueE extends ParentDataTransferTechnique {
         if(settingsController.getIsVerbose()){
             System.out.println("Technique E transmitted " + size + " IO Requests.");
         }
+        */
     }
 
 }
