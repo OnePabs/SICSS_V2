@@ -70,7 +70,7 @@ public class Main {
 		///// TECH B EXPONENTIAL  ///////
 		System.out.println("Running Technique B - Periods");
 		ias  = new int[]{50};
-		long[] periodBexp = {500,200,100,50,20,10,5};
+		long[] periodBexp = {1500, 250, 50, 49, 40, 39};
 		String[] iasStr = new String[ias.length];
 		for(int interArrivalIdx=0;interArrivalIdx<ias.length;interArrivalIdx++){
 			iasStr[interArrivalIdx] = String.valueOf(ias[interArrivalIdx]);
@@ -88,6 +88,8 @@ public class Main {
 				bSaturationResultsFolderPath
 		);
 		techBExponentialStubStorage.run();
+
+		/*
 
 		System.out.println("Running Technique B - Saturation");
 		ias = new int[]{41, 50, 80};
@@ -109,6 +111,7 @@ public class Main {
 				bSaturationResultsFolderPath
 		);
 		techBExponentialStubStorage.run();
+		*/
 
 
 /*
