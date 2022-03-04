@@ -4,10 +4,9 @@ import server.enumerators.PROGRAM_STATE;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
 
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-public class SyncIORequestLinkedList {
+public class SyncIORequestLinkedList implements Iterable{
 	private int linkedListId;
 	private LinkedList<IORequest> requests;
 	private StateController stateController;
@@ -22,18 +21,18 @@ public class SyncIORequestLinkedList {
 		return linkedListId;
 	}
 	
-	public int getSize() {
+	public synchronized int getSize() {
 		return requests.size();
 	}
 
-	public int getNumberOfRequests(){
+	public synchronized int getNumberOfRequests(){
 		if(requests == null){
 			return 0;
 		}
 		return requests.size();
 	}
 
-	public int getNumberOfBytes(){
+	public synchronized int getNumberOfBytes(){
 		if(requests == null){
 			return 0;
 		}
@@ -43,6 +42,13 @@ public class SyncIORequestLinkedList {
 			numBytes += req.getSize();
 		}
 		return numBytes;
+	}
+
+	public synchronized IORequest[] getRequests(){
+		if(requests == null){
+			return null;
+		}
+		return requests.toArray(new IORequest[requests.size()]);
 	}
 	
 	
@@ -83,9 +89,7 @@ public class SyncIORequestLinkedList {
 	}
 
 	public void clearList() {
-		if(stateController.getCurrentState() == PROGRAM_STATE.STOPPED) {
-			requests = new LinkedList<IORequest>();
-		}
+		requests.clear();
 	}
 
 	public synchronized void printIds() {
@@ -102,5 +106,10 @@ public class SyncIORequestLinkedList {
 		requests.toArray(requestArray);
 		return requestArray;
 	}
+
+
+	public Iterator<IORequest> iterator() {
+        return this.requests.iterator();
+    }
 
 }

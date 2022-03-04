@@ -12,7 +12,7 @@ public class Main {
 		String[] applicationAddresses = {"http://localhost:8000"};
 		String[] storageApiAddress = {"http://localhost:8080"};
 		String storageManagerAddress = "http://localhost:8090";
-		boolean isVerbose = false;
+		boolean isVerbose = true;
 		long minutes_to_millis = (long)60000;
 		long[] runtime = {45*minutes_to_millis};
 		int[] ias;
@@ -66,7 +66,7 @@ public class Main {
 		techBExponentialStubPeriods.run();
 */
 
-
+/*
 		///// TECH B EXPONENTIAL  ///////
 		System.out.println("Running Technique B - Periods");
 		ias  = new int[]{50};
@@ -88,9 +88,9 @@ public class Main {
 				bSaturationResultsFolderPath
 		);
 		techBExponentialStubStorage.run();
+		*/
 
 		/*
-
 		System.out.println("Running Technique B - Saturation");
 		ias = new int[]{41, 50, 80};
 		periodBexp = new long[]{1000};
@@ -159,18 +159,18 @@ public class Main {
 		techBExponentialStubStorage.run();
 */
 
-/*
+
 		//Tech C exponential
-		int[] interArrivalTimesCSaturation = {80,50,41};
-		long[] maxsizesCsaturation = {2000}; //when request rate is 20, data transfers will occur one per second
+		int[] interArrivalTimesCSaturation = {5000};
+		long[] maxsizesCsaturation = {300}; //when request rate is 20, data transfers will occur one per second
 		String[] interArrivalTimesCsaturationStr = new String[interArrivalTimesCSaturation.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesCSaturation.length;interArrivalIdx++){
 			interArrivalTimesCsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesCSaturation[interArrivalIdx]);
 		}
-		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-saturation";
+		String cSaturationResultsFolderPath = resultsFolderPath + File.separator + "C-exp-test";
 		TechCExponentialStubSaturation techCExponentialStubSaturation = new TechCExponentialStubSaturation(
 				isVerbose,
-				runtime,
+				1*minutes_to_millis,
 				serviceTime,
 				maxperiod,
 				maxsizesCsaturation,
@@ -181,7 +181,7 @@ public class Main {
 				cSaturationResultsFolderPath
 		);
 		techCExponentialStubSaturation.run();
-*/
+
 
 
 /*

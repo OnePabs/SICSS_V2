@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class ReadyLists {
     public Object bufferEntryEvent;
-    private Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> readylists;
+    private Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> readylists; //hashtable of batches. Each batch is itself a hashtable of applications
     private StateController stateController;
 
     public ReadyLists(StateController stateController){
@@ -17,7 +17,10 @@ public class ReadyLists {
         this.bufferEntryEvent = new Object();
     }
 
-    synchronized public void add(IORequest request, Integer batchId, Integer appId){
+    synchronized public void add(IORequest request){
+        Integer batchId = request.getBatchId();
+        Integer appId = request.getAppId();
+
         SyncIORequestLinkedList applicationIORequestList;
         if(!readylists.containsKey(batchId) || readylists.get(batchId)==null){
             //batch does not exist. create it
@@ -36,55 +39,44 @@ public class ReadyLists {
         }
     }
 
-    synchronized public void add(IORequest request){
-        Integer batchId = request.getBatchId();
-        Integer appId = request.getAppId();
-        add(request,batchId,appId);
-    }
-
+    /**
+    * Get all requests from an application and clear them from the buffer
+    */
     synchronized public SyncIORequestLinkedList removeAllFromApp(Integer batchId, Integer appId){
-        if(readylists.containsKey(batchId)){
-            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
-            return batch.remove(appId);
+        Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId);//get batch
+        if(batch!=null){
+            return batch.remove(appId); //removes the mapping in batch hashTable between appId and the SyncIORequestLinkedList. Assumed that no data structure is created
         }
         return null;
     }
 
-    synchronized public SyncIORequestLinkedList getAndRemoveAllFromBatch(Integer batchId){
-        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList(batchId,stateController);
-        if(readylists.containsKey(batchId)){
-            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
-            Set<Integer> appListIds = batch.keySet();
-            for(Integer appListId : appListIds){
-                requestsList.add(removeAllFromApp(batchId,appListId));
-            }
-        }
-        return requestsList;
+    /**
+    * Get all Requests from a batch and clear them from the buffer
+    */
+    synchronized public Hashtable<Integer,SyncIORequestLinkedList> removeAllFromBatch(Integer batchId){
+        Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.remove(batchId);
+        return batch;
     }
 
-    synchronized public SyncIORequestLinkedList getAndRemoveFromAllBatches(){
-        SyncIORequestLinkedList requestsList = new SyncIORequestLinkedList(Integer.valueOf(0),stateController);
-        Set<Integer> batchesIds = readylists.keySet();
-        for(Integer batchId : batchesIds){
-            requestsList.add(getAndRemoveAllFromBatch(batchId));
-        }
-        return requestsList;
+
+    /**
+    * Get all requests in buffer
+     */
+    synchronized public Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> removeAllFromBuffer(){
+        Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> requests = readylists;
+        readylists = new Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>>();
+        return readylists;
     }
 
-    synchronized public SyncIORequestLinkedList getAndRemoveAllFromBatch(){
-        Integer batchId = Integer.valueOf(0);
-        return getAndRemoveAllFromBatch(batchId);
-    }
-
-    synchronized public int getNumberOfRequestsInBuffer(){
-        if(readylists == null){
+    public static int getNumberOfRequestsInBuffer(Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> buffer){
+         if(buffer == null){
             return 0;
         }
 
         int numRequests = 0;
-        Set<Integer> batchesIds = readylists.keySet();
+        Set<Integer> batchesIds = buffer.keySet();
         for(Integer batchId : batchesIds){
-            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+            Hashtable<Integer,SyncIORequestLinkedList> batch = buffer.get(batchId); //get batch
             Set<Integer> appListIds = batch.keySet();
             for(Integer appListId : appListIds){
                 SyncIORequestLinkedList appList = batch.get(appListId);
@@ -94,15 +86,20 @@ public class ReadyLists {
         return numRequests;
     }
 
-    synchronized public int getNumberOfBytesInBuffer(){
-        if(readylists == null){
+    synchronized public int getNumberOfRequestsInBuffer(){
+       return getNumberOfRequestsInBuffer(this.readylists);
+    }
+
+
+    public static int getNumberOfBytesInBuffer(Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> buffer){
+        if(buffer == null){
             return 0;
         }
 
         int numBytes = 0;
-        Set<Integer> batchesIds = readylists.keySet();
+        Set<Integer> batchesIds = buffer.keySet();
         for(Integer batchId : batchesIds){
-            Hashtable<Integer,SyncIORequestLinkedList> batch = readylists.get(batchId); //get batch
+            Hashtable<Integer,SyncIORequestLinkedList> batch = buffer.get(batchId); //get batch
             Set<Integer> appListIds = batch.keySet();
             for(Integer appListId : appListIds){
                 SyncIORequestLinkedList appList = batch.get(appListId);
@@ -112,9 +109,28 @@ public class ReadyLists {
         return numBytes;
     }
 
+    synchronized public int getNumberOfBytesInBuffer(){
+        return getNumberOfBytesInBuffer(this.readylists);
+    }
+
+    public static void clear(Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> buffer){
+        Hashtable<Integer,SyncIORequestLinkedList> currBatch;
+        SyncIORequestLinkedList currApp;
+        Set<Integer> batchesIds = buffer.keySet();
+        for(Integer batchId: batchesIds){
+            currBatch = buffer.get(batchId);
+            Set<Integer> appIds = currBatch.keySet();
+            for(Integer appId:appIds){
+                currApp = currBatch.get(appId);
+                currApp.clearList();
+            }
+            currBatch.clear();
+        }
+        buffer.clear();
+    }
 
     synchronized public void clear(){
-        readylists.clear();
+        clear(this.readylists);
     }
 
 }

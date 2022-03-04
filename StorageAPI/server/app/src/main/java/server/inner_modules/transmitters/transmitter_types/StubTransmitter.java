@@ -24,38 +24,12 @@ public class StubTransmitter extends ParentTransmitter {
 
     @Override
     public void transmit(IORequest request){
-        if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
-            request.addTimeStamp(TRANSMITTER_ENTRY);
-            for(TimeStamp t: request.getTimeStamps()){
-                measurementController.addMeasurement(t);
-            }
-            request.addTimeStamp(TRANSMITTER_EXIT);
-            if(settingsController.getIsVerbose()){
-                System.out.println("Stub Transmitter: IORequest " + request.getRequestId() + " leaving storage  API");
-            }
-            measurementController.addMeasurement(request.getTimeStamp(TRANSMITTER_EXIT));
-        }
+        //TODO: in the future I could add a programmed delay
     }
 
     @Override
-    public void transmit(SyncIORequestLinkedList requests){
-    	if(settingsController.getIsVerbose()){
-                System.out.println("Transmitting SyncIORequestLinkedList");
-        }
-        if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
-            int numRequests = requests.getSize();
-            for(int i=0;i<numRequests;i++){
-                try{
-                    IORequest request = requests.take();
-                    transmit(request);
-                }catch (Exception e){
-                    if(settingsController.getIsVerbose()){
-                        System.out.println("Problem in stub transmitter. Cannot transmit request");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+    public void transmit(IORequest[] requests){
+    	//TODO: in the future I could add a programmed delay
     }
 
 }

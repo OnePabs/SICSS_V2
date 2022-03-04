@@ -71,33 +71,18 @@ public class StorageManagerTransmitter extends ParentTransmitter {
     }
 
     @Override
-    public void transmit(SyncIORequestLinkedList requests){
+    public void transmit(IORequest[] requests){
         if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
-
-            //get requests in an array
-            IORequest[] requestArray = requests.getAsArray();
-
-            //add measurements
-            for(IORequest req:requestArray){
-                req.addTimeStamp(READY_LIST_EXIT);
-                req.addTimeStamp(SERVICE_TIME_END); 
-                req.addTimeStamp(TRANSMITTER_ENTRY);
-                for(TimeStamp t: req.getTimeStamps()){
-                    measurementController.addMeasurement(t);
-                }
-            }
-
-
             if(settingsController.getIsVerbose()){
-                System.out.println("Storage Manager Transmitter: commitall");
+                System.out.println("Storage Manager Transmitter: transmit(IORequest[])");
             }
 
             try{
                 IORequest request;
                 String jsonstr = "[";
-                int numRequests = requests.getSize();
+                int numRequests = requests.length;
                 for(int i=0;i<numRequests;i++){
-                    request = requests.take();
+                    request = requests[i];
 
                     if(i != 0){
                         jsonstr += ",";
@@ -130,15 +115,6 @@ public class StorageManagerTransmitter extends ParentTransmitter {
                 }else if(settingsController.getIsVerbose()){
                     System.out.println("strg manager transmitter: data send successfully ");
                 }
-
-
-                //add exit timestamp
-                long exitTime = System.nanoTime();
-                for(int i=0;i<numRequests;i++){
-                    request = requestArray[i];
-                    measurementController.addMeasurement(new TimeStamp(request.getRequestId(),TIMESTAMP_NAME.TRANSMITTER_EXIT,exitTime));
-                }
-
             }catch (Exception e){
                 if(settingsController.getIsVerbose()){
                     System.out.println("Problem in stub transmitter. Cannot transmit request");

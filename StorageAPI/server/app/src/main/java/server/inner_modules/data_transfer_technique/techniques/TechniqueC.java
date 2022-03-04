@@ -47,6 +47,10 @@ public class TechniqueC extends ParentDataTransferTechnique {
 
     @Override
     public void waitForDataTransferCondition() throws Exception{ //condition for sending ready IO requests
-        super.waitForDataTransferCondition();
+        int numBytes = buffer.getNumberOfBytesInBuffer();
+        while(numBytes < maxSize){
+            super.waitForDataTransferCondition();
+            numBytes = buffer.getNumberOfBytesInBuffer();
+        }
     }
 }
