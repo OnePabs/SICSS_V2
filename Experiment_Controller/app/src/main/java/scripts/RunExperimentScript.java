@@ -19,7 +19,6 @@ public class RunExperimentScript {
 				System.out.println("Error while running or analysis of experiment: " + exp.experimentName);
 				e.printStackTrace();
 			}
-			
 		}
 	}
 
@@ -130,6 +129,12 @@ public class RunExperimentScript {
 		for(ApplicationInterface api:experimentParameters.applications_interfaces){
 			api.stop();
 		}
+		//inter operation time
+		try{
+			Thread.sleep(500);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 		//Wait for All requests to be serviced
 		// try{
@@ -142,7 +147,7 @@ public class RunExperimentScript {
 		experimentParameters.storageApis_interface.stop();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -160,8 +165,10 @@ public class RunExperimentScript {
 		//store storage manager measurements
 		LinkedList<MeasurementEntry> strgMngr_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageManager_measurements,experiment_results_folder,"strgMngr");
 
-		System.out.println("Experiment " + experimentParameters.experimentName + "finished running and results are stored. Starting Analysis...");
-
+		
+		System.out.println("Experiment " + experimentParameters.experimentName + "finished running and results are stored");
+		
+		/*
 		//get and store storage api performance metrics
 		MeasurementsComparator comp = new MeasurementsComparator();
 		strgApi_EntryMeasurements.sort(comp);
@@ -172,6 +179,7 @@ public class RunExperimentScript {
 		JsonToCsv.writeStorageManagerPerformanceMetrics(strgMngr_EntryMeasurements,experiment_results_folder);
 
 		System.out.println("Experiment " + experimentParameters.experimentName + "finished Analysis");
+		*/
 
 		//clear storage api
 		experimentParameters.storageApis_interface.clear();

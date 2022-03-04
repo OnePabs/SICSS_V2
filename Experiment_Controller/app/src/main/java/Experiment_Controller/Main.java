@@ -14,10 +14,11 @@ public class Main {
 		String storageManagerAddress = "http://localhost:8090";
 		boolean isVerbose = false;
 		long minutes_to_millis = (long)60000;
-		long runtime = 45*minutes_to_millis;
+		long[] runtime = {45*minutes_to_millis};
+		int[] ias;
 		long[] serviceTime = {40};
 		long maxperiod = 60000; //for technique C
-		String resultsFolderPath = "C:\Users\Juan Pablo Contreras\Documents\expresults\kubernetesSaturation";
+		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results";
 
 
 		/*
@@ -66,9 +67,57 @@ public class Main {
 */
 
 
+		///// TECH B EXPONENTIAL  ///////
+		System.out.println("Running Technique B - Periods");
+		ias  = new int[]{50};
+		long[] periodBexp = {1500, 250, 50, 49, 40, 39};
+		String[] iasStr = new String[ias.length];
+		for(int interArrivalIdx=0;interArrivalIdx<ias.length;interArrivalIdx++){
+			iasStr[interArrivalIdx] = String.valueOf(ias[interArrivalIdx]);
+		}
+		String bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-periods";
+		TechBExponentialStubStorage techBExponentialStubStorage = new TechBExponentialStubStorage(
+				isVerbose,
+				runtime,
+				serviceTime,
+				periodBexp,
+				iasStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				bSaturationResultsFolderPath
+		);
+		techBExponentialStubStorage.run();
+
+		/*
+
+		System.out.println("Running Technique B - Saturation");
+		ias = new int[]{41, 50, 80};
+		periodBexp = new long[]{1000};
+		iasStr = new String[ias.length];
+		for(int interArrivalIdx=0;interArrivalIdx<ias.length;interArrivalIdx++){
+			iasStr[interArrivalIdx] = String.valueOf(ias[interArrivalIdx]);
+		}
+		bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-saturation";
+		techBExponentialStubStorage = new TechBExponentialStubStorage(
+				isVerbose,
+				runtime,
+				serviceTime,
+				periodBexp,
+				iasStr,
+				applicationAddresses,
+				storageApiAddress,
+				storageManagerAddress,
+				bSaturationResultsFolderPath
+		);
+		techBExponentialStubStorage.run();
+		*/
+
+
+/*
 		// Experiment 2 - A saturation at 24 requests per second
 		/////////  TECH A EXPONENTIAL ////////////
-		int[] interArrivalTimesA = {80,50,41};
+		int[] interArrivalTimesA = {10000};
 		String[] interArrivalTimesAStr = new String[interArrivalTimesA.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesA.length;interArrivalIdx++){
 			interArrivalTimesAStr[interArrivalIdx] = String.valueOf(interArrivalTimesA[interArrivalIdx]);
@@ -85,18 +134,18 @@ public class Main {
 				aResultsFolderPath
 		);
 		techAExponentialStubSaturation.run();
-
+*/
 
 /*
 		///// TECH B EXPONENTIAL  ///////
-		int[] interArrivalTimesBsaturation = {50};
-		long[] periodBexp = {1000};
+		int[] interArrivalTimesBsaturation = {10000};
+		long[] periodBexp = {5000};
 		String[] interArrivalTimesBsaturationStr = new String[interArrivalTimesBsaturation.length];
 		for(int interArrivalIdx=0;interArrivalIdx<interArrivalTimesBsaturation.length;interArrivalIdx++){
 			interArrivalTimesBsaturationStr[interArrivalIdx] = String.valueOf(interArrivalTimesBsaturation[interArrivalIdx]);
 		}
-		String bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-saturation-feb-23";
-		TechBExponentialStubSaturation techBExponentialStubSaturation = new TechBExponentialStubSaturation(
+		String bSaturationResultsFolderPath = resultsFolderPath + File.separator + "B-exp-saturation";
+		TechBExponentialStubStorage techBExponentialStubStorage = new TechBExponentialStubStorage(
 				isVerbose,
 				runtime,
 				serviceTime,
@@ -107,10 +156,10 @@ public class Main {
 				storageManagerAddress,
 				bSaturationResultsFolderPath
 		);
-		techBExponentialStubSaturation.run();
+		techBExponentialStubStorage.run();
 */
 
-
+/*
 		//Tech C exponential
 		int[] interArrivalTimesCSaturation = {80,50,41};
 		long[] maxsizesCsaturation = {2000}; //when request rate is 20, data transfers will occur one per second
@@ -132,6 +181,8 @@ public class Main {
 				cSaturationResultsFolderPath
 		);
 		techCExponentialStubSaturation.run();
+*/
+
 
 /*
 		//Experiment 3 - C exp vary max sizes

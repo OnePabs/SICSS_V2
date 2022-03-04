@@ -48,6 +48,13 @@ public class IORequest {
 	public LinkedList<TimeStamp> getTimeStamps(){
 		return this.timeStamps;
 	}
+
+	public int getSize(){
+		if(content == null){
+			return 0;
+		}
+		return content.length;
+	}
 	
 	
 	//Add time stamp

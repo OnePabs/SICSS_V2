@@ -40,8 +40,11 @@ public class StorageManager implements Runnable {
                     System.out.println("Data Transfer Controller: Settings Controller Changed Settings");
                 }
 
-                if(commitAllExecutor != null && insertOneExecutor != null){
+                if(commitAllExecutor != null){
                     commitAllExecutor.stop();
+                }
+
+                if(insertOneExecutor != null){
                     insertOneExecutor.stop();
                 }
 

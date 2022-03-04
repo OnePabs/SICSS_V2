@@ -8,7 +8,6 @@ import server.enumerators.PROGRAM_STATE;
 import server.inner_modules.MeasurementController;
 import server.inner_modules.SettingsController;
 import server.inner_modules.StateController;
-import server.inner_modules.data_transfer_technique.DataTransferTechniqueController;
 
 import java.io.IOException;
 
@@ -17,18 +16,18 @@ public class Clear implements HttpHandler {
     private StateController stateController;
     private MeasurementController measurementController;
     private SyncIORequestLinkedList ioEntryList;
-    private DataTransferTechniqueController dataTransferTechniqueController;
+    private ReadyLists buffer;
 
     public Clear(StateController stateController,
                  SettingsController settingsController,
                  MeasurementController measurementController,
                  SyncIORequestLinkedList ioEntryList,
-                 DataTransferTechniqueController dataTransferTechniqueController) {
+                 ReadyLists buffer) {
         this.settingsController = settingsController;
         this.stateController = stateController;
         this.measurementController = measurementController;
         this.ioEntryList = ioEntryList;
-        this.dataTransferTechniqueController = dataTransferTechniqueController;
+        this.buffer = buffer;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class Clear implements HttpHandler {
         if(stateController.getCurrentState() == PROGRAM_STATE.STOPPED){
             measurementController.clear();
             ioEntryList.clearList();
-            dataTransferTechniqueController.clear();
+            buffer.clear();
             returnCode = 200;
         }else{
             returnCode = 400;

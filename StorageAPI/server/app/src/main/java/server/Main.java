@@ -20,8 +20,8 @@ public class Main {
 		
 		//create inner modules
 		InnerModulesContainer ic = new InnerModulesContainer(port);
-		ic.init();
-		ic.start();
+		Thread ict = new Thread(ic);
+		ict.start();
 	}
 
 }

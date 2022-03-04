@@ -25,6 +25,25 @@ public class SyncIORequestLinkedList {
 	public int getSize() {
 		return requests.size();
 	}
+
+	public int getNumberOfRequests(){
+		if(requests == null){
+			return 0;
+		}
+		return requests.size();
+	}
+
+	public int getNumberOfBytes(){
+		if(requests == null){
+			return 0;
+		}
+
+		int numBytes = 0;
+		for(IORequest req: requests){
+			numBytes += req.getSize();
+		}
+		return numBytes;
+	}
 	
 	
 	public synchronized void add(IORequest req) {
