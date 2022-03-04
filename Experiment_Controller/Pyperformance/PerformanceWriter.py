@@ -1,11 +1,39 @@
+import os
+
 class PerformanceWriter:
 
-    #@staticmethod
-    #def findAndWritePerformanceMetricsOfExperiment(experimentFolderPath,resultFolderPath):
-
+    @staticmethod
+    def findAndWritePerformanceMetricsOfExperiment(experimentFolderPath,resultFolderPath):
+        list_subfolders_with_paths = [f.path for f in os.scandir(experimentFolderPath) if f.is_dir()]
+        #create API results file
+        apiResultsPath = resultFolderPath + os.path.sep + "api-results.txt"
+        frapi = open(apiResultsPath,"w")
+        frapi.write("Path,Arrival Rate, Time spent in Buffer,Residence Time\n")
+        frapi.close()
+        #create Manager results file
+        managerResultsPath = resultFolderPath + os.path.sep + "manager-results.txt"
+        frmanager =  open(managerResultsPath,"w")
+        frmanager.write("Path,Arrival Rate,Service Time,Residence Time\n")
+        frmanager.close()
+        #find and write experiment results from measurement folder
+        for path in list_subfolders_with_paths:
+            print(path)
+            #performance analysis for API
+            apiMPath = path + os.path.sep + "measurements" + os.path.sep + "strgapi.txt"
+            PerformanceWriter.findAndWritePerformanceMetrics(apiMPath,"STORAGE_API_ENTRY","ENTRY_LIST_EXIT","TRANSMITTER_EXIT",apiResultsPath)
+            #performance analysis for Manager
+            managerPath = path + os.path.sep + "measurements" + os.path.sep + "strgMngr.txt"
+            PerformanceWriter.findAndWritePerformanceMetrics(managerPath,"ENTRY","QueueExitTime","EXIT",managerResultsPath)
+            print()
 
     @staticmethod
-    def findAndWritePerformanceMetrics(measurementsPath, entryMeasurementName, serviceTimeEndMeasurementName, exitMeasurementName, resultsPath):
+    def findAndWritePerformanceMetrics(measurementsPath, entryMeasurementName, serviceTimeStartMeasurementName, exitMeasurementName, resultsPath):
+
+        #write measurement Path to results path
+        fmp = open(resultsPath,"a")
+        fmp.write(measurementsPath+",")
+        fmp.close()
+
         #get measurements into python object
         lines = ""
         f = open(measurementsPath, 'r')
@@ -13,8 +41,6 @@ class PerformanceWriter:
             lines = f.readlines()
         finally:
             f.close()
-
-        
 
         #pop first line because it is not measurements
         lines.pop(0)
@@ -70,7 +96,7 @@ class PerformanceWriter:
                     curEntry = int(data[2])
                 elif curId == data[0]:
                     #Working on same request as the current Request Id
-                    if data[1] == serviceTimeEndMeasurementName:
+                    if data[1] == serviceTimeStartMeasurementName:
                         curServStart = int(data[2])
                     elif data[1] == exitMeasurementName:
                         curExit = int(data[2])
@@ -93,6 +119,38 @@ class PerformanceWriter:
             r2.write(str(avgSt) + ","+str(avgRs)+"\n")
             r2.close()
 
+    @staticmethod
+    def getAverageNumberOfRequestsInABatch(measurementsPath,thrs):
+        lines = ""
+        f = open(measurementsPath, 'r')
+        try:
+            lines = f.readlines()
+        finally:
+            f.close()
         
+        numRequestPerBatchSum = 0
+        numBatches = 0
+        numRequestsInCurrentBatch = 0
+        currentEntryTime = 0
+        prevTimeStampName = ""
+        for line in lines:
+            data = line.split(",")
+            if data[1] == "ENTRY" and prevTimeStampName != "ENTRY":
+                #new batch
+                currentEntryTime = int(data[2]) #set current entry time
+            elif data[1] == "ENTRY" and abs(int(data[2]) - currentEntryTime) < thrs:
+                #in current entry batch
+                numRequestsInCurrentBatch += 1
+            elif data[1] != "ENTRY" and prevTimeStampName == "ENTRY":
+                #marks the end of an entry batch
+                numRequestPerBatchSum += numRequestsInCurrentBatch
+                numBatches += 1
+                numRequestsInCurrentBatch = 0
+            prevTimeStampName = data[1]
 
-
+        print(measurementsPath)
+        print("numRequestPerBatchSum: " + str(numRequestPerBatchSum))
+        print("numBatches: " + str(numBatches))
+        avg = numRequestPerBatchSum/numBatches
+        print("avg: " + str(avg))
+        print()
