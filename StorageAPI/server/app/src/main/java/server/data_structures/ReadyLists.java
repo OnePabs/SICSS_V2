@@ -65,7 +65,7 @@ public class ReadyLists {
     synchronized public Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> removeAllFromBuffer(){
         Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> requests = readylists;
         readylists = new Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>>();
-        return readylists;
+        return requests;
     }
 
     public static int getNumberOfRequestsInBuffer(Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> buffer){

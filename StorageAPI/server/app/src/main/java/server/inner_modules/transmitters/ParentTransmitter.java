@@ -37,6 +37,7 @@ public class ParentTransmitter implements Runnable{
 
     //Methods implemented by parent
     public void transmit(Hashtable<Integer,Hashtable<Integer,SyncIORequestLinkedList>> buffer){
+
         if(buffer == null){
             return;
         }
@@ -44,6 +45,8 @@ public class ParentTransmitter implements Runnable{
         if(numRequests == 0){
             return;
         }
+
+        
 
         //List of requests to be transmitted
         IORequest[] requests = new IORequest[numRequests];
@@ -122,9 +125,7 @@ public class ParentTransmitter implements Runnable{
         while(isRunning){
             try{
                 if(stateController.isStateRunning() && isRunning){
-                    synchronized(transmitionInformationObject.transmitionNotifier){
-                        transmitionInformationObject.transmitionNotifier.wait();
-                    }
+                    transmitionInformationObject.waitForNotificationToStartTransmition();
                 }
                 
                 //check again because state could change while thread was waiting
@@ -172,6 +173,11 @@ public class ParentTransmitter implements Runnable{
             }catch(Exception e){
                 System.out.println("Unnable to perform the data transfer");
                 e.printStackTrace();
+            }finally{
+                if(settingsController.getIsVerbose()){
+                    System.out.println("Transmitter: tio end of transmition");
+                }
+                transmitionInformationObject.endOfTransmition();
             }
         }
 

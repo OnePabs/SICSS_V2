@@ -19,9 +19,11 @@ class PerformanceWriter:
         for path in list_subfolders_with_paths:
             print(path)
             #performance analysis for API
+            print("Handler:")
             apiMPath = path + os.path.sep + "measurements" + os.path.sep + "strgapi.txt"
             PerformanceWriter.findAndWritePerformanceMetrics(apiMPath,"STORAGE_API_ENTRY","ENTRY_LIST_EXIT","TRANSMITTER_EXIT",apiResultsPath)
             #performance analysis for Manager
+            print("Manager: ")
             managerPath = path + os.path.sep + "measurements" + os.path.sep + "strgMngr.txt"
             PerformanceWriter.findAndWritePerformanceMetrics(managerPath,"ENTRY","QueueExitTime","EXIT",managerResultsPath)
             print()
@@ -69,7 +71,9 @@ class PerformanceWriter:
 
         #Calculate and Write Arrival Rate 
         if numIa != 0:
-            averageIa = ias/numIa      
+            averageIa = ias/numIa    
+            print("Average ia: " + str(averageIa))  
+            print("Num Arrivals: " + str(numIa))
             iaRate = 1000000000/averageIa
             print("Arrival Rate: " + str(iaRate))
             r = open(resultsPath, "a")
@@ -154,3 +158,34 @@ class PerformanceWriter:
         avg = numRequestPerBatchSum/numBatches
         print("avg: " + str(avg))
         print()
+
+
+    @staticmethod
+    def writeEntryTimes(entryMeasurementName,measurementsPath,resultsPath):
+        #get measurements into python object
+        lines = ""
+        f = open(measurementsPath, 'r')
+        try:
+            lines = f.readlines()
+        finally:
+            f.close()
+
+        #pop first line because it is not measurements
+        lines.pop(0)
+
+        #get number of lines
+        numberOfLines = len(lines)
+
+        #Get and write Arrival Times
+        #Lines is already sorted by time because of how measurements are made at modules
+        f2 = open(resultsPath,'w')
+        curline = ""
+        data = []
+        for i in range(0,numberOfLines):
+            curline = lines[i]
+            if curline and not curline.isspace():
+                data = curline.split(",")
+                if data[1] == entryMeasurementName:
+                    f2.write(curline)
+        f2.close()
+    

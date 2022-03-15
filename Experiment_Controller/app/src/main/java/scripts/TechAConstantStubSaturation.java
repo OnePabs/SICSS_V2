@@ -37,6 +37,7 @@ public class TechAConstantStubSaturation extends ParentScript{
 
     @Override
 	public void run() {
+        /*
         try{
             //create parameters
             LinkedList<ExperimentParameter> experiment_parameters = new LinkedList<ExperimentParameter>();
@@ -100,5 +101,6 @@ public class TechAConstantStubSaturation extends ParentScript{
         }catch(Exception e){
             e.printStackTrace();
         }
+        */
     }
 }

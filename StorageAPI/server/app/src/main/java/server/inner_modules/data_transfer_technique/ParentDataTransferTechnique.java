@@ -53,12 +53,13 @@ public class ParentDataTransferTechnique implements Runnable{
         waitForNewBufferEntry();
     }
     public void transmit() throws Exception{
-        synchronized(transmitionInformationObject.transmitionNotifier){
-            transmitionInformationObject.transmitionNotifier.notifyAll();
+
+        if(transmitionInformationObject.sendNotificationToStartTransmition() && settingsController.getIsVerbose()){
+            System.out.println("Data transfer technique: notified transmitter to transmit");
+        }else if(settingsController.getIsVerbose()){
+             System.out.println("Data transfer technique: transfer is already in progress. transmitter is not notified");
         }
-        if(settingsController.getIsVerbose()){
-            System.out.println("Data transfer technique notified transmitter to transmit");
-        }
+        Thread.sleep(1);
     }
 
 
