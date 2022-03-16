@@ -23,7 +23,7 @@ public class Main {
 		long[] runtimes = {45*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {40,41,42,43,44,45,50,80,100,200,500,1000};
+		int[] inter_arrival_times = {41,42,43,44,45,46,50,80,100,200,500,1000};
 		String inter_arrival_times_distribution;
 		//inter_arrival_times_distribution = "CONSTANT";
 		inter_arrival_times_distribution = "GEOMETRIC";
