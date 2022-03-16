@@ -2,12 +2,12 @@ from PerformanceWriter import PerformanceWriter
 
 
 expPaths = [
-"C:\\Users\\juanp\\Documents\\experiment_results\\C-rate"
+"C:\\Users\\juanp\\Documents\\experiment_results\\st-test"
 ]
 
 
 resPaths = [
-"C:\\Users\\juanp\\Documents\\experiment_results\\C-rate-analysis"
+"C:\\Users\\juanp\\Documents\\experiment_results\\st-test-analysis"
 ]
 
 numExperiments = len(expPaths)

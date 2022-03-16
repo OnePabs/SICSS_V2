@@ -40,23 +40,26 @@ public class ParentServiceTimeCreator {
             }
         }else{
             //create elapsed time by doing calculations
-            long number = 12345;
-            int numfactors = 0;
-            int result;
-            long startT = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
             do{
+                /*
+                int number = 10000;
+                int currFactor = 0;
                 for(int i=1;i<number;i++){
-                    for(int j=1;j<12345;j++){
-                        result = i*j;
-                        if(result == number){
-                            numfactors++;
-                        }
+                    if(number%i == 0){
+                        currFactor = i;
                     }
                 }
-            }while( (System.currentTimeMillis()-startT)<numMillis );
-            if(numfactors!=7 && settingsController.getIsVerbose()){
-                System.out.println("createTimLapse did not find the correct factors of 12345. number of factors found: " + numfactors);
-            }
+                //long p = System.nanoTime() - startTime;
+                //System.out.println("Time for one iteration of " +number+ " in nano: " + p);
+                //System.exit(0);
+                */
+                try{
+                    Thread.sleep(0,500000);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }while((System.currentTimeMillis()-startTime)<numMillis);
         }
     }
 

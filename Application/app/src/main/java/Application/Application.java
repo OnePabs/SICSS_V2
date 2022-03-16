@@ -58,13 +58,19 @@ public class Application implements Runnable{
         while(!isFinished && stateController.getCurrentState()!= PROGRAM_STATE.FINISHED){
             if(stateController.getCurrentState()==PROGRAM_STATE.RUNNING){
                 try {
+                    long start_time = System.currentTimeMillis();
                     long sleepTime = naturalNumberGenerator.generate();
                     if(isVerbose){
                     	System.out.println("Application: sleeping for: " + String.valueOf(sleepTime) + " milliseconds");
                     }
                     
                     if(sleepTime != 0){
-                        Thread.sleep(sleepTime);
+                        if(settingsController.getBoolean("useSleepForMockProcessing")){
+                            Thread.sleep(sleepTime);
+                        }else{
+                            processFor(sleepTime);
+                        }
+                        
                     }
 
                     leastSignificant = requestNum % 255;
@@ -84,7 +90,8 @@ public class Application implements Runnable{
                     if(response.statusCode() != 200 && settingsController.getIsVerbose()==true) {
                         System.out.println("Application: Error Code other than 200 was received when sending data");
                     }else if(isVerbose){
-                        System.out.println("Application: data send successfully ");
+                        long duration = System.currentTimeMillis() - start_time;
+                        System.out.println("Application: data send successfully with ia="+duration+" milliseconds");
                     }
 
                 }catch(Exception e){
@@ -107,5 +114,30 @@ public class Application implements Runnable{
 
     public void finishApplication(){
         isFinished = true;
+    }
+
+
+    public void processFor(long sleepTime){
+        long startTime = System.currentTimeMillis();
+        sleepTime = sleepTime - 1;
+        do{
+            /*
+            int number = 1000;
+            int currFactor = 0;
+            for(int i=1;i<number;i++){
+                if(number%i == 0){
+                    currFactor = i;
+                }
+            }
+            //long p = System.nanoTime() - startTime;
+            //System.out.println("Time for one iteration of " +number+ " in nano: " + p);
+            //System.exit(0);
+            */
+            try{
+                Thread.sleep(0,300000);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }while((System.currentTimeMillis()-startTime)<sleepTime);
     }
 }

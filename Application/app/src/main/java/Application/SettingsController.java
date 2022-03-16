@@ -73,6 +73,18 @@ public class SettingsController {
         return this.settings.get(settingName);
     }
 
+    public boolean getBoolean(String settingName){
+        Object settingValue;
+        boolean b;
+        if(containsSetting(settingName)){
+            settingValue = getSetting(settingName);
+            b = Boolean.valueOf(settingValue.toString());
+        }else{
+            b = false;
+        }
+        return b;
+    }
+
     public int getNumberOfSettings(){
         return this.settings.size();
     }

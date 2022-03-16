@@ -36,11 +36,6 @@ public class StorageManagerTransmitter extends ParentTransmitter {
     @Override
     public void transmit(IORequest request){
         if(stateController.getCurrentState()== PROGRAM_STATE.RUNNING){
-            request.addTimeStamp(TRANSMITTER_ENTRY);
-            for(TimeStamp t: request.getTimeStamps()){
-                measurementController.addMeasurement(t);
-            }
-
             if(settingsController.getIsVerbose()){
                 System.out.println("Storage Manager Transmitter: IORequest " + request.getRequestId() + " leaving storage  API");
             }
@@ -64,9 +59,6 @@ public class StorageManagerTransmitter extends ParentTransmitter {
                     return;
                 }
             }
-
-            request.addTimeStamp(TRANSMITTER_EXIT);
-            measurementController.addMeasurement(request.getTimeStamp(TRANSMITTER_EXIT));
         }
     }
 

@@ -80,7 +80,7 @@ public class CTechnique extends ParentScript{
                                 String application_parameters = "{"
                                     + "\"receiverAddress\":\"" + handler_location + "/data"+"\","
                                     + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                    + "\"useSleepForMockProcessing\":true,"
+                                    + "\"useSleepForMockProcessing\":false,"
                                     + "\"interGenerationTimeDistribution\":\"" + inter_arrival_times_distribution + "\","
                                     + "\"interGenerationTimeDistributionSettings\":"+ inter_arrival_time
                                     + "}";
@@ -101,7 +101,7 @@ public class CTechnique extends ParentScript{
                                     + "\"platform\":\"stub\","
                                     + "\"serviceTimeDistribution\":\"" + service_times_distribution + "\","
                                     + "\"serviceTimeDistributionSettings\":"+ String.valueOf(service_time) +","
-                                    +"\"useSleepForMockProcessing\":true"
+                                    +"\"useSleepForMockProcessing\":false"
                                     + "}";
 
                                 String experimentName = 
