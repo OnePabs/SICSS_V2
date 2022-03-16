@@ -23,14 +23,14 @@ public class Main {
 		long[] runtimes = {45*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {50};
+		int[] inter_arrival_times = {40,41,42,43,44,45,50,80,100,200,500,1000};
 		String inter_arrival_times_distribution;
 		//inter_arrival_times_distribution = "CONSTANT";
 		inter_arrival_times_distribution = "GEOMETRIC";
 
 
 		//SERVICE TIMES
-		int[] service_times = {45};
+		int[] service_times = {40};
 		String service_times_distribution;
 		//service_times_distribution = "CONSTANT";
 		service_times_distribution = "EXPONENTIAL";
@@ -39,6 +39,7 @@ public class Main {
 		//String resultsFolderPath = "/home/ubuntu/results";
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\st-test";
 
+/*
 		//Technique A
 		ATechnique a0 = new ATechnique(
 			isVerbose,
@@ -54,7 +55,7 @@ public class Main {
 		);
 		a0.run();
 
-	/*
+	
 		//TECHNIQUE B
 		int[] periods = {1000};
 		BTechnique b0 = new BTechnique(
@@ -71,11 +72,12 @@ public class Main {
 			service_times_distribution
 		);
 		b0.run();
+		*/
 
 
 		//TECHNIQUE C
-		int[] maxperiods = {60000};
-		int[] maxsizes = {2000};
+		int[] maxperiods = {73};
+		int[] maxsizes = {300};
 		CTechnique c0 = new CTechnique(
 			isVerbose,
 			runtimes,
@@ -92,6 +94,6 @@ public class Main {
 		);
 		c0.run();
 		
-*/
+
 	}//end main
 }//end class
