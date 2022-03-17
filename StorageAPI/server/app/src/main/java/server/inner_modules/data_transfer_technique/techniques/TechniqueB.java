@@ -1,5 +1,6 @@
 package server.inner_modules.data_transfer_technique.techniques;
 
+import server.Sleeper;
 import server.data_structures.*;
 import server.inner_modules.*;
 import server.inner_modules.data_transfer_technique.ParentDataTransferTechnique;
@@ -40,7 +41,8 @@ public class TechniqueB extends ParentDataTransferTechnique {
     @Override
     public void waitForDataTransferCondition() throws Exception{
         long start = System.currentTimeMillis();
-        Thread.sleep(period);
+        //Thread.sleep(period);
+        Sleeper.sleep(period);
         long periodMeasuredTime = System.currentTimeMillis() - start;
 
         if(settingsController.getIsVerbose()){
