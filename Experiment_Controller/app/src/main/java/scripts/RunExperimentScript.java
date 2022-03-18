@@ -23,6 +23,7 @@ public class RunExperimentScript {
 	}
 
 	public static void runExperiment(ExperimentParameter experimentParameters, String result_folder_path) throws Exception{
+		final int MAX_NUM_TRIES = 3;
 		/*
 		//print parameters
 		System.out.println("results folder path="+result_folder_path);
@@ -139,19 +140,48 @@ public class RunExperimentScript {
 			e.printStackTrace();
 		}
 
-		//get storage api measurements
-		String storageApi_measurements = experimentParameters.storageApis_interface.getMeasurements();
+		//Get and store Storage Handler Measurements
+		int i;
+		for(i=0;i<MAX_NUM_TRIES;i++){
+			try{
+				//get storage handler measurements
+				String storageApi_measurements = experimentParameters.storageApis_interface.getMeasurements();
 
-		//store storage api measurements
-		String experiment_results_folder = result_folder_path + File.separator + experimentParameters.experimentName;
-		LinkedList<MeasurementEntry> strgApi_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageApi_measurements,experiment_results_folder,"strgapi");
+				//store storage api measurements
+				String experiment_results_folder = result_folder_path + File.separator + experimentParameters.experimentName;
+				LinkedList<MeasurementEntry> strgApi_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageApi_measurements,experiment_results_folder,"strgapi");
 
-		//get storage manager measurements
-		String storageManager_measurements = experimentParameters.storageManager_interface.getMeasurements();
+				break;
+			}catch(Exception e){
+				System.out.println("Error Getting Storage Handler measurements. Trying again...");
+			}
+		}
+		if(i==MAX_NUM_TRIES){
+			System.out.println("Final - could not get Storage Handler measurements");
+			return;
+		}
+		
 
-		//store storage manager measurements
-		LinkedList<MeasurementEntry> strgMngr_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageManager_measurements,experiment_results_folder,"strgMngr");
+		//get and store storage manager measurements
+		for(i=0;i<MAX_NUM_TRIES;i++){
+			try{
+				//get manager measurements
+				String storageManager_measurements = experimentParameters.storageManager_interface.getMeasurements();
 
+				//store storage manager measurements
+				LinkedList<MeasurementEntry> strgMngr_EntryMeasurements = JsonToCsv.getAndStoreMeasurements(storageManager_measurements,experiment_results_folder,"strgMngr");
+				break;
+			}catch(Exception e){
+				System.out.println("Error Getting Storage Manager measurements. Trying again...");
+			}
+		}
+		if(i == MAX_NUM_TRIES){
+			System.out.println("Final - could not get Storage Manager measurements");
+			return;
+		}
+		
+
+		
 		
 		System.out.println("Experiment " + experimentParameters.experimentName + "finished running and results are stored");
 

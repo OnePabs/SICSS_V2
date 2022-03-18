@@ -11,6 +11,7 @@ import java.net.URI;
 public class StorageManagerInterface {
     public HttpClient client;
     public String address;
+    public final int MAX_NUM_TRIES = 3;
 
     public StorageManagerInterface(String address) {
         this.client = HttpClient.newBuilder().build();
@@ -62,16 +63,19 @@ public class StorageManagerInterface {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .build();
-        try {
-            HttpResponse<String>  response = client.send(request,BodyHandlers.ofString());
-            if(response.statusCode() == 200) {
-                return response.body();
-            }else {
-                System.out.println("Storage manager getMeasurements: Error code received: " + response.statusCode());
+        for(int i=0; i<MAX_NUM_TRIES;i++){
+            try{
+                HttpResponse<String>  response = client.send(request,BodyHandlers.ofString());
+                if(response.statusCode() == 200) {
+                    return response.body();
+                }
+            }catch(Exception e){
+            }finally {
+                System.out.println("Unnable to get Manager measurements. Retrying...");
+                Thread.sleep(500);
             }
-        }catch(Exception e){
-            e.printStackTrace();
         }
+        System.out.println("Final - Unnable to get measurements from Storage Manager");
         return "";
     }
 }
