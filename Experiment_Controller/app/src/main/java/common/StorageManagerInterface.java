@@ -72,7 +72,9 @@ public class StorageManagerInterface {
             }catch(Exception e){
             }finally {
                 System.out.println("Unnable to get Manager measurements. Retrying...");
-                Thread.sleep(500);
+                try{
+					Thread.sleep(1000);
+				}catch(Exception e){}
             }
         }
         System.out.println("Final - Unnable to get measurements from Storage Manager");

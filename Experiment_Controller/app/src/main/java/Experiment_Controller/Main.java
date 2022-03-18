@@ -25,15 +25,15 @@ public class Main {
 		//ARRIVAL TIMES
 		int[] inter_arrival_times = {50};
 		String inter_arrival_times_distribution;
-		//inter_arrival_times_distribution = "CONSTANT";
-		inter_arrival_times_distribution = "GEOMETRIC";
+		inter_arrival_times_distribution = "CONSTANT";
+		//inter_arrival_times_distribution = "GEOMETRIC";
 
 
 		//SERVICE TIMES
 		int[] service_times = {40};
 		String service_times_distribution;
-		//service_times_distribution = "CONSTANT";
-		service_times_distribution = "EXPONENTIAL";
+		service_times_distribution = "CONSTANT";
+		//service_times_distribution = "EXPONENTIAL";
 
 		//RESULTS
 		//String resultsFolderPath = "/home/ubuntu/results";
