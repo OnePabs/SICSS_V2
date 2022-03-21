@@ -12,18 +12,18 @@ public class Main {
 		boolean isVerbose = false;
 		
 		//String application_location = "http://amazonaws:80";
-		String application_location = "http://localhost:8000";
+		//String application_location = "http://localhost:8000";
 		//String handler_location = "http://amazonaws:80";
-		String handler_location = "http://localhost:8080";
+		//String handler_location = "http://localhost:8080";
 		//String manager_location = "http://amazonaws:80";
-		String manager_location = "http://localhost:8090";
+		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
 		long[] runtimes = {45*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {200,100,80,50,46,45,44,42,41};
+		int[] inter_arrival_times = {42};
 		String inter_arrival_times_distribution;
 		//inter_arrival_times_distribution = "CONSTANT";
 		inter_arrival_times_distribution = "GEOMETRIC";
@@ -38,7 +38,7 @@ public class Main {
 		//RESULTS
 		//String resultsFolderPath = "/home/ubuntu/results"; //linux
 		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
-		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\st-test"; //desktop
+		//String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\st-test"; //desktop
 
 /*
 		//Technique A
@@ -57,9 +57,9 @@ public class Main {
 		a0.run();
 */
 	
-	/*
+	
 		//TECHNIQUE B
-		int[] periods = {0,3,5,10,20,1000};
+		int[] periods = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,100,200,500};
 		BTechnique b0 = new BTechnique(
 			isVerbose,
 			runtimes,
@@ -75,9 +75,9 @@ public class Main {
 		);
 		b0.run();
 		
-*/
 
 
+/*
 		//TECHNIQUE C
 		int[] maxperiods = {300};
 		int[] maxsizes = {1500};
@@ -96,6 +96,7 @@ public class Main {
 			service_times_distribution
 		);
 		c0.run();
+		*/
 		
 	}//end main
 }//end class
