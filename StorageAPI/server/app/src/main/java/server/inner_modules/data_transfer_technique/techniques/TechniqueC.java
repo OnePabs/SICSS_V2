@@ -49,9 +49,12 @@ public class TechniqueC extends ParentDataTransferTechnique {
     @Override
     public void waitForDataTransferCondition() throws Exception{ //condition for sending ready IO requests
 
+        //create lock
+        Object lock = new Object();
+
         //create period and threshold task
-        CPeriodTask periodTask = new CPeriodTask(period);
-        ThresholdMonitoringTask thresholdTask = new ThresholdMonitoringTask(maxSize,buffer);
+        CPeriodTask periodTask = new CPeriodTask(period,lock);
+        ThresholdMonitoringTask thresholdTask = new ThresholdMonitoringTask(maxSize,buffer,lock);
 
         //link tasks together
         thresholdTask.setPeriodTask(periodTask);
@@ -80,11 +83,13 @@ class CPeriodTask extends Task {
     long period;
     boolean canExecute;
     ThresholdMonitoringTask ttask;
+    Object lock;
 
-    public CPeriodTask(long period){
+    public CPeriodTask(long period, Object lock){
         this.period = period;
         this.canExecute = true;
         this.ttask = ttask;
+        this.lock = lock;
     }
 
     public void setThresholdTask(ThresholdMonitoringTask ttask){
@@ -108,11 +113,14 @@ class CPeriodTask extends Task {
                 }
             }
         }
-        if(this.canExecute){
-            try{
-                ttask.finishExecution();
-            }catch(Exception e){}
+        synchronized(lock){
+            if(this.canExecute){
+                try{
+                    ttask.finishExecution();
+                }catch(Exception e){}
+            }
         }
+
     }
 
     public void finishExecution(){
@@ -130,11 +138,13 @@ class ThresholdMonitoringTask extends Task {
     ReadyLists buffer;
     boolean canExecute;
     CPeriodTask cPeriodTask;
+    Object lock;
 
-    public ThresholdMonitoringTask(long max_size, ReadyLists buffer){
+    public ThresholdMonitoringTask(long max_size, ReadyLists buffer, Object lock){
         this.max_size = max_size;
         this.buffer = buffer;
         this.cPeriodTask = cPeriodTask;
+        this.lock = lock;
         this.canExecute = true;
     }
 
@@ -155,11 +165,12 @@ class ThresholdMonitoringTask extends Task {
             //update number of bytes in the buffer
             numBytes = buffer.getNumberOfBytesInBuffer();
         }
-
-        if(this.canExecute){
-            try{
-                cPeriodTask.finishExecution();
-            }catch(Exception e){}
+        synchronized(lock){
+            if(this.canExecute){
+                try{
+                    cPeriodTask.finishExecution();
+                }catch(Exception e){}
+            }
         }
     }
 
