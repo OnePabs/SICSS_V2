@@ -26,10 +26,17 @@ public class App {
 
         HttpServer server;
         //MysqlApi mysqlapi = new MysqlApi();
-        MeasurementController measurementController = new MeasurementController();
+        
+
         SettingsController settingsController = new SettingsController();
-        SyncIORequestLinkedList insertOneEntryQueue = new SyncIORequestLinkedList(0);
-        SyncStringLinkedList commitAllEntryQueue = new SyncStringLinkedList(0);
+        StateController stateController = new StateController();
+
+        stateController.setSttingsController(settingsController);
+        settingsController.setStateController(stateController);
+
+        SyncIORequestLinkedList insertOneEntryQueue = new SyncIORequestLinkedList(0,stateController);
+        SyncStringLinkedList commitAllEntryQueue = new SyncStringLinkedList(0,stateController);
+        MeasurementController measurementController = new MeasurementController(stateController);
 
         try{
             //initialize server
@@ -37,14 +44,19 @@ public class App {
 
             server.createContext("/insertone", new InsertOne(insertOneEntryQueue,measurementController,settingsController));
             server.createContext("/commitall", new CommitAll(commitAllEntryQueue,measurementController,settingsController));
-            server.createContext("/measurements", new Measurements(measurementController,settingsController));
+            server.createContext("/measurements", new Measurements(measurementController,stateController,settingsController));
             server.createContext("/settings", new Settings(settingsController));
             server.createContext("/clear", new Clear(insertOneEntryQueue,commitAllEntryQueue,measurementController,settingsController));
+            
+            server.createContext("/start", new Start(stateController,settingsController));
+            server.createContext("/stop", new Stop(stateController,settingsController));
+            
             server.createContext("/test", new Test());
             server.setExecutor(null);
 
             //start Storage Manager
             StorageManager storageManager = new StorageManager(
+                    stateController,
                     settingsController,
                     insertOneEntryQueue,
                     commitAllEntryQueue,

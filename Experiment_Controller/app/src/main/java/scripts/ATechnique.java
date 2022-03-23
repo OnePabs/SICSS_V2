@@ -90,6 +90,7 @@ public class ATechnique extends ParentScript{
                         String storageManager_parameters = "{"
                             + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
                             + "\"platform\":\"stub\","
+                            + "\"executorType\":\"single\","
                             + "\"serviceTimeDistribution\":\"" + service_times_distribution + "\","
                             + "\"serviceTimeDistributionSettings\":"+ String.valueOf(service_time) +","
                             +"\"useSleepForMockProcessing\":false"

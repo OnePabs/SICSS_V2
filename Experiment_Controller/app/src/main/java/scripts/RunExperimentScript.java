@@ -9,7 +9,6 @@ import java.io.File;
  *
  */
 public class RunExperimentScript {
-	private static long interOperationWaitTime = 1000; //1 second
 
 	public static void runExperiment(LinkedList<ExperimentParameter> experimentParameters, String result_folder_path) throws Exception{
 		for(ExperimentParameter exp:experimentParameters){
@@ -24,6 +23,7 @@ public class RunExperimentScript {
 
 	public static void runExperiment(ExperimentParameter experimentParameters, String result_folder_path) throws Exception{
 		final int MAX_NUM_TRIES = 3;
+		final long INTER_OPERATION_TIME = 1000;
 		/*
 		//print parameters
 		System.out.println("results folder path="+result_folder_path);
@@ -41,7 +41,7 @@ public class RunExperimentScript {
 		experimentParameters.applications_interface.stop();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -50,7 +50,7 @@ public class RunExperimentScript {
 		experimentParameters.applications_interface.changeSettings(experimentParameters.applications_parameters);
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -59,7 +59,7 @@ public class RunExperimentScript {
 		experimentParameters.storageApis_interface.stop();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -68,7 +68,7 @@ public class RunExperimentScript {
 		experimentParameters.storageApis_interface.clear();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -77,7 +77,17 @@ public class RunExperimentScript {
 		experimentParameters.storageApis_interface.changeSettings(experimentParameters.storageApi_parameters);
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+
+		//stop storage manager
+		experimentParameters.storageManager_interface.stop();
+		//inter operation time
+		try{
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -86,7 +96,7 @@ public class RunExperimentScript {
 		experimentParameters.storageManager_interface.clear();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -95,12 +105,22 @@ public class RunExperimentScript {
 		experimentParameters.storageManager_interface.changeSettings(experimentParameters.storageManager_parameters);
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 
 		System.out.println("Starting experiment: " + experimentParameters.experimentName);
+
+
+		//start storage manager
+		experimentParameters.storageManager_interface.start();
+		//inter operation time
+		try{
+			Thread.sleep(INTER_OPERATION_TIME);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 		//start storage api
 		experimentParameters.storageApis_interface.start();
@@ -126,7 +146,7 @@ public class RunExperimentScript {
 		experimentParameters.applications_interface.stop();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -135,10 +155,20 @@ public class RunExperimentScript {
 		experimentParameters.storageApis_interface.stop();
 		//inter operation time
 		try{
-			Thread.sleep(1000);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+
+		//stop storage manager
+		experimentParameters.storageManager_interface.stop();
+		//inter operation time
+		try{
+			Thread.sleep(INTER_OPERATION_TIME);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
 
 		//Get and store Storage Handler Measurements
 		String experiment_results_folder = result_folder_path + File.separator + experimentParameters.experimentName;
@@ -155,7 +185,7 @@ public class RunExperimentScript {
 			}catch(Exception e){
 				System.out.println("Error Getting Storage Handler measurements. Trying again...");
 				try{
-					Thread.sleep(1000);
+					Thread.sleep(INTER_OPERATION_TIME);
 				}catch(Exception ex){}
 			}
 		}
@@ -177,7 +207,7 @@ public class RunExperimentScript {
 			}catch(Exception e){
 				System.out.println("Error Getting Storage Manager measurements. Trying again...");
 				try{
-					Thread.sleep(1000);
+					Thread.sleep(INTER_OPERATION_TIME);
 				}catch(Exception ex){}
 			}
 		}
@@ -195,7 +225,7 @@ public class RunExperimentScript {
 		experimentParameters.storageApis_interface.clear();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -204,7 +234,7 @@ public class RunExperimentScript {
 		experimentParameters.storageManager_interface.clear();
 		//inter operation time
 		try{
-			Thread.sleep(500);
+			Thread.sleep(INTER_OPERATION_TIME);
 		}catch(Exception e){
 			e.printStackTrace();
 		}

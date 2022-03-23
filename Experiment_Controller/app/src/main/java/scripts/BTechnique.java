@@ -94,6 +94,7 @@ public class BTechnique extends ParentScript{
                             String storageManager_parameters = "{"
                                 + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
                                 + "\"platform\":\"stub\","
+                                + "\"executorType\":\"multiple\","
                                 + "\"serviceTimeDistribution\":\"" + service_times_distribution + "\","
                                 + "\"serviceTimeDistributionSettings\":"+ String.valueOf(service_time) +","
                                 +"\"useSleepForMockProcessing\":true"

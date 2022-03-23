@@ -11,14 +11,17 @@ public class StorageManager implements Runnable {
     private SyncStringLinkedList commitAllEntryQueue;
     private StorageCommitAllExecutor commitAllExecutor;
     private StorageInsertOneExecutor insertOneExecutor;
+    private StateController stateController;
     private MeasurementController measurementController;
 
     public StorageManager(
+            StateController stateController,
             SettingsController settingsController,
             SyncIORequestLinkedList insertOneEntryQueue,
             SyncStringLinkedList commitAllEntryQueue,
             MeasurementController measurementController
     ){
+        this.stateController = stateController;
         this.settingsController  = settingsController;
         this.insertOneEntryQueue = insertOneEntryQueue;
         this.commitAllEntryQueue = commitAllEntryQueue;
@@ -69,14 +72,19 @@ public class StorageManager implements Runnable {
                 commitAllEntryQueue.clear();
 
                 //create executors
-                insertOneExecutor = new StorageInsertOneExecutor(insertOneEntryQueue,platform,measurementController);
-                commitAllExecutor = new StorageCommitAllExecutor(commitAllEntryQueue,platform,measurementController);
+                if(settingsController.getString("executorType").equals("single")){
+                    insertOneExecutor = new StorageInsertOneExecutor(insertOneEntryQueue,platform,stateController,measurementController);
+                    commitAllExecutor = null;
+                    new Thread(insertOneExecutor).start();
+                }else if(settingsController.getString("executorType").equals("multiple")){
+                    commitAllExecutor = new StorageCommitAllExecutor(commitAllEntryQueue,platform,stateController,measurementController);
+                    insertOneExecutor = null;
+                    new Thread(commitAllExecutor).start();
+                }else{
+                    throw new Exception("executorType missing from settings or has the wrong value");
+                }
 
-                //run executors
-                new Thread(insertOneExecutor).start();
-                new Thread(commitAllExecutor).start();
-
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

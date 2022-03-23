@@ -7,13 +7,20 @@ import org.json.simple.parser.JSONParser;
 import java.util.Hashtable;
 import java.util.Set;
 
+import StorageManager.enumerators.PROGRAM_STATE;
+
 public class SettingsController {
 	private Hashtable<String,Object> settings;
+	private StateController stateCtrl;
 	public Object changaOfSettingsNotifier;
 
 	public SettingsController() {
 		settings = new Hashtable<String,Object>();
 		changaOfSettingsNotifier = new Object();
+	}
+
+	public void setStateController(StateController stateCtrl){
+		this.stateCtrl = stateCtrl;
 	}
 
 	/*
@@ -23,12 +30,14 @@ public class SettingsController {
 	* Returns false otherwise
 	* */
 	public boolean changeSettings(Hashtable<String,Object> newSettings) {
-
-		synchronized (changaOfSettingsNotifier){
-			this.settings = newSettings;
-			changaOfSettingsNotifier.notifyAll();
+		if(stateCtrl.changeState(PROGRAM_STATE.SETTINGS)) {
+			synchronized (changaOfSettingsNotifier){
+				this.settings = newSettings;
+				changaOfSettingsNotifier.notifyAll();
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/*

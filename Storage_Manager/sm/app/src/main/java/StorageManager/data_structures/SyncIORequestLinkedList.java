@@ -1,6 +1,6 @@
 package StorageManager.data_structures;
 
-import StorageManager.SettingsController;
+import StorageManager.*;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -8,9 +8,11 @@ import java.util.NoSuchElementException;
 public class SyncIORequestLinkedList {
 	private int linkedListId;
 	private LinkedList<IORequest> requests;
+	private StateController stateController;
 	
-	public SyncIORequestLinkedList(int linkedListId) {
+	public SyncIORequestLinkedList(int linkedListId, StateController stateController) {
 		this.linkedListId = linkedListId;
+		this.stateController = stateController;
 		requests = new LinkedList<IORequest>();
 	}
 	
@@ -24,7 +26,7 @@ public class SyncIORequestLinkedList {
 	
 	
 	public synchronized void add(IORequest req) {
-		if(req!=null) {
+		if(req!=null && stateController.isStateRunning()) {
 			requests.add(req);
 			if(requests.size() == 1) {
 				notifyAll();
@@ -33,7 +35,7 @@ public class SyncIORequestLinkedList {
 	}
 
 	public synchronized void add(SyncIORequestLinkedList li){
-		if(li!=null &&li.getSize()>0) {
+		if(li!=null &&li.getSize()>0 && stateController.isStateRunning()) {
 			requests.addAll(li.requests);
 		}
 	}
@@ -48,16 +50,27 @@ public class SyncIORequestLinkedList {
 		IORequest req = null;
 		do {
 			try {
-				req = requests.remove();
+				if(stateController.isStateRunning()){
+					req = requests.remove();
+				}else{
+					return null;
+				}
+				
 			} catch (NoSuchElementException e) {
-				req = null;
-				wait();
+				if(stateController.isStateRunning()){
+					req = null;
+					wait();
+				}
 			}
 		} while (req == null);
 		return req;
 	}
 
-	public void clear() {
+	public synchronized void wakeAll(){
+		notifyAll();
+	}
+
+	public synchronized void clear() {
 		requests.clear();
 	}
 

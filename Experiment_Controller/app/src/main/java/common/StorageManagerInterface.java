@@ -18,6 +18,42 @@ public class StorageManagerInterface {
         this.address = address;
     }
 
+    public boolean start() {
+		URI uri = URI.create(address + "/start");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
+        try {
+        	HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
+        	if(response.statusCode() == 200) {
+        		return true;
+        	}
+        }catch(IOException ioe){
+        	
+        }catch(InterruptedException ie) {
+        	
+        }
+        return false;
+	}
+	
+	public boolean stop() {
+		URI uri = URI.create(address + "/stop");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .build();
+        try {
+        	HttpResponse<?>  response = client.send(request,BodyHandlers.discarding());
+        	if(response.statusCode() == 200) {
+        		return true;
+        	}
+        }catch(IOException ioe){
+        	
+        }catch(InterruptedException ie) {
+        	
+        }
+        return false;
+	}
+
     public boolean changeSettings(String jsonStr) {
 
         URI uri = URI.create(address + "/settings");
@@ -70,12 +106,13 @@ public class StorageManagerInterface {
                     return response.body();
                 }
             }catch(Exception e){
-            }finally {
-                System.out.println("Unnable to get Manager measurements. Retrying...");
-                try{
-					Thread.sleep(1000);
-				}catch(Exception e){}
+                e.printStackTrace();
             }
+
+            System.out.println("Unnable to get Manager measurements. Retrying...");
+            try{
+                Thread.sleep(1000);
+            }catch(Exception e){}
         }
         System.out.println("Final - Unnable to get measurements from Storage Manager");
         return "";

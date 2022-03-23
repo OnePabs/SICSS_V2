@@ -1,6 +1,6 @@
 package StorageManager.data_structures;
 
-import StorageManager.SettingsController;
+import StorageManager.*;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -8,9 +8,11 @@ import java.util.NoSuchElementException;
 public class SyncStringLinkedList {
     private int linkedListId;
     private LinkedList<String> requests;
+    private StateController stateController;
 
-    public SyncStringLinkedList(int linkedListId) {
+    public SyncStringLinkedList(int linkedListId, StateController stateController) {
         this.linkedListId = linkedListId;
+        this.stateController = stateController;
         requests = new LinkedList<String>();
     }
 
@@ -24,7 +26,7 @@ public class SyncStringLinkedList {
 
 
     public synchronized void add(String req) {
-        if(req!=null) {
+        if(req!=null && stateController.isStateRunning()) {
             requests.add(req);
             if(requests.size() == 1) {
                 notifyAll();
@@ -43,16 +45,26 @@ public class SyncStringLinkedList {
         String req = null;
         do {
             try {
-                req = requests.remove();
+                if(stateController.isStateRunning()){
+                    req = requests.remove();
+                }else{
+                    return null;
+                }
             } catch (NoSuchElementException e) {
-                req = null;
-                wait();
+                if(stateController.isStateRunning()){
+                    req = null;
+                    wait();
+                }
             }
         } while (req == null);
         return req;
     }
 
-    public void clear() {
+    public synchronized void wakeAll(){
+		notifyAll();
+	}
+
+    public synchronized void clear() {
         requests.clear();
     }
 

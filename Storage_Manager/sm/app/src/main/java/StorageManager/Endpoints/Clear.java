@@ -33,6 +33,7 @@ public class Clear implements HttpHandler {
             System.out.println("clear endpoint reached");
         }
 
+
         measurementController.clear();
         insertOneEntryQueue.clear();
         commitAllEntryQueue.clear();

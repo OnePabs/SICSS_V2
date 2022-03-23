@@ -93,4 +93,21 @@ public class SettingsController {
 		}
 		return isVerbose;
 	}
+
+		public String getString(String settingName){
+		return getSetting(settingName).toString();
+	}
+
+
+	public boolean getBoolean(String settingName){
+		Object settingValue;
+		boolean boolVal;
+		if(containsSetting(settingName)){
+			settingValue = getSetting(settingName);
+			boolVal = Boolean.valueOf(settingValue.toString());
+		}else{
+			boolVal = false;
+		}
+		return boolVal;
+	}
 }
