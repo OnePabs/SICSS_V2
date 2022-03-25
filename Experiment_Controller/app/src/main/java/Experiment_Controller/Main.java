@@ -20,10 +20,10 @@ public class Main {
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {1*minutes_to_millis};
+		long[] runtimes = {2000};//{1*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {10000};
+		int[] inter_arrival_times = {200};
 		String inter_arrival_times_distribution;
 		inter_arrival_times_distribution = "CONSTANT";
 		//inter_arrival_times_distribution = "GEOMETRIC";
@@ -40,7 +40,7 @@ public class Main {
 		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
 
-
+/*
 		//Technique A
 		ATechnique a0 = new ATechnique(
 			isVerbose,
@@ -55,7 +55,7 @@ public class Main {
 			service_times_distribution
 		);
 		a0.run();
-
+*/
 	
 	/*
 		//TECHNIQUE B
@@ -77,10 +77,10 @@ public class Main {
 		*/
 
 
-/*
+
 		//TECHNIQUE C
-		int[] maxperiods = {300};
-		int[] maxsizes = {1500};
+		int[] maxperiods = {60000};
+		int[] maxsizes = {25};
 		CTechnique c0 = new CTechnique(
 			isVerbose,
 			runtimes,
@@ -96,7 +96,7 @@ public class Main {
 			service_times_distribution
 		);
 		c0.run();
-	*/	
+	
 		
 	}//end main
 }//end class

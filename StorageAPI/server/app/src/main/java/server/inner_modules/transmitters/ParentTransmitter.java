@@ -77,9 +77,11 @@ public class ParentTransmitter implements Runnable{
             }
         }
 
-        if(numRequests==1){
-            transmit(requests[0]);
-        }else{
+        if(settingsController.getString("dataTransferTechnique").equals("a")){
+            for(int reqnum=0;reqnum<numRequests;reqnum++){
+                transmit(requests[reqnum]);
+            }
+        }else if(numRequests>0){
             transmit(requests);
         }
     }
