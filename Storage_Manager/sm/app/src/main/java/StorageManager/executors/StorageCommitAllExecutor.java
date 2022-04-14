@@ -13,16 +13,19 @@ public class StorageCommitAllExecutor implements Runnable{
     private SyncStringLinkedList entryQueue;
     private ParentStoragePlatform platform;
     private StateController stateController;
+    SettingsController settingsController;
     private MeasurementController measurementController;
 
     public StorageCommitAllExecutor(
         SyncStringLinkedList entryQueue, 
         ParentStoragePlatform platform, 
         StateController stateController,
+        SettingsController settingsController,
         MeasurementController measurementController){
         this.entryQueue = entryQueue;
         this.platform = platform;
         this.stateController = stateController;
+        this.settingsController = settingsController;
         this.measurementController = measurementController;
         this.isRunning = true;
     }
@@ -33,6 +36,10 @@ public class StorageCommitAllExecutor implements Runnable{
             try{
                 if(stateController.isStateRunning()){
                     String requests = entryQueue.take();
+                    if(settingsController.getIsVerbose()){
+                        System.out.println("CommitAll Executor: Executor took batch from comit all Entry Queue");
+                    }
+
                     if(requests != null){
                         long queueExitTime = System.nanoTime();
 
@@ -41,6 +48,10 @@ public class StorageCommitAllExecutor implements Runnable{
                         Object obj = parser.parse(requests);
                         JSONArray arr = (JSONArray)obj;
                         long requestId;
+                        if(settingsController.getIsVerbose()){
+                            System.out.println("CommitAll Executor: Number of requests in batch = " + arr.size());
+                             System.out.println("CommitAll Executor: adding QueueExitTime measurements to measurements controller ");
+                        }
                         for (int i=0; i < arr.size(); i++) {
                             JSONObject jobj = (JSONObject)arr.get(i);
                             requestId = (long)jobj.get("requestId");
@@ -52,7 +63,10 @@ public class StorageCommitAllExecutor implements Runnable{
 
                         //exit time stamp
                         long exitTime = System.nanoTime();
-
+                        if(settingsController.getIsVerbose()){
+                            System.out.println("CommitAll Executor: Number of requests in batch after service time = " + arr.size());
+                             System.out.println("CommitAll Executor: adding EXIT measurements to measurements controller ");
+                        }
                         //add exit measurements
                         for (int i=0; i < arr.size(); i++) {
                             JSONObject jobj = (JSONObject)arr.get(i);
@@ -60,6 +74,9 @@ public class StorageCommitAllExecutor implements Runnable{
                             measurementController.addMeasurement(new TimeStamp(((int)requestId),"EXIT",exitTime));
                         }
                     }else{
+                        if(settingsController.getIsVerbose()){
+                            System.out.println("CommitAll Executor: Batch is null");
+                        }
                         try{
                             Thread.sleep(200);
                         }catch(Exception e){

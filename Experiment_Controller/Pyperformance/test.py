@@ -3,13 +3,20 @@ from PerformanceWriter import PerformanceWriter
 
 expPaths = [
 #"C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"
-"C:\\Users\\juanp\\Documents\\experiment_results\\measurements"
+#"C:\\Users\\juanp\\Documents\\experiment_results\\measurements"
+"C:\\Users\\juanp\\Downloads\\period-ia50\\ia50",
+"C:\\Users\\juanp\\Downloads\\period-ia200\\ia200",
+"C:\\Users\\juanp\\Downloads\\threshold-ia50\\ia50",
+"C:\\Users\\juanp\\Downloads\\threshold-ia200\\ia200"
 ]
 
 
 resPaths = [
 #"C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\analysis"
-"C:\\Users\\juanp\\Documents\\experiment_results\\analysis"
+"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\period-ia50",
+"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\period-ia200",
+"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\threshold-ia50",
+"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\threshold-ia200"
 ]
 
 numExperiments = len(expPaths)

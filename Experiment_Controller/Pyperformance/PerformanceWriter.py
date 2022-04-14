@@ -7,7 +7,7 @@ class PerformanceWriter:
         list_subfolders_with_paths = [f.path for f in os.scandir(experimentFolderPath) if f.is_dir()]
         #create API results file
         apiResultsPath = resultFolderPath + os.path.sep + "api-results.txt"
-        frapi = open(apiResultsPath,"w")
+        frapi = open(apiResultsPath,"w+")
         frapi.write("Path,Arrival Rate, Time spent in Buffer,Residence Time\n")
         frapi.close()
         #create Manager results file

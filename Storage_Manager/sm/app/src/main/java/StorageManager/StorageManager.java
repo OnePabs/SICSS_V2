@@ -77,7 +77,7 @@ public class StorageManager implements Runnable {
                     commitAllExecutor = null;
                     new Thread(insertOneExecutor).start();
                 }else if(settingsController.getString("executorType").equals("multiple")){
-                    commitAllExecutor = new StorageCommitAllExecutor(commitAllEntryQueue,platform,stateController,measurementController);
+                    commitAllExecutor = new StorageCommitAllExecutor(commitAllEntryQueue,platform,stateController,settingsController,measurementController);
                     insertOneExecutor = null;
                     new Thread(commitAllExecutor).start();
                 }else{

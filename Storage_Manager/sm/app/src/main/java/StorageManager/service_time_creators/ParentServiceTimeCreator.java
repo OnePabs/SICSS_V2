@@ -31,12 +31,17 @@ public class ParentServiceTimeCreator {
 
         //create the timelapse
         if(useSleepForMockProcessing){
+            long startTime = System.currentTimeMillis();
             try{
                 Thread.sleep(numMillis);
             }catch(Exception e){
                 if(settingsController.getIsVerbose()){
                     e.printStackTrace();
                 }
+            }
+            if(settingsController.getIsVerbose()){
+                long duration = System.currentTimeMillis() - startTime; 
+                System.out.println("Service Time Creator: Performed service time of " + duration + " milliseconds");
             }
         }else{
             //create elapsed time by doing calculations
@@ -60,6 +65,10 @@ public class ParentServiceTimeCreator {
                     e.printStackTrace();
                 }
             }while((System.currentTimeMillis()-startTime)<numMillis);
+            if(settingsController.getIsVerbose()){
+                long duration = System.currentTimeMillis() - startTime; 
+                System.out.println("Service Time Creator: Performed service time of " + duration + " milliseconds");
+            }
         }
     }
 

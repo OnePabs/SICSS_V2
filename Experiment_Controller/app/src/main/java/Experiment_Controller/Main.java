@@ -9,31 +9,31 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 
-		boolean isVerbose = false;
+		boolean isVerbose = true;
 		
-		String application_location = "http://ec2-3-145-1-209.us-east-2.compute.amazonaws.com:80";
-		//String application_location = "http://localhost:8000";
-		String handler_location = "http://ec2-3-144-41-138.us-east-2.compute.amazonaws.com:80";
-		//String handler_location = "http://localhost:8080";
-		String manager_location = "http://ec2-3-22-99-49.us-east-2.compute.amazonaws.com:80";
-		//String manager_location = "http://localhost:8090";
+		//String application_location = "http://ec2-3-145-1-209.us-east-2.compute.amazonaws.com:80";
+		String application_location = "http://localhost:8000";
+		//String handler_location = "http://ec2-3-22-249-74.us-east-2.compute.amazonaws.com:80";
+		String handler_location = "http://localhost:8080";
+		//String manager_location = "http://ec2-3-22-99-49.us-east-2.compute.amazonaws.com:80";
+		String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {45*minutes_to_millis};
+		long[] runtimes = {6100};//{1*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {200, 100, 80, 50, 46, 44, 42};
+		int[] inter_arrival_times = {200};
 		String inter_arrival_times_distribution;
-		//inter_arrival_times_distribution = "CONSTANT";
-		inter_arrival_times_distribution = "GEOMETRIC";
+		inter_arrival_times_distribution = "CONSTANT";
+		//inter_arrival_times_distribution = "GEOMETRIC";
 
 
 		//SERVICE TIMES
 		int[] service_times = {40};
 		String service_times_distribution;
-		//service_times_distribution = "CONSTANT";
-		service_times_distribution = "EXPONENTIAL";
+		service_times_distribution = "CONSTANT";
+		//service_times_distribution = "EXPONENTIAL";
 
 		//RESULTS
 		//String resultsFolderPath = "/home/ubuntu/results"; //linux
@@ -57,9 +57,9 @@ public class Main {
 		a0.run();
 */
 	
-	/*
+/*
 		//TECHNIQUE B
-		int[] periods = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,100,200,500};
+		int[] periods = {1000};
 		BTechnique b0 = new BTechnique(
 			isVerbose,
 			runtimes,
@@ -74,12 +74,12 @@ public class Main {
 			service_times_distribution
 		);
 		b0.run();
-		*/
+*/
 
 
 
 		//TECHNIQUE C
-		int[] maxperiods = {1000};
+		int[] maxperiods = {60000};
 		int[] maxsizes = {2000};
 		CTechnique c0 = new CTechnique(
 			isVerbose,
