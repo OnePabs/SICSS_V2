@@ -50,7 +50,7 @@ public class StorageCommitAllExecutor implements Runnable{
                         long requestId;
                         if(settingsController.getIsVerbose()){
                             System.out.println("CommitAll Executor: Number of requests in batch = " + arr.size());
-                             System.out.println("CommitAll Executor: adding QueueExitTime measurements to measurements controller ");
+                             System.out.println("CommitAll Executor: adding QueueExitTime measurements to measurements controller");
                         }
                         for (int i=0; i < arr.size(); i++) {
                             JSONObject jobj = (JSONObject)arr.get(i);
@@ -65,7 +65,7 @@ public class StorageCommitAllExecutor implements Runnable{
                         long exitTime = System.nanoTime();
                         if(settingsController.getIsVerbose()){
                             System.out.println("CommitAll Executor: Number of requests in batch after service time = " + arr.size());
-                             System.out.println("CommitAll Executor: adding EXIT measurements to measurements controller ");
+                            System.out.println("CommitAll Executor: adding EXIT measurements to measurements controller ");
                         }
                         //add exit measurements
                         for (int i=0; i < arr.size(); i++) {

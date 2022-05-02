@@ -4,19 +4,21 @@ from PerformanceWriter import PerformanceWriter
 expPaths = [
 #"C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"
 #"C:\\Users\\juanp\\Documents\\experiment_results\\measurements"
-"C:\\Users\\juanp\\Downloads\\period-ia50\\ia50",
-"C:\\Users\\juanp\\Downloads\\period-ia200\\ia200",
-"C:\\Users\\juanp\\Downloads\\threshold-ia50\\ia50",
-"C:\\Users\\juanp\\Downloads\\threshold-ia200\\ia200"
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Hybrid\measurements",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Period\ia50\measurements\Measurements",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Period\ia200\measurements",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Threshold\ia50\measurements",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Threshold\ia200\measurements"
 ]
 
 
 resPaths = [
 #"C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\analysis"
-"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\period-ia50",
-"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\period-ia200",
-"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\threshold-ia50",
-"C:\\Users\\juanp\\Documents\\experiment_results\\analysis\\threshold-ia200"
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Hybrid\analysis",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Period\ia50\analysis",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Period\ia200\analysis",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Threshold\ia50\analysis",
+r"C:\Users\juanp\Downloads\drive-download-20220418T142019Z-001\Threshold\ia200\analysis",
 ]
 
 numExperiments = len(expPaths)

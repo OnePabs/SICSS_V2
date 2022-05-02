@@ -17,7 +17,7 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
     }
 
     @Override
-    public void createServiceTime(){
+    public void createServiceTime(int num_bytes){
         double numgen = Math.log(1-Math.random())*(-mean);
         long num = (long)numgen;
         if(settingsController.getIsVerbose()){
@@ -25,6 +25,19 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
             System.out.println("double Generated: " + numgen);
             System.out.println("long Generated: " + num);
         }
-        createTimLapse(num);
+
+        long st;
+        if(num_bytes<=150){
+            st = num;
+        }else if(num_bytes<=1000){
+            st=(num*3)/4;
+        }else if(num_bytes<=2000){
+            st=num*2;
+        }else if(num_bytes<=3000){
+            st=(num*5)/2;
+        }else{
+            st=num*3;
+        }
+        createTimLapse(st);
     }
 }

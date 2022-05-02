@@ -18,14 +18,15 @@ public class StubPlatform extends ParentStoragePlatform{
         if(settingsController.getIsVerbose()){
             System.out.println("Stub Platform producing service time for insert one");
         }
-        parentServiceTimeCreator.createServiceTime();
+        parentServiceTimeCreator.createServiceTime(request.length);
         return true;
     }
     public boolean commitAll(String content){
         if(settingsController.getIsVerbose()){
             System.out.println("Stub Platform producing service time for commitAll");
         }
-        parentServiceTimeCreator.createServiceTime();
+        int strl=content.length();
+        parentServiceTimeCreator.createServiceTime(strl);
         return true;
     }
 }
