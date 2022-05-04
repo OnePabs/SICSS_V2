@@ -30,7 +30,7 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
         if(num_bytes<=150){
             st = num;
         }else if(num_bytes<=1000){
-            st=(num*3)/4;
+            st=(num*3)/2;
         }else if(num_bytes<=2000){
             st=num*2;
         }else if(num_bytes<=3000){

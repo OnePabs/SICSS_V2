@@ -11,19 +11,19 @@ public class Main {
 
 		boolean isVerbose = true;
 		
-		//String application_location = "http://ec2-3-145-1-209.us-east-2.compute.amazonaws.com:80";
-		String application_location = "http://localhost:8000";
-		//String handler_location = "http://ec2-3-22-249-74.us-east-2.compute.amazonaws.com:80";
-		String handler_location = "http://localhost:8080";
-		//String manager_location = "http://ec2-3-22-99-49.us-east-2.compute.amazonaws.com:80";
-		String manager_location = "http://localhost:8090";
+		String application_location = "http://ec2-3-133-153-208.us-east-2.compute.amazonaws.com:80";
+		//String application_location = "http://localhost:8000";
+		String handler_location = "http://ec2-3-139-81-140.us-east-2.compute.amazonaws.com:80";
+		//String handler_location = "http://localhost:8080";
+		String manager_location = "http://35.203.51.116:80";
+		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {6100};//{1*minutes_to_millis};
+		long[] runtimes = {1*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {200};
+		int[] inter_arrival_times = {50};
 		String inter_arrival_times_distribution;
 		inter_arrival_times_distribution = "CONSTANT";
 		//inter_arrival_times_distribution = "GEOMETRIC";
@@ -40,7 +40,7 @@ public class Main {
 		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
 		String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
 
-/*
+
 		//Technique A
 		ATechnique a0 = new ATechnique(
 			isVerbose,
@@ -55,7 +55,7 @@ public class Main {
 			service_times_distribution
 		);
 		a0.run();
-*/
+
 	
 /*
 		//TECHNIQUE B
@@ -77,7 +77,7 @@ public class Main {
 */
 
 
-
+/*
 		//TECHNIQUE C
 		int[] maxperiods = {60000};
 		int[] maxsizes = {2000};
@@ -96,7 +96,7 @@ public class Main {
 			service_times_distribution
 		);
 		c0.run();
-	
+	*/
 		
 	}//end main
 }//end class

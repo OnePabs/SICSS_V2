@@ -22,7 +22,7 @@ public class ConstantServiceTimeCreator extends ParentServiceTimeCreator {
         if(num_bytes<=150){
             st = constantTimeMillis;
         }else if(num_bytes<=1000){
-            st=(constantTimeMillis*3)/4;
+            st=(constantTimeMillis*3)/2;
         }else if(num_bytes<=2000){
             st=constantTimeMillis*2;
         }else if(num_bytes<=3000){
