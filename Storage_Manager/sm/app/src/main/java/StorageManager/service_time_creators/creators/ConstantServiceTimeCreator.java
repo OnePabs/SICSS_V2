@@ -18,18 +18,25 @@ public class ConstantServiceTimeCreator extends ParentServiceTimeCreator {
 
     @Override
     public void createServiceTime(int num_bytes){
-        long st;
-        if(num_bytes<=150){
-            st = constantTimeMillis;
-        }else if(num_bytes<=1000){
-            st=(constantTimeMillis*3)/2;
-        }else if(num_bytes<=2000){
-            st=constantTimeMillis*2;
-        }else if(num_bytes<=3000){
-            st=(constantTimeMillis*5)/2;
-        }else{
-            st=constantTimeMillis*3;
+        if(settingsController.containsSetting("usestepservicetime")){
+            boolean usestepservicetime = settingsController.getBoolean("usestepservicetime");
+            if(usestepservicetime){
+                long st;
+                if(num_bytes<=150){
+                    st = constantTimeMillis;
+                }else if(num_bytes<=1000){
+                    st=(constantTimeMillis*3)/2;
+                }else if(num_bytes<=2000){
+                    st=constantTimeMillis*2;
+                }else if(num_bytes<=3000){
+                    st=(constantTimeMillis*5)/2;
+                }else{
+                    st=constantTimeMillis*3;
+                }
+                createTimLapse(st);
+                return;
+            }
         }
-        createTimLapse(st);
+        createTimLapse(constantTimeMillis);
     }
 }
