@@ -34,6 +34,7 @@ public class Main {
 		String service_times_distribution;
 		service_times_distribution = "CONSTANT";
 		//service_times_distribution = "EXPONENTIAL";
+		boolean useStep=false;
 
 		//RESULTS
 		//String resultsFolderPath = "/home/ubuntu/results"; //linux
@@ -71,7 +72,8 @@ public class Main {
 			periods,
 			manager_location,
 			service_times,
-			service_times_distribution
+			service_times_distribution,
+			useStep
 		);
 		b0.run();
 */

@@ -23,6 +23,7 @@ public class BTechnique extends ParentScript{
     private String manager_location;
     private int[] service_times;
     private String service_times_distribution;
+    private boolean usestepservicetime;
     
     /**
     
@@ -38,7 +39,8 @@ public class BTechnique extends ParentScript{
             int[] periods,
             String manager_location,
             int[] service_times,
-            String service_times_distribution
+            String service_times_distribution,
+            boolean usestepservicetime
     ){
         this.isVerbose = isVerbose;
         this.runtimes = Arrays.copyOf(runtimes,runtimes.length);
@@ -57,6 +59,7 @@ public class BTechnique extends ParentScript{
         this.manager_location = manager_location;
         this.service_times = Arrays.copyOf(service_times,service_times.length);
         this.service_times_distribution = service_times_distribution;
+        this.usestepservicetime = usestepservicetime;
     }
     
 
@@ -97,7 +100,8 @@ public class BTechnique extends ParentScript{
                                 + "\"executorType\":\"multiple\","
                                 + "\"serviceTimeDistribution\":\"" + service_times_distribution + "\","
                                 + "\"serviceTimeDistributionSettings\":"+ String.valueOf(service_time) +","
-                                +"\"useSleepForMockProcessing\":true"
+                                +"\"useSleepForMockProcessing\":true,"
+                                +"\"usestepservicetime\"" + String.valueOf(usestepservicetime)
                                 + "}";
 
                             String experimentName = 
