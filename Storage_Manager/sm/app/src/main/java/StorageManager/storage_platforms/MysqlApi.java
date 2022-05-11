@@ -10,6 +10,7 @@ import org.json.simple.parser.JSONParser;
 import StorageManager.*;
 
 public class MysqlApi extends ParentStoragePlatform {
+    /*
 
     //db connection info
     private String host = "localhost";
@@ -98,6 +99,8 @@ public class MysqlApi extends ParentStoragePlatform {
             return false;
         }
     }
+
+     */
 
 
 }

@@ -59,7 +59,7 @@ public class StorageCommitAllExecutor implements Runnable{
                         }
 
                         // commit all
-                        platform.commitAll(requests);
+                        platform.commitAll(arr);
 
                         //exit time stamp
                         long exitTime = System.nanoTime();

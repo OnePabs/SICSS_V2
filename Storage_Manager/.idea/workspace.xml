@@ -2,12 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="413e1ce2-325c-4013-9dfa-fdc1541ed2a9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Application/app/src/main/java/Application/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Application/app/src/main/java/Application/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/Experiment_Controller/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/Experiment_Controller/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/scripts/TechBExponentialStubSaturation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/scripts/TechBExponentialStubSaturation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/scripts/TechCExponentialStubSaturation.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/scripts/TechCExponentialStubSaturation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../StorageAPI/server/app/src/main/java/server/inner_modules/data_transfer_technique/techniques/TechniqueC.java" beforeDir="false" afterPath="$PROJECT_DIR$/../StorageAPI/server/app/src/main/java/server/inner_modules/data_transfer_technique/techniques/TechniqueC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/executors/StorageCommitAllExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/executors/StorageCommitAllExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/service_time_creators/ParentServiceTimeCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/service_time_creators/ParentServiceTimeCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/service_time_creators/creators/ConstantServiceTimeCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/service_time_creators/creators/ConstantServiceTimeCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/service_time_creators/creators/ExponentialServiceTimeCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/service_time_creators/creators/ExponentialServiceTimeCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/storage_platforms/MysqlApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/storage_platforms/MysqlApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/storage_platforms/ParentStoragePlatform.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/storage_platforms/ParentStoragePlatform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/storage_platforms/StubPlatform.java" beforeDir="false" afterPath="$PROJECT_DIR$/sm/app/src/main/java/StorageManager/storage_platforms/StubPlatform.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,11 +28,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../StorageAPI" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/juanp/OneDrive/Documents/projects/SICSS_V2/Storage_Manager"
+  }
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

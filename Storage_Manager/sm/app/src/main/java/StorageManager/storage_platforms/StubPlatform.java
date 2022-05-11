@@ -4,6 +4,7 @@ import StorageManager.*;
 import StorageManager.storage_platforms.*;
 import StorageManager.service_time_creators.*;
 import StorageManager.service_time_creators.creators.*;
+import org.json.simple.JSONArray;
 
 public class StubPlatform extends ParentStoragePlatform{
     private SettingsController settingsController;
@@ -21,12 +22,12 @@ public class StubPlatform extends ParentStoragePlatform{
         parentServiceTimeCreator.createServiceTime(request.length);
         return true;
     }
-    public boolean commitAll(String content){
+    public boolean commitAll(JSONArray arr){
         if(settingsController.getIsVerbose()){
             System.out.println("Stub Platform producing service time for commitAll");
         }
-        int strl=content.length();
-        parentServiceTimeCreator.createServiceTime(strl);
+        int num_req=arr.size();
+        parentServiceTimeCreator.createServiceTime(num_req);
         return true;
     }
 }

@@ -17,7 +17,7 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
     }
 
     @Override
-    public void createServiceTime(int num_bytes){
+    public void createServiceTime(int num_requests){
         double numgen = Math.log(1-Math.random())*(-mean);
         long num = (long)numgen;
         if(settingsController.getIsVerbose()){
@@ -29,16 +29,16 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
         if(settingsController.containsSetting("usestepservicetime")){
              boolean usestepservicetime = settingsController.getBoolean("usestepservicetime");
             if(usestepservicetime){
-                long st;
-                if(num_bytes<=150){
+                long st=0;
+                if(num_requests==1){
                     st = num;
-                }else if(num_bytes<=1000){
+                }else if(num_requests<=10){
                     st=(num*3)/2;
-                }else if(num_bytes<=2000){
+                }else if(num_requests<=20){
                     st=num*2;
-                }else if(num_bytes<=3000){
+                }else if(num_requests<=30){
                     st=(num*5)/2;
-                }else{
+                }else if(num_requests > 30){
                     st=num*3;
                 }
                 createTimLapse(st);

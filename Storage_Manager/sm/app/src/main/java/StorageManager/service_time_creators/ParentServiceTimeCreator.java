@@ -15,7 +15,7 @@ public class ParentServiceTimeCreator {
 
     //child must @Override these
     public void init(){}
-    public void createServiceTime(int num_bytes){
+    public void createServiceTime(int num_requests){
         System.out.println("Parent Service Time Creator createServiceTime()");
     }
 
