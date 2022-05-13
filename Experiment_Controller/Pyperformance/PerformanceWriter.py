@@ -8,12 +8,12 @@ class PerformanceWriter:
         #create API results file
         apiResultsPath = resultFolderPath + os.path.sep + "api-results.txt"
         frapi = open(apiResultsPath,"w+")
-        frapi.write("Path,Arrival Rate, Time spent in Buffer,Residence Time\n")
+        frapi.write("Path,Arrival Rate,Batch Average Size,Average Time Between Batches,Time spent in Buffer,Residence Time\n")
         frapi.close()
         #create Manager results file
         managerResultsPath = resultFolderPath + os.path.sep + "manager-results.txt"
         frmanager =  open(managerResultsPath,"w")
-        frmanager.write("Path,Arrival Rate,Service Time,Residence Time\n")
+        frmanager.write("Path,Arrival Rate,Batch Average Size,Average Time Between Batches,Service Time,Residence Time\n")
         frmanager.close()
         #find and write experiment results from measurement folder
         for path in list_subfolders_with_paths:
@@ -80,6 +80,46 @@ class PerformanceWriter:
             r.write(str(iaRate) + ",")
             r.close()
 
+        #get average batch size and inter batch time
+        num_batches = 0
+        total_num_requests = 0
+        total_inter_batch_time = 0
+        prev_batch_timestamp = 0
+        curr_request_timestamp = 0
+        isFirst = True
+        for i in range(0,numberOfLines):
+            curline = lines[i]
+            if curline and not curline.isspace():
+                data = curline.split(",")
+                if data[1] == exitMeasurementName:
+                    #only count exit times so that requests are not counted twice
+                    total_num_requests += 1   #add one to the total number of requests
+                    curr_request_timestamp = int(data[2])
+                    if isFirst:
+                        #first request
+                        num_batches += 1
+                        prev_batch_timestamp = curr_request_timestamp
+                        isFirst=False
+                    elif curr_request_timestamp != prev_batch_timestamp:
+                        #new batch
+                        num_batches += 1
+                        total_inter_batch_time += (curr_request_timestamp - prev_batch_timestamp)
+                        prev_batch_timestamp = curr_request_timestamp
+
+        #calculate and write batch data
+        avg_batch_size = total_num_requests/num_batches
+        avg_inter_batch_time = total_inter_batch_time/num_batches
+        print("number of batches: " + str(num_batches))
+        print("total number of requests: " + str(total_num_requests))
+        print("Average Batch size: " + str(avg_batch_size))
+        print("total time between batches: " + str(total_inter_batch_time))
+        print("Average Inter batch time: " + str(avg_inter_batch_time))
+        r = open(resultsPath, "a")
+        r.write(str(avg_batch_size) + ",")
+        r.write(str(avg_inter_batch_time) + ",")
+        r.close()
+        
+
         #sort list by ID
         lines.sort(key=lambda x: (int(x.split(",")[0]), int(x.split(",")[2])))
         #print(lines[0:6])
@@ -109,7 +149,9 @@ class PerformanceWriter:
                 
                 #else: Measurement is not an Entry measurement and the Id is not that one of the entry, therefore erroneous
                 #skip
-
+        
+        
+        #write the residence and service time to the results file
         curIdNum = int(curId)
         if curIdNum != 0:
             numCompletedRequests = curIdNum + 1    #ID starts at zero so 1 is added
