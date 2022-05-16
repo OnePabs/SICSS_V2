@@ -59,17 +59,16 @@ public class JsonAPI {
     }
 
     public static JSONArray objectToJSONArray(Object object){
-        Object json = null;
-        JSONArray jsonArray = null;
-        try {
-            json = new JSONTokener(object.toString()).nextValue();
-        } catch (JSONException e) {
+        try{
+            String arraystr = object.toString();
+            JSONParser parser = new JSONParser();
+            JSONArray array = (JSONArray)parser.parse(arraystr);
+            return array;
+        }catch (Exception e){
             e.printStackTrace();
+            return null;
         }
-        if (json instanceof JSONArray) {
-            jsonArray = (JSONArray) json;
-        }
-        return jsonArray;
+
     }
 
 

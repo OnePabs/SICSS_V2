@@ -6,7 +6,7 @@ import common.ExperimentParameter;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class CTechnique extends ParentScript{
+public class CAdaptiveTechnique extends ParentScript{
     private boolean isVerbose;
     private long[] runtimes;
     private String result_folder_path;
@@ -84,18 +84,29 @@ public class CTechnique extends ParentScript{
                                 + "\"interGenerationTimeDistributionSettings\":"+ inter_arrival_time
                                 + "}";
 
-                        String stepinfostr = "";
+                        String stepinfostr = "[";
                         for(int i=0;i<stepinfo.length;i++){
-                            stepinfostr += stepinfo[i];
+                            stepinfostr += "[";
+                            for(int j=0;j<stepinfo[i].length;j++){
+                                stepinfostr += stepinfo[i][j];
+                                if(j!=stepinfo[i].length-1){
+                                    stepinfostr += ",";
+                                }
+                            }
+                            stepinfostr += "]";
+
                             if(i!=(stepinfo.length-1)){
-                                stepinfostr += ","
+                                stepinfostr += ",";
                             }
                         }
+                        stepinfostr += "]";
+
+                        System.out.println(stepinfostr);
                         String storageApi_parameters = "{"
                                 + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
                                 + "\"dataTransferTechnique\":\"ca\","
                                 + "\"dataTransferTechniqueSettings\":{\"coolofftime\":" + String.valueOf(coolofftime) + ","
-                                + "["+Arrays.toString(stepinfostr)+"]"
+                                + "\"stepvaluesandcparameters\": [" + stepinfostr + "]"
                                 + "},"
                                 + "\"transmitter\":\"StorageManagerTransmitter\","
                                 + "\"destination\":\"" + manager_location + "\""
@@ -115,8 +126,7 @@ public class CTechnique extends ParentScript{
                                 "ca-"+
                                         "rt-"+String.valueOf(runtime) +"-"+
                                         "ia-"+String.valueOf(inter_arrival_time) +"-"+
-                                        "mp-"+String.valueOf(maxperiod) +"-"+
-                                        "ms-"+String.valueOf(maxsize) +"-"+
+                                        "cl-"+String.valueOf(coolofftime) +"-"+
                                         "st-"+String.valueOf(service_time)
                                 ;
 

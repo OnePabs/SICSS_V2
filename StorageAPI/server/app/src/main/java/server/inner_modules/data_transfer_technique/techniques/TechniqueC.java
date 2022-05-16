@@ -30,6 +30,7 @@ public class TechniqueC extends ParentDataTransferTechnique {
         if(!settingsController.containsSetting("dataTransferTechniqueSettings")){
             return false;
         }
+
         Hashtable<String,Object> dtSettings = JsonAPI.jsonToHashTable(settingsController.getSetting("dataTransferTechniqueSettings"));
         if(!dtSettings.containsKey("period") || !dtSettings.containsKey("maxsize") ){
             return false;

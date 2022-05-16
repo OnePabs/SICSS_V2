@@ -15,6 +15,9 @@ public class TechniqueBuilder {
             ReadyLists buffer,
             TransmitionInformationObject transmitionInformationObject
     ){
+        if(settingsController.getIsVerbose()){
+            System.out.println("Techniqe builder");
+        }
         ParentDataTransferTechnique technique;
         String techniqueName = settingsController.getSetting("dataTransferTechnique").toString();
         techniqueName = techniqueName.toUpperCase();
@@ -27,6 +30,9 @@ public class TechniqueBuilder {
                 break;
             case "C":
                 technique = new TechniqueC(stateController, settingsController, buffer, transmitionInformationObject);
+                break;
+            case "CA":
+                technique = new TechniqueCAdaptive(stateController, settingsController, buffer, transmitionInformationObject);
                 break;
             default:
                 technique = new ParentDataTransferTechnique(stateController, settingsController, buffer, transmitionInformationObject);

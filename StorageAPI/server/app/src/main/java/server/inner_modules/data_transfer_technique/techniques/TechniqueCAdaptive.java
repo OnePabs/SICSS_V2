@@ -3,11 +3,16 @@ package server.inner_modules.data_transfer_technique.techniques;
 import server.data_structures.*;
 import server.inner_modules.*;
 import server.inner_modules.data_transfer_technique.ParentDataTransferTechnique;
+import server.Task;
+import server.JsonAPI;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
+import java.util.Hashtable;
+
 public class TechniqueCAdaptive extends ParentDataTransferTechnique {
-    private int coolofftime;
+    private long coolofftime;
     private JSONArray stepinfo;
     public TechniqueCAdaptive(
             StateController stateController,
@@ -31,7 +36,7 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
      * threshold: the threshold that the adaptive technique will change to after iastepmin has been reached
      *
      * Example:
-     * dataTransferTechniqueSettings: {coolofftime:5000, stepvaluesandcparameters: [ [0,500,30000],[40,300,700],[50,150,300],[100,100,200],[200,0,0] ] }
+     * dataTransferTechniqueSettings: {coolofftime:5000, stepvaluesandcparameters: [ [0,500,30000],[40,300,700],[50,150,300],[100,100,200],[200,0,0] ]
      * explanation:
      * The adaptive technique will check every 5000 milliseconds wheter or not the average inter arrival rate has changed from one step to another
      * the steps are as follow:
@@ -46,19 +51,31 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
      */
     @Override
     public boolean initialize(){
+        if(settingsController.getIsVerbose()){
+            System.out.println("C Adaptive Initialization");
+        }
         if(!settingsController.containsSetting("dataTransferTechniqueSettings")){
             return false;
         }
         Hashtable<String,Object> dtSettings = JsonAPI.jsonToHashTable(settingsController.getSetting("dataTransferTechniqueSettings"));
+
         if(!dtSettings.containsKey("stepvaluesandcparameters") || !dtSettings.containsKey("coolofftime") ){
             return false;
         }
-        coolofftime = dtSettings.get("coolofftime")
-        stepinfo = JsonAPI.objectToJSONArray(dtSettings.get("stepvaluesandcparameters"))
 
+        coolofftime = (long)dtSettings.get("coolofftime");
         if(settingsController.getIsVerbose()){
-            System.out.println("Technique C Adaptive coolofftime:" coolofftime + ", step definition: " + stepinfo.toString());
+            System.out.println("coolofftime: " + coolofftime);
         }
+
+        stepinfo = JsonAPI.objectToJSONArray(dtSettings.get("stepvaluesandcparameters"));
+        if(settingsController.getIsVerbose()){
+            System.out.println("stepvaluesandcparameters: ");
+            for(Object a : stepinfo){
+                System.out.println(a.toString());
+            }
+        }
+
         return true;
     }
 }

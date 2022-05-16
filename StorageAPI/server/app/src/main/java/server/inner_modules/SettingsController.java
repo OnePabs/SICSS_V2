@@ -94,10 +94,17 @@ public class SettingsController {
 		return isVerbose;
 	}
 
-		public String getString(String settingName){
+	public String getString(String settingName){
 		return getSetting(settingName).toString();
 	}
 
+	public int getInt(String settingName){
+		Object settingValue;
+		int intValue;
+		settingValue = getSetting(settingName);
+		intValue = (int)settingValue;
+		return intValue;
+	}
 
 	public boolean getBoolean(String settingName){
 		Object settingValue;
