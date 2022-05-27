@@ -3,18 +3,35 @@ package Experiment_Controller;
 import common.*;
 import scripts.*;
 import java.io.File;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
 
+
+		String experimentName = "techniqueCTest";
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDateTime now = LocalDateTime.now();
+		experimentName = dtf.format(now) + experimentName;
+
+		String resultsFolderPath;
+		resultsFolderPath = "/home/ubuntu/experiment_results/"; //linux
+		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
+		//String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
+		//String resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiments\\2022-05-18-b-exp-step-disabled-but-implemented"; //TUF
+
+		String resultsPath = resultsFolderPath + experimentName;
+
 		/*
 		TestBConstant tb = new TestBConstant();
 		tb.run();
 		 */
 
-		TestCConstant tc = new TestCConstant();
+		TestCConstant tc = new TestCConstant(resultsPath);
 		tc.run();
 /*
 

@@ -5,6 +5,10 @@ import common.*;
 import java.io.File;
 
 public class TestCConstant {
+    private String resultsPath;
+    public TestCConstant(String resultsPath){
+        this.resultsPath = resultsPath;
+    }
     public void run() {
         System.out.println("Test C Constant");
 
@@ -32,12 +36,6 @@ public class TestCConstant {
         service_times_distribution = "CONSTANT";
         boolean useStep = false;
 
-        //RESULTS
-        //String resultsFolderPath = "/home/ubuntu/results"; //linux
-        //String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //mini laptop
-        //String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
-        String resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiments\\2022-05-18-tests\\measurements";
-
 
         //Small experiment to wake up everything
         //Technique A
@@ -45,7 +43,7 @@ public class TestCConstant {
         ATechnique a0 = new ATechnique(
                 isVerbose,
                 wake_up_rt,
-                resultsFolderPath,
+                resultsPath,
                 application_location,
                 inter_arrival_times,
                 inter_arrival_times_distribution,
@@ -64,7 +62,7 @@ public class TestCConstant {
         CTechnique c0 = new CTechnique(
                 isVerbose,
                 runtimes,
-                resultsFolderPath,
+                resultsPath,
                 application_location,
                 inter_arrival_times,
                 inter_arrival_times_distribution,
@@ -84,7 +82,7 @@ public class TestCConstant {
         CTechnique c1 = new CTechnique(
                 isVerbose,
                 runtimes,
-                resultsFolderPath,
+                resultsPath,
                 application_location,
                 inter_arrival_times,
                 inter_arrival_times_distribution,
