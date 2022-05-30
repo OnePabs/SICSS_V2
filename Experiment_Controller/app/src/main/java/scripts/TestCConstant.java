@@ -79,6 +79,7 @@ public class TestCConstant {
         //Technique C constant tests in order of document
         int[] maxsizes_step = {0, 100, 200, 1100,2100,3100};
         useStep = true;
+        resultsPath += "-ste-on";
         CTechnique c1 = new CTechnique(
                 isVerbose,
                 runtimes,
