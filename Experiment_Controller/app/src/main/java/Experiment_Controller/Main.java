@@ -10,13 +10,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-
-
-		String experimentName = "techniqueCTest";
+		String experimentName = "c-exponential-step-on";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
-		experimentName = dtf.format(now) + experimentName;
+		experimentName = dtf.format(now) + "-" + experimentName;
 
 		String resultsFolderPath;
 		resultsFolderPath = "/home/ubuntu/experiment_results/"; //linux
@@ -30,45 +28,40 @@ public class Main {
 		TestBConstant tb = new TestBConstant();
 		tb.run();
 		 */
-
+/*
 		TestCConstant tc = new TestCConstant(resultsPath);
 		tc.run();
-/*
+ */
 
-		boolean isVerbose = true;
+
+
+		boolean isVerbose = false;
 		
-		//String application_location = "http://ec2-18-116-67-207.us-east-2.compute.amazonaws.com:80";
-		String application_location = "http://localhost:8000";
-		//String handler_location = "http://ec2-3-144-111-183.us-east-2.compute.amazonaws.com:80";
-		String handler_location = "http://localhost:8080";
-		//String manager_location = "http://ec2-3-141-196-31.us-east-2.compute.amazonaws.com:80";
-		String manager_location = "http://localhost:8090";
+		String application_location = "http://ec2-3-144-19-250.us-east-2.compute.amazonaws.com:80";
+		//String application_location = "http://localhost:8000";
+		String handler_location = "http://ec2-3-137-213-226.us-east-2.compute.amazonaws.com:80";
+		//String handler_location = "http://localhost:8080";
+		String manager_location = "http://ec2-18-189-1-146.us-east-2.compute.amazonaws.com:80";
+		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {25000};//{45*minutes_to_millis};
+		long[] runtimes = {45*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {5000};
+		int[] inter_arrival_times = {50};
 		String inter_arrival_times_distribution;
 		//inter_arrival_times_distribution = "CONSTANT";
 		inter_arrival_times_distribution = "GEOMETRIC";
 
 
 		//SERVICE TIMES
-		int[] service_times = {4000};
+		int[] service_times = {40};
 		String service_times_distribution;
 		//service_times_distribution = "CONSTANT";
 		service_times_distribution = "EXPONENTIAL";
-		boolean useStep=false;
+		boolean useStep=true;
 
-		//RESULTS
-		//String resultsFolderPath = "/home/ubuntu/results"; //linux
-		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
-		//String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
-		String resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiments\\2022-05-18-b-exp-step-disabled-but-implemented"; //TUF
-
-*/
 
 /*
 		//Technique A
@@ -108,11 +101,9 @@ public class Main {
 
 */
 
-
-/*
 		//TECHNIQUE C
 		int[] maxperiods = {60000};
-		int[] maxsizes = {2000};
+		int[] maxsizes = {20,30,50,100,300,500,1000,2000,3000};
 		CTechnique c0 = new CTechnique(
 			isVerbose,
 			runtimes,
@@ -129,7 +120,7 @@ public class Main {
 			useStep
 		);
 		c0.run();
-	*/
+
 		
 	}//end main
 }//end class
