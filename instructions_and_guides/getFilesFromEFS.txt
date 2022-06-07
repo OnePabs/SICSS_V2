@@ -1,0 +1,1 @@
+scp -i controller.pem -r ubuntu@machinename:/home/ubuntu/efs/expres/... C:\Users\juanp\OneDrive\Documents\experiments
