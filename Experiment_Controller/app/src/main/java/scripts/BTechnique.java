@@ -100,13 +100,13 @@ public class BTechnique extends ParentScript{
                                 + "\"executorType\":\"multiple\","
                                 + "\"serviceTimeDistribution\":\"" + service_times_distribution + "\","
                                 + "\"serviceTimeDistributionSettings\":"+ String.valueOf(service_time) +","
-                                +"\"useSleepForMockProcessing\":true,"
+                                +"\"useSleepForMockProcessing\":false,"
                                 +"\"usestepservicetime\"" + String.valueOf(usestepservicetime)
                                 + "}";
 
                             String experimentName = 
                                 "B-"+
-                                "rt-"+String.valueOf(runtime) +
+                                "rt-"+String.valueOf(runtime) +"-"+
                                 "ia-"+String.valueOf(inter_arrival_time) +"-"+
                                 "p-"+String.valueOf(period) +"-"+
                                 "st-"+String.valueOf(service_time)

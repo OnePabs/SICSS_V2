@@ -4,27 +4,26 @@ package scripts;
 import common.*;
 import java.io.File;
 
-public class TestBConstant {
+public class TestCConstant {
     private String resultsPath;
-
-    public TestBConstant(String resultsPath){
+    public TestCConstant(String resultsPath){
         this.resultsPath = resultsPath;
     }
     public void run() {
-        System.out.println("Test B Constant");
+        System.out.println("Test C Constant");
 
         boolean isVerbose = false;
 
-        //String application_location = "http://ec2-3-133-153-208.us-east-2.compute.amazonaws.com:80";
+        //String application_location = "http://:80";
         String application_location = "http://localhost:8000";
-        //String handler_location = "http://ec2-3-139-81-140.us-east-2.compute.amazonaws.com:80";
+        //String handler_location = "http://:80";
         String handler_location = "http://localhost:8080";
-        //String manager_location = "http://35.203.51.116:80";
+        //String manager_location = "http://:80";
         String manager_location = "http://localhost:8090";
 
         //RUNTIMES
         long minutes_to_millis = (long) 60000;
-        long[] runtimes = {10 * minutes_to_millis};
+        long[] runtimes = {15 * minutes_to_millis};
 
         //ARRIVAL TIMES
         int[] inter_arrival_times = {50};
@@ -35,6 +34,7 @@ public class TestBConstant {
         int[] service_times = {40};
         String service_times_distribution;
         service_times_distribution = "CONSTANT";
+        boolean useStep = false;
 
 
         //Small experiment to wake up everything
@@ -55,11 +55,11 @@ public class TestBConstant {
         a0.run();
 
 
-        //Technique B constant tests in order of document
+        //Technique C constant tests in order of document
         //TECHNIQUE B
-        int[] periods = {120, 20, 50};
-        boolean useStep = false;
-        BTechnique b0 = new BTechnique(
+        int[] maxperiods = {60000};
+        int[] maxsizes = {0, 100, 200, 2000};
+        CTechnique c0 = new CTechnique(
                 isVerbose,
                 runtimes,
                 resultsPath,
@@ -67,19 +67,20 @@ public class TestBConstant {
                 inter_arrival_times,
                 inter_arrival_times_distribution,
                 handler_location,
-                periods,
+                maxperiods,
+                maxsizes,
                 manager_location,
                 service_times,
                 service_times_distribution,
                 useStep
         );
-        b0.run();
+        c0.run();
 
-
-        //using step service time
-        int[] periods_step = {50, 100, 550, 1550};
+        //Technique C constant tests in order of document
+        int[] maxsizes_step = {0, 100, 200, 1100,2100,3100};
         useStep = true;
-        BTechnique b1 = new BTechnique(
+        resultsPath += "-ste-on";
+        CTechnique c1 = new CTechnique(
                 isVerbose,
                 runtimes,
                 resultsPath,
@@ -87,14 +88,14 @@ public class TestBConstant {
                 inter_arrival_times,
                 inter_arrival_times_distribution,
                 handler_location,
-                periods_step,
+                maxperiods,
+                maxsizes_step,
                 manager_location,
                 service_times,
                 service_times_distribution,
                 useStep
         );
-        b1.run();
-
+        c1.run();
     }
 
 }

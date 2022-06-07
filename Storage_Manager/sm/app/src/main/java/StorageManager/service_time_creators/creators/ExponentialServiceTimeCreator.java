@@ -21,13 +21,14 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
         double numgen = Math.log(1-Math.random())*(-mean);
         long num = (long)numgen;
         if(settingsController.getIsVerbose()){
-            System.out.println("meanInterArrivalTime: " + mean);
+            System.out.println("meanServiceTime: " + mean);
             System.out.println("double Generated: " + numgen);
             System.out.println("long Generated: " + num);
         }
 
         if(settingsController.containsSetting("usestepservicetime")){
-             boolean usestepservicetime = settingsController.getBoolean("usestepservicetime");
+
+            boolean usestepservicetime = settingsController.getBoolean("usestepservicetime");
             if(usestepservicetime){
                 long st=0;
                 if(num_requests==1){
@@ -41,9 +42,20 @@ public class ExponentialServiceTimeCreator extends ParentServiceTimeCreator {
                 }else if(num_requests > 30){
                     st=num*3;
                 }
+
+                if(settingsController.getIsVerbose()){
+                    System.out.println("usestepservicetime: true");
+                    System.out.println("final service time created: " + st);
+                    System.out.println();
+                }
+
                 createTimLapse(st);
                 return;
             }
+        }
+        if(settingsController.getIsVerbose()){
+            System.out.println("usestepservicetime: false");
+            System.out.println();
         }
         createTimLapse(num);
     }

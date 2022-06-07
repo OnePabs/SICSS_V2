@@ -3,44 +3,64 @@ package Experiment_Controller;
 import common.*;
 import scripts.*;
 import java.io.File;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
+		String experimentName = "c-exponential-step-on";
 
-		boolean isVerbose = true;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDateTime now = LocalDateTime.now();
+		experimentName = dtf.format(now) + "-" + experimentName;
+
+		String resultsFolderPath;
+		resultsFolderPath = "/home/ubuntu/experiment_results/"; //linux
+		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
+		//String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
+		//String resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiments\\2022-05-18-b-exp-step-disabled-but-implemented"; //TUF
+
+		String resultsPath = resultsFolderPath + experimentName;
+
+		/*
+		TestBConstant tb = new TestBConstant();
+		tb.run();
+		 */
+/*
+		TestCConstant tc = new TestCConstant(resultsPath);
+		tc.run();
+ */
+
+
+
+		boolean isVerbose = false;
 		
-		//String application_location = "http://ec2-3-133-153-208.us-east-2.compute.amazonaws.com:80";
-		String application_location = "http://localhost:8000";
-		//String handler_location = "http://ec2-3-139-81-140.us-east-2.compute.amazonaws.com:80";
-		String handler_location = "http://localhost:8080";
-		//String manager_location = "http://35.203.51.116:80";
-		String manager_location = "http://localhost:8090";
+		String application_location = "http://ec2-3-144-19-250.us-east-2.compute.amazonaws.com:80";
+		//String application_location = "http://localhost:8000";
+		String handler_location = "http://ec2-3-137-213-226.us-east-2.compute.amazonaws.com:80";
+		//String handler_location = "http://localhost:8080";
+		String manager_location = "http://ec2-18-189-1-146.us-east-2.compute.amazonaws.com:80";
+		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {10000}; //{20*minutes_to_millis};
+		long[] runtimes = {45*minutes_to_millis};
 
 		//ARRIVAL TIMES
-		int[] inter_arrival_times = {10000};
+		int[] inter_arrival_times = {50};
 		String inter_arrival_times_distribution;
-		inter_arrival_times_distribution = "CONSTANT";
-		//inter_arrival_times_distribution = "GEOMETRIC";
+		//inter_arrival_times_distribution = "CONSTANT";
+		inter_arrival_times_distribution = "GEOMETRIC";
 
 
 		//SERVICE TIMES
-		int[] service_times = {5000};
+		int[] service_times = {40};
 		String service_times_distribution;
-		service_times_distribution = "CONSTANT";
-		//service_times_distribution = "EXPONENTIAL";
-		boolean useStep=false;
-
-		//RESULTS
-		//String resultsFolderPath = "/home/ubuntu/results"; //linux
-		//String resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
-		//String resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
-		String resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiments\\measurements"; //TUF
+		//service_times_distribution = "CONSTANT";
+		service_times_distribution = "EXPONENTIAL";
+		boolean useStep=true;
 
 
 /*
@@ -62,7 +82,7 @@ public class Main {
 	
 /*
 		//TECHNIQUE B
-		int[] periods = {1000};
+		int[] periods = {2000};
 		BTechnique b0 = new BTechnique(
 			isVerbose,
 			runtimes,
@@ -78,13 +98,12 @@ public class Main {
 			useStep
 		);
 		b0.run();
+
 */
 
-
-/*
 		//TECHNIQUE C
 		int[] maxperiods = {60000};
-		int[] maxsizes = {2000};
+		int[] maxsizes = {20,30,50,100,300,500,1000,2000,3000};
 		CTechnique c0 = new CTechnique(
 			isVerbose,
 			runtimes,
@@ -97,29 +116,11 @@ public class Main {
 			maxsizes,
 			manager_location,
 			service_times,
-			service_times_distribution
+			service_times_distribution,
+			useStep
 		);
 		c0.run();
-	*/
 
-		//TECHNIQUE C
-		int coolofftime=1000;
-		int[][] stepinfo= {{0,500,3000},{40,300,700},{50,150,300},{100,100,200},{200,0,0}};
-		CAdaptiveTechnique ca = new CAdaptiveTechnique(
-				isVerbose,
-				runtimes,
-				resultsFolderPath,
-				application_location,
-				inter_arrival_times,
-				inter_arrival_times_distribution,
-				handler_location,
-				coolofftime,
-				stepinfo,
-				manager_location,
-				service_times,
-				service_times_distribution
-		);
-		ca.run();
 		
 	}//end main
 }//end class

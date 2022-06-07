@@ -18,6 +18,10 @@ public class ConstantServiceTimeCreator extends ParentServiceTimeCreator {
 
     @Override
     public void createServiceTime(int num_requests){
+        if(settingsController.getIsVerbose()){
+            System.out.println("constantTimeMillis: " + constantTimeMillis);
+        }
+
         if(settingsController.containsSetting("usestepservicetime")){
             boolean usestepservicetime = settingsController.getBoolean("usestepservicetime");
             if(usestepservicetime){
@@ -33,9 +37,21 @@ public class ConstantServiceTimeCreator extends ParentServiceTimeCreator {
                 }else if(num_requests > 30){
                     st=constantTimeMillis*3;
                 }
+
+                if(settingsController.getIsVerbose()){
+                    System.out.println("usestepservicetime: true");
+                    System.out.println("final service time created: " + st);
+                    System.out.println();
+                }
+
                 createTimLapse(st);
                 return;
             }
+        }
+
+        if(settingsController.getIsVerbose()){
+            System.out.println("usestepservicetime: false");
+            System.out.println();
         }
         createTimLapse(constantTimeMillis);
     }
