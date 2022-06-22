@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="413e1ce2-325c-4013-9dfa-fdc1541ed2a9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Experiment_Controller/Pyperformance/PerformanceWriter.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Experiment_Controller/Pyperformance/PerformanceWriter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Experiment_Controller/Pyperformance/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Experiment_Controller/Pyperformance/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Application/app/src/main/java/Application/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Application/app/src/main/java/Application/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/scripts/CAdaptiveTechnique.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Experiment_Controller/app/src/main/java/scripts/CAdaptiveTechnique.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -11,11 +11,17 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
   </component>
   <component name="ProjectId" id="23fmkfqcqHTnbtgla6NyTOMz1Sm" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -27,7 +33,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/juanp/OneDrive/Documents/projects/SICSS_V2/Experiment_Controller"
+    "last_opened_file_path": "C:/Users/juanp/OneDrive/Documents/projects/SICSS_V2/Storage_Manager"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

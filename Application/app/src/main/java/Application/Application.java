@@ -55,11 +55,38 @@ public class Application implements Runnable{
         }
         URI uri = URI.create(receiverAddress);
         HttpRequest request;
+
+        long sleepTime;
+
+        boolean isFirstCycle = true;
+        long cycle_start_time = 0;
+        int cycle_num = 0;
+        int max_num_cycles = 3;
+        long maxTime = (long)settingsController.getSetting("cycletime");
+
         while(!isFinished && stateController.getCurrentState()!= PROGRAM_STATE.FINISHED){
             if(stateController.getCurrentState()==PROGRAM_STATE.RUNNING){
                 try {
+                    if(settingsController.containsSetting("useMultipleRates") && settingsController.getBoolean("useMultipleRates")){
+                        //Rate is a cycle
+                        if(isFirstCycle){
+                            cycle_start_time = System.currentTimeMillis();
+                            isFirstCycle = false;
+                        }
+
+                        sleepTime = naturalNumberGenerator.generate()*(cycle_num%max_num_cycles + 1);
+
+                        if((System.currentTimeMillis() - cycle_start_time) >= maxTime){
+                            //generate request
+                            cycle_num++;
+                            cycle_start_time = System.currentTimeMillis();
+                        }
+                    }else{
+                        sleepTime = naturalNumberGenerator.generate();
+                    }
+
+                    //Send request
                     long start_time = System.currentTimeMillis();
-                    long sleepTime = naturalNumberGenerator.generate();
                     if(isVerbose){
                     	System.out.println("Application: sleeping for: " + String.valueOf(sleepTime) + " milliseconds");
                     }
@@ -70,7 +97,6 @@ public class Application implements Runnable{
                         }else{
                             processFor(sleepTime);
                         }
-                        
                     }
 
                     leastSignificant = requestNum % 255;
@@ -97,12 +123,12 @@ public class Application implements Runnable{
                 }catch(Exception e){
                     if(settingsController.getIsVerbose()==true) {
                         System.out.println("Application: Exception thrown when sending data");
-                        //e.printStackTrace();
+                        e.printStackTrace();
                     }
                 }
             }else{
                 try{
-                    Thread.sleep(300);
+                    Thread.sleep(1000);
                 }catch(Exception e){
                     e.printStackTrace();
                 }

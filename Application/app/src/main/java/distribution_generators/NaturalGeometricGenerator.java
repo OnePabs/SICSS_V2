@@ -37,4 +37,12 @@ public class NaturalGeometricGenerator extends ParentNaturalNumberGenerator{
         //System.out.println("long Generated: " + num);
         return  num;
     }
+
+    @Override
+    public long generate(long num){
+        //System.out.println("mean: " + mean);
+        double numgen = Math.log(1-Math.random())*(-num);
+        //System.out.println("double Generated: " + numgen);
+        return (long)numgen;
+    }
 }

@@ -28,4 +28,7 @@ public class NaturalConstantGenerator extends ParentNaturalNumberGenerator{
     public long generate() {
         return constant;
     }
+
+    @Override
+    public long generate(long num){return num;}
 }

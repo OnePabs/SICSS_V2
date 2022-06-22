@@ -12,4 +12,5 @@ public abstract class ParentNaturalNumberGenerator {
 
     public abstract boolean initialize();
     public abstract long generate();
+    public abstract long generate(long num);
 }
