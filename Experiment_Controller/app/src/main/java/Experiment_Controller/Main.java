@@ -10,17 +10,17 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "c-exponential-step-on";
+		String experimentName = "adaptive-constant";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
 		experimentName = dtf.format(now) + "-" + experimentName;
 
 		String resultsFolderPath;
-		//resultsFolderPath = "/home/ubuntu/experiment_results/"; //linux
+		resultsFolderPath = "/home/ubuntu/experiment_results/"; //linux
 		//resultsFolderPath = "C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"; //laptop
 		//resultsFolderPath = "C:\\Users\\juanp\\Documents\\experiment_results\\measurements"; //desktop
-		resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiment_results\\2022-06-22-adaptive-app-test"; //TUF
+		//resultsFolderPath = "C:\\Users\\juanp\\OneDrive\\Documents\\experiment_results\\"; //TUF
 
 		String resultsPath = resultsFolderPath + experimentName;
 
@@ -37,16 +37,16 @@ public class Main {
 
 		boolean isVerbose = false;
 		
-		//String application_location = "http://ec2-3-144-19-250.us-east-2.compute.amazonaws.com:80";
-		String application_location = "http://localhost:8000";
-		//String handler_location = "http://ec2-3-137-213-226.us-east-2.compute.amazonaws.com:80";
-		String handler_location = "http://localhost:8080";
-		//String manager_location = "http://ec2-18-189-1-146.us-east-2.compute.amazonaws.com:80";
-		String manager_location = "http://localhost:8090";
+		String application_location = "http://ec2-3-137-161-80.us-east-2.compute.amazonaws.com:80";
+		//String application_location = "http://localhost:8000";
+		String handler_location = "http://ec2-3-128-197-97.us-east-2.compute.amazonaws.com:80";
+		//String handler_location = "http://localhost:8080";
+		String manager_location = "http://ec2-18-222-44-205.us-east-2.compute.amazonaws.com:80";
+		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {5*minutes_to_millis};
+		long[] runtimes = {15*minutes_to_millis};
 
 		//ARRIVAL TIMES
 		int[] inter_arrival_times = {50};
@@ -123,12 +123,12 @@ public class Main {
 */
 
 		//adaptive
-		int cycletime = 5000; //milliseconds
+		int cycletime = 20000; //milliseconds
 		int coolofftime = 1000; //milliseconds
 		CAdaptiveTechnique ca = new CAdaptiveTechnique(
 				isVerbose,
 				runtimes,
-				resultsFolderPath,
+				resultsPath,
 				application_location,
 				inter_arrival_times,
 				inter_arrival_times_distribution,

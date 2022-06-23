@@ -13,7 +13,14 @@ import java.util.Hashtable;
 
 public class TechniqueCAdaptive extends ParentDataTransferTechnique {
     private long coolofftime;
-    private JSONArray stepinfo;
+    private long startTime = 0;
+    private long prev_arrival_time = 0;
+    private long[] inter_arrival_times = new long[]{0,0,0,0,0,0,0,0,0,0}; //10 places
+    private int tail = 0;
+    private long period = 1000;
+    private long threshold = 1000;
+    private Object notifier;
+
     public TechniqueCAdaptive(
             StateController stateController,
             SettingsController settingsController,
@@ -22,60 +29,114 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
     ) {
         super(stateController, settingsController, buffer, transmitionInformationObject);
         techniqueName = "techniqueCadaptive";
+        notifier = new Object();
     }
 
 
-    /*
-     *Initialize technique
-     * Parameters needed from settingsController
-     * {... dataTransferTechniqueSettings: { coolofftime:Int(milliseconds), stepvaluesandcparameters:[[iastepmin:Int,period:Int,threshold:Int],[...],...] } ... }
-     * coolofftime = Minimum time in between changes of period and threshold
-     * stepvaluesandcparameters = represents the steps/min inter arrival values at which the period and threshold must be changed
-     * iastepmin: The minimum value after which the period and threshold must be changed
-     * period: the period that the adaptive technique will change to after iastepmin has been reached
-     * threshold: the threshold that the adaptive technique will change to after iastepmin has been reached
-     *
-     * Example:
-     * dataTransferTechniqueSettings: {coolofftime:5000, stepvaluesandcparameters: [ [0,500,30000],[40,300,700],[50,150,300],[100,100,200],[200,0,0] ]
-     * explanation:
-     * The adaptive technique will check every 5000 milliseconds wheter or not the average inter arrival rate has changed from one step to another
-     * the steps are as follow:
-     * if the average inter arrival rate computed over the cooloff period is from 0 milliseconds to 39 milliseconds then the period set is 500 and the threshold 30000
-     * if the average inter arrival rate computed over the cooloff period is from 40 milliseconds to 49 milliseconds then the period set is 300 and the threshold 700
-     * if the average inter arrival rate computed over the cooloff period is from 50 milliseconds to 99 milliseconds then the period set is 150 and the threshold 300
-     * if the average inter arrival rate computed over the cooloff period is from 100 milliseconds to 199 milliseconds then the period set is 100 and the threshold 200
-     * if the average inter arrival rate computed over the cooloff period is over 200 milliseconds then the period set is 0 and the threshold 0
-     *
-     * if the first iastepmin is not zero, then when the average inter arrival time is less than the first iastepmin the adaptive technique will
-     * use the default P=1000 and T=60000
-     */
     @Override
     public boolean initialize(){
         if(settingsController.getIsVerbose()){
             System.out.println("C Adaptive Initialization");
         }
-        if(!settingsController.containsSetting("dataTransferTechniqueSettings")){
-            return false;
-        }
-        Hashtable<String,Object> dtSettings = JsonAPI.jsonToHashTable(settingsController.getSetting("dataTransferTechniqueSettings"));
-
-        if(!dtSettings.containsKey("stepvaluesandcparameters") || !dtSettings.containsKey("coolofftime") ){
+        if(!settingsController.containsSetting("coolofftime")){
             return false;
         }
 
-        coolofftime = (long)dtSettings.get("coolofftime");
+        coolofftime = (long)settingsController.getSetting("coolofftime");
         if(settingsController.getIsVerbose()){
             System.out.println("coolofftime: " + coolofftime);
         }
 
-        stepinfo = JsonAPI.objectToJSONArray(dtSettings.get("stepvaluesandcparameters"));
-        if(settingsController.getIsVerbose()){
-            System.out.println("stepvaluesandcparameters: ");
-            for(Object a : stepinfo){
-                System.out.println(a.toString());
-            }
-        }
-
         return true;
     }
+
+
+    @Override
+    public void waitForDataTransferCondition() throws Exception{ //condition for sending ready IO requests
+        if(startTime == 0){
+            startTime = System.currentTimeMillis();
+        }
+
+        //update array of inter arrival times
+        if(prev_arrival_time == 0){
+            prev_arrival_time = System.currentTimeMillis();
+        }else{
+            inter_arrival_times[tail++%inter_arrival_times.length] = System.currentTimeMillis() - prev_arrival_time;
+        }
+
+        if(!isThereZeroInInterArrivals() && System.currentTimeMillis() - startTime > coolofftime){
+            //see if period and threshold need to be changed
+            long sum_inter_arrival_times = 0;
+            for(long inter_arrival_time: inter_arrival_times){
+                sum_inter_arrival_times += inter_arrival_time;
+            }
+            long average_inter_arrival_time = sum_inter_arrival_times / inter_arrival_times.length;
+
+            if(average_inter_arrival_time < 45){
+                period = 400;
+                threshold = 400;
+            }else if (average_inter_arrival_time < 55){
+                period = 300;
+                threshold = 300;
+            }else if (average_inter_arrival_time < 110){
+                period = 200;
+                threshold = 200;
+            }else{
+                period = 0;
+                threshold = 100;
+            }
+            startTime = System.currentTimeMillis();
+        }
+
+        //create period and threshold task
+        ThresholdTask thresholdTask = new ThresholdTask(buffer,threshold,notifier);
+        Thread tthreashold = new Thread(thresholdTask);
+        tthreashold.start();
+
+        if(period != 0){
+            PeriodTask periodTask = new PeriodTask(period,notifier);
+            Thread tperiod = new Thread(periodTask);
+            tperiod.start();
+            //wait for notification
+            synchronized (notifier){
+                try{
+                    notifier.wait();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+            //finish period and threshold tasks execution
+            try{
+                periodTask.finishExecution();
+            }catch(Exception e){}
+
+            try{
+                thresholdTask.finishExecution();
+            }catch(Exception e){}
+            //wait until tasks finish
+            tperiod.join();
+            tthreashold.join();
+        }else{
+            synchronized (notifier){
+                try{
+                    notifier.wait();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+            tthreashold.join();
+        }
+    }
+
+
+    private boolean isThereZeroInInterArrivals(){
+        for(long inter_arrival_time: inter_arrival_times){
+            if(inter_arrival_time==0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

@@ -61,7 +61,7 @@ public class Application implements Runnable{
         boolean isFirstCycle = true;
         long cycle_start_time = 0;
         int cycle_num = 0;
-        int max_num_cycles = 3;
+        int max_num_cycles = 2;
         long maxTime = (long)settingsController.getSetting("cycletime");
 
         while(!isFinished && stateController.getCurrentState()!= PROGRAM_STATE.FINISHED){
