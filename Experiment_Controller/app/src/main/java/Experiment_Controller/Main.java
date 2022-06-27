@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "adaptive-constant";
+		String experimentName = "technique-a-cycle-low50-high-100-cycle_duration20min-num_cycles_2";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
@@ -37,29 +37,29 @@ public class Main {
 
 		boolean isVerbose = false;
 		
-		String application_location = "http://ec2-3-137-161-80.us-east-2.compute.amazonaws.com:80";
+		String application_location = "http://ec2-3-145-165-26.us-east-2.compute.amazonaws.com:80";
 		//String application_location = "http://localhost:8000";
-		String handler_location = "http://ec2-3-128-197-97.us-east-2.compute.amazonaws.com:80";
+		String handler_location = "http://ec2-18-191-215-38.us-east-2.compute.amazonaws.com:80";
 		//String handler_location = "http://localhost:8080";
-		String manager_location = "http://ec2-18-222-44-205.us-east-2.compute.amazonaws.com:80";
+		String manager_location = "http://ec2-52-15-192-141.us-east-2.compute.amazonaws.com:80";
 		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {15*minutes_to_millis};
+		long[] runtimes = {40*minutes_to_millis};
 
 		//ARRIVAL TIMES
 		int[] inter_arrival_times = {50};
 		String inter_arrival_times_distribution;
-		inter_arrival_times_distribution = "CONSTANT";
-		//inter_arrival_times_distribution = "GEOMETRIC";
+		//inter_arrival_times_distribution = "CONSTANT";
+		inter_arrival_times_distribution = "GEOMETRIC";
 
 
 		//SERVICE TIMES
 		int[] service_times = {40};
 		String service_times_distribution;
-		service_times_distribution = "CONSTANT";
-		//service_times_distribution = "EXPONENTIAL";
+		//service_times_distribution = "CONSTANT";
+		service_times_distribution = "EXPONENTIAL";
 		boolean useStep=false;
 
 
@@ -123,7 +123,7 @@ public class Main {
 */
 
 		//adaptive
-		int cycletime = 20000; //milliseconds
+		int cycletime = 20*minutes_to_millis; //milliseconds
 		int coolofftime = 1000; //milliseconds
 		CAdaptiveTechnique ca = new CAdaptiveTechnique(
 				isVerbose,
