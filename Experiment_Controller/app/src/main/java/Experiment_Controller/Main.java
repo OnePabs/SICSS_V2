@@ -123,7 +123,7 @@ public class Main {
 */
 
 		//adaptive
-		int cycletime = 20*minutes_to_millis; //milliseconds
+		long cycletime = 20*minutes_to_millis; //milliseconds
 		int coolofftime = 1000; //milliseconds
 		CAdaptiveTechnique ca = new CAdaptiveTechnique(
 				isVerbose,

@@ -15,7 +15,7 @@ public class CAdaptiveTechnique extends ParentScript{
     private String application_location;
     private int[] base_inter_arrival_times;
     private String inter_arrival_times_distribution;
-    private int cycletime;
+    private long cycletime;
 
     //storage handler
     private String handler_location;
@@ -35,7 +35,7 @@ public class CAdaptiveTechnique extends ParentScript{
             String application_location,
             int[] base_inter_arrival_times,
             String inter_arrival_times_distribution,
-            int cycletime,
+            long cycletime,
             String handler_location,
             int coolofftime,
             String manager_location,
