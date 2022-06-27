@@ -100,7 +100,7 @@ public class Main {
 		b0.run();
 
 */
-
+/*
 		//TECHNIQUE C
 		int[] maxperiods = {30000};
 		int[] maxsizes = {0};
@@ -120,8 +120,8 @@ public class Main {
 			useStep
 		);
 		c0.run();
+*/
 
-/*
 		//adaptive
 		long cycletime = 10*minutes_to_millis; //milliseconds
 		int coolofftime = 1000; //milliseconds
@@ -141,7 +141,7 @@ public class Main {
 				useStep
 		);
 		ca.run();
- */
+
 		
 	}//end main
 }//end class
