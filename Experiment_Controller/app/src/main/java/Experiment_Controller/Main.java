@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "technique-a-cycle-low50-high-100-cycle_duration20min-num_cycles_2";
+		String experimentName = "technique-ca-20min";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
@@ -46,7 +46,7 @@ public class Main {
 
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
-		long[] runtimes = {40*minutes_to_millis};
+		long[] runtimes = {20*minutes_to_millis};
 
 		//ARRIVAL TIMES
 		int[] inter_arrival_times = {50};
@@ -123,7 +123,7 @@ public class Main {
 */
 
 		//adaptive
-		long cycletime = 20*minutes_to_millis; //milliseconds
+		long cycletime = 10*minutes_to_millis; //milliseconds
 		int coolofftime = 1000; //milliseconds
 		CAdaptiveTechnique ca = new CAdaptiveTechnique(
 				isVerbose,

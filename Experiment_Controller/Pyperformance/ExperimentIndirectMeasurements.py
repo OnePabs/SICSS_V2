@@ -93,18 +93,18 @@ class ExperimentIndirectMeasurements:
 #RUN script
 
 #api inter arrival times
-#measurementsFileNameApi = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-23-adaptive-constant\ca-rt-900000-ia-50-cy-20000-cl-1000-st-40\measurements\strgapi.txt"
-#inter_arrival_times_resultsFileNameAPI = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-23-adaptive-constant\ca-rt-900000-ia-50-cy-20000-cl-1000-st-40\inter_arrival_times.csv"
-#ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameApi,inter_arrival_times_resultsFileNameAPI,'STORAGE_API_ENTRY')
+measurementsFileNameApi = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\measurements\strgapi.txt"
+inter_arrival_times_resultsFileNameAPI = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\inter_arrival_times.csv"
+ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameApi,inter_arrival_times_resultsFileNameAPI,'STORAGE_API_ENTRY')
 
 #manager inter batch times
-#measurementsFileNameMngr = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-23-adaptive-constant\ca-rt-900000-ia-50-cy-20000-cl-1000-st-40\measurements\strgMngr.txt"
-#inter_arrival_times_resultsFileNameMngr = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-23-adaptive-constant\ca-rt-900000-ia-50-cy-20000-cl-1000-st-40\batch_arrival_times.csv"
-#ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameMngr,inter_arrival_times_resultsFileNameMngr,'ENTRY')
+measurementsFileNameMngr = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\measurements\strgMngr.txt"
+inter_arrival_times_resultsFileNameMngr = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\batch_arrival_times.csv"
+ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameMngr,inter_arrival_times_resultsFileNameMngr,'ENTRY')
 
 #augmented dataset
-exp_measurments_path = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-23-adaptive-constant\ca-rt-900000-ia-50-cy-20000-cl-1000-st-40\measurements"
-augmentedDatasetFolderPath = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-23-adaptive-constant\ca-rt-900000-ia-50-cy-20000-cl-1000-st-40"
+exp_measurments_path = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\measurements"
+augmentedDatasetFolderPath = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40"
 ExperimentIndirectMeasurements.writeAugmentedDataset(exp_measurments_path,augmentedDatasetFolderPath)
 
 

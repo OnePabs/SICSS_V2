@@ -107,8 +107,11 @@ class PerformanceWriter:
                         prev_batch_timestamp = curr_request_timestamp
 
         #calculate and write batch data
-        avg_batch_size = total_num_requests/num_batches
-        avg_inter_batch_time = total_inter_batch_time/num_batches
+        avg_batch_size = 1
+        avg_inter_batch_time = 0
+        if num_batches > 0:
+            avg_batch_size = total_num_requests/num_batches
+            avg_inter_batch_time = total_inter_batch_time/num_batches
         print("number of batches: " + str(num_batches))
         print("total number of requests: " + str(total_num_requests))
         print("Average Batch size: " + str(avg_batch_size))
