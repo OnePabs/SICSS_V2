@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "technique-ca-20min";
+		String experimentName = "technique-a-c0-20min";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
@@ -37,11 +37,11 @@ public class Main {
 
 		boolean isVerbose = false;
 		
-		String application_location = "http://ec2-3-145-165-26.us-east-2.compute.amazonaws.com:80";
+		String application_location = "http://ec2-3-138-174-172.us-east-2.compute.amazonaws.com:80";
 		//String application_location = "http://localhost:8000";
-		String handler_location = "http://ec2-18-191-215-38.us-east-2.compute.amazonaws.com:80";
+		String handler_location = "http://ec2-18-116-45-199.us-east-2.compute.amazonaws.com:80";
 		//String handler_location = "http://localhost:8080";
-		String manager_location = "http://ec2-52-15-192-141.us-east-2.compute.amazonaws.com:80";
+		String manager_location = "http://ec2-18-217-25-51.us-east-2.compute.amazonaws.com:80";
 		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
@@ -100,10 +100,10 @@ public class Main {
 		b0.run();
 
 */
-/*
+
 		//TECHNIQUE C
-		int[] maxperiods = {60000};
-		int[] maxsizes = {20,30,50,100,300,500,1000,2000,3000};
+		int[] maxperiods = {30000};
+		int[] maxsizes = {0};
 		CTechnique c0 = new CTechnique(
 			isVerbose,
 			runtimes,
@@ -120,8 +120,8 @@ public class Main {
 			useStep
 		);
 		c0.run();
-*/
 
+/*
 		//adaptive
 		long cycletime = 10*minutes_to_millis; //milliseconds
 		int coolofftime = 1000; //milliseconds
@@ -141,6 +141,7 @@ public class Main {
 				useStep
 		);
 		ca.run();
+ */
 		
 	}//end main
 }//end class
