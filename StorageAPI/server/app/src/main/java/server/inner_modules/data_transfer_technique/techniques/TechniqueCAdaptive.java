@@ -12,14 +12,16 @@ import org.json.simple.JSONArray;
 import java.util.Hashtable;
 
 public class TechniqueCAdaptive extends ParentDataTransferTechnique {
+
+    private long sample_start_time = 0;
+    private long num_requests_in_sample = 0;
     private long coolofftime;
-    private long startTime = 0;
-    private long prev_arrival_time = 0;
-    private long[] inter_arrival_times = new long[]{0,0,0,0,0,0,0,0,0,0}; //10 places
-    private int tail = 0;
-    private long period = 1000;
-    private long threshold = 1000;
+
+    private long period = 300;
+    private long threshold = 300;
     private Object notifier;
+
+
 
     public TechniqueCAdaptive(
             StateController stateController,
@@ -53,39 +55,23 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
 
     @Override
     public void waitForDataTransferCondition() throws Exception{ //condition for sending ready IO requests
-        if(startTime == 0){
-            startTime = System.currentTimeMillis();
+        //initialize first sample start time
+        if(sample_start_time == 0){
+            sample_start_time = System.currentTimeMillis();
         }
 
-        //update array of inter arrival times
-        if(prev_arrival_time == 0){
-            prev_arrival_time = System.currentTimeMillis();
-        }else{
-            inter_arrival_times[tail++%inter_arrival_times.length] = System.currentTimeMillis() - prev_arrival_time;
-        }
-
-        if(!isThereZeroInInterArrivals() && System.currentTimeMillis() - startTime > coolofftime){
-            //see if period and threshold need to be changed
-            long sum_inter_arrival_times = 0;
-            for(long inter_arrival_time: inter_arrival_times){
-                sum_inter_arrival_times += inter_arrival_time;
-            }
-            long average_inter_arrival_time = sum_inter_arrival_times / inter_arrival_times.length;
-
-            if(average_inter_arrival_time < 45){
-                period = 400;
-                threshold = 400;
-            }else if (average_inter_arrival_time < 55){
+        if(System.currentTimeMillis() - sample_start_time > coolofftime && num_requests_in_sample>0){
+            long average_inter_arrival_time = (System.currentTimeMillis() - sample_start_time)/num_requests_in_sample;
+            if(average_inter_arrival_time < 75){
                 period = 300;
                 threshold = 300;
-            }else if (average_inter_arrival_time < 110){
-                period = 200;
-                threshold = 200;
             }else{
-                period = 0;
-                threshold = 100;
+                period = 100;
+                threshold = 0;
             }
-            startTime = System.currentTimeMillis();
+            //reset sample start time and number of requests in sample
+            sample_start_time = System.currentTimeMillis();
+            num_requests_in_sample = 0;
         }
 
         //create period and threshold task
@@ -126,17 +112,8 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
             }
             tthreashold.join();
         }
+
+        //update number of requests in buffer
+        num_requests_in_sample += buffer.getNumberOfRequestsInBuffer();
     }
-
-
-    private boolean isThereZeroInInterArrivals(){
-        for(long inter_arrival_time: inter_arrival_times){
-            if(inter_arrival_time==0){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 }
