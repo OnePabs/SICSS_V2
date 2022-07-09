@@ -88,15 +88,7 @@ public class CAdaptiveTechnique extends ParentScript{
                                 + "\"cycletime\":" + cycletime
                                 + "}";
 
-                        String storageApi_parameters = "{"
-                                + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                + "\"dataTransferTechnique\":\"c\","
-                                + "\"dataTransferTechniqueSettings\":{\"period\":" + String.valueOf(60000) + ","
-                                + "\"maxsize\":" + String.valueOf(0) + "},"
-                                + "\"transmitter\":\"StorageManagerTransmitter\","
-                                + "\"destination\":\"" + manager_location + "\""
-                                + "}";
-                        /*
+
                         String storageApi_parameters = "{"
                                 + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
                                 + "\"dataTransferTechnique\":\"ca\","
@@ -104,7 +96,7 @@ public class CAdaptiveTechnique extends ParentScript{
                                 + "\"transmitter\":\"StorageManagerTransmitter\","
                                 + "\"destination\":\"" + manager_location + "\""
                                 + "}";
-                         */
+
 
 
                         String storageManager_parameters = "{"

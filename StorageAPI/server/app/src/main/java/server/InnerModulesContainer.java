@@ -50,7 +50,7 @@ public class InnerModulesContainer implements Runnable {
         settingsCtrl = new SettingsController();
         stateCtrl.setSttingsController(settingsCtrl);
         settingsCtrl.setStateController(stateCtrl);
-        
+
         measurementController = new MeasurementController(stateCtrl);
         ioEntryList = new SyncIORequestLinkedList((byte)0,stateCtrl);
         buffer = new ReadyLists(stateCtrl);
@@ -115,7 +115,7 @@ public class InnerModulesContainer implements Runnable {
             transmitterThread.start();
 
             //create new data transfer with new settings
-            dataTransferTechnique = TechniqueBuilder.build(stateCtrl,settingsCtrl,buffer,transmitionInformationObject);
+            dataTransferTechnique = TechniqueBuilder.build(stateCtrl,settingsCtrl,buffer,transmitionInformationObject,measurementController);
             Thread dtt = new Thread(dataTransferTechnique);
             dtt.start();
         }

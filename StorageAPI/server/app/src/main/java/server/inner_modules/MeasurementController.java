@@ -13,14 +13,15 @@ public class MeasurementController {
         measurements = new LinkedList<TimeStamp>();
     }
 
-    public boolean addMeasurement(TimeStamp tp){
+    public synchronized boolean addMeasurement(TimeStamp tp){
         if(stateController.getCurrentState() == PROGRAM_STATE.RUNNING){
             measurements.add(tp);
+            return true;
         }
         return false;
     }
 
-    public TimeStamp[] getMeasurements(){
+    public synchronized TimeStamp[] getMeasurements(){
         return measurements.toArray(new TimeStamp[measurements.size()]);
     }
 

@@ -92,19 +92,20 @@ class ExperimentIndirectMeasurements:
 
 #RUN script
 
-#api inter arrival times
-measurementsFileNameApi = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\measurements\strgapi.txt"
-inter_arrival_times_resultsFileNameAPI = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\inter_arrival_times.csv"
+#api inter arrival
+path_before_measurements = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-07-09-test0\ca-rt-300000-ia-50-cy-150000-cl-1000-st-40"
+measurementsFileNameApi = path_before_measurements + r"\measurements\strgapi.txt"
+inter_arrival_times_resultsFileNameAPI = path_before_measurements + r"\inter_arrival_times.csv"
 ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameApi,inter_arrival_times_resultsFileNameAPI,'STORAGE_API_ENTRY')
 
 #manager inter batch times
-measurementsFileNameMngr = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\measurements\strgMngr.txt"
-inter_arrival_times_resultsFileNameMngr = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\batch_arrival_times.csv"
+measurementsFileNameMngr = path_before_measurements + r"\measurements\strgMngr.txt"
+inter_arrival_times_resultsFileNameMngr = path_before_measurements + r"\batch_arrival_times.csv"
 ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameMngr,inter_arrival_times_resultsFileNameMngr,'ENTRY')
 
 #augmented dataset
-exp_measurments_path = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40\measurements"
-augmentedDatasetFolderPath = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-06-27-technique-ca\ca-rt-360000-ia-50-cy-180000-cl-1000-st-40"
+exp_measurments_path = path_before_measurements + r"\measurements"
+augmentedDatasetFolderPath = path_before_measurements
 ExperimentIndirectMeasurements.writeAugmentedDataset(exp_measurments_path,augmentedDatasetFolderPath)
 
 

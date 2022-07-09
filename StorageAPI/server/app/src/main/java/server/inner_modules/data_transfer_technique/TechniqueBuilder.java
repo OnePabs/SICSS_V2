@@ -13,7 +13,8 @@ public class TechniqueBuilder {
             StateController stateController,
             SettingsController settingsController,
             ReadyLists buffer,
-            TransmitionInformationObject transmitionInformationObject
+            TransmitionInformationObject transmitionInformationObject,
+            MeasurementController measurementController
     ){
         if(settingsController.getIsVerbose()){
             System.out.println("Techniqe builder");
@@ -32,7 +33,7 @@ public class TechniqueBuilder {
                 technique = new TechniqueC(stateController, settingsController, buffer, transmitionInformationObject);
                 break;
             case "CA":
-                technique = new TechniqueCAdaptive(stateController, settingsController, buffer, transmitionInformationObject);
+                technique = new TechniqueCAdaptive(stateController, settingsController, buffer, transmitionInformationObject,measurementController);
                 break;
             default:
                 technique = new ParentDataTransferTechnique(stateController, settingsController, buffer, transmitionInformationObject);

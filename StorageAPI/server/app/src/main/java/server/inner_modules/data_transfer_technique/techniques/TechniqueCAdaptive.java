@@ -13,13 +13,13 @@ import java.util.Hashtable;
 
 public class TechniqueCAdaptive extends ParentDataTransferTechnique {
 
-    private long sample_start_time = 0;
-    private long num_requests_in_sample = 0;
     private long coolofftime;
 
-    private long period = 300;
-    private long threshold = 300;
-    private Object notifier;
+    private long period = 60000;
+    private long threshold = 100;
+    private MeasurementController measurementController;
+    private ArrivalMonitorAndSettingsChanger arrivalMonitorAndSettingsChanger;
+    private Object changeTechniqueSettingsLock;
 
 
 
@@ -27,11 +27,13 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
             StateController stateController,
             SettingsController settingsController,
             ReadyLists buffer,
-            TransmitionInformationObject transmitionInformationObject
+            TransmitionInformationObject transmitionInformationObject,
+            MeasurementController measurementController
     ) {
         super(stateController, settingsController, buffer, transmitionInformationObject);
         techniqueName = "techniqueCadaptive";
-        notifier = new Object();
+        this.measurementController = measurementController;
+        changeTechniqueSettingsLock = new Object();
     }
 
 
@@ -49,71 +51,59 @@ public class TechniqueCAdaptive extends ParentDataTransferTechnique {
             System.out.println("coolofftime: " + coolofftime);
         }
 
+        arrivalMonitorAndSettingsChanger = new ArrivalMonitorAndSettingsChanger(this,measurementController,coolofftime);
+        Thread arrivalMonitorAndSettingsChangerThread = new Thread(arrivalMonitorAndSettingsChanger);
+        arrivalMonitorAndSettingsChangerThread.start();
+
         return true;
+    }
+
+    public void changeThreshold(long threshold){
+        synchronized (changeTechniqueSettingsLock){
+            this.threshold = threshold;
+        }
     }
 
 
     @Override
     public void waitForDataTransferCondition() throws Exception{ //condition for sending ready IO requests
-        //initialize first sample start time
-        if(sample_start_time == 0){
-            sample_start_time = System.currentTimeMillis();
-        }
-
-        if(System.currentTimeMillis() - sample_start_time > coolofftime && num_requests_in_sample>0){
-            long average_inter_arrival_time = (System.currentTimeMillis() - sample_start_time)/num_requests_in_sample;
-            if(average_inter_arrival_time < 75){
-                period = 300;
-                threshold = 300;
-            }else{
-                period = 100;
-                threshold = 0;
+        /*
+        System.out.println("wainting for data transfer condition...");
+        synchronized (changeTechniqueSettingsLock){
+            try {
+                Thread.sleep(5000);
+            }catch(Exception e){
+                e.printStackTrace();
             }
-            //reset sample start time and number of requests in sample
-            sample_start_time = System.currentTimeMillis();
-            num_requests_in_sample = 0;
         }
+         */
+        //System.out.println("Technique C Adaptive: Threshold = " + threshold);
+        //long start_t = System.currentTimeMillis();
+
+        //create lock
+        Object lock = new Object();
 
         //create period and threshold task
-        ThresholdTask thresholdTask = new ThresholdTask(buffer,threshold,notifier);
+        CPeriodTask periodTask = new CPeriodTask(period,lock);
+        ThresholdMonitoringTask thresholdTask = new ThresholdMonitoringTask(threshold,buffer,lock);
+
+        //link tasks together
+        thresholdTask.setPeriodTask(periodTask);
+        periodTask.setThresholdTask(thresholdTask);
+
+        //create threads to run the tasks
+        Thread tperiod = new Thread(periodTask);
         Thread tthreashold = new Thread(thresholdTask);
+
+        //start the tasks
+        tperiod.start();
         tthreashold.start();
 
-        if(period != 0){
-            PeriodTask periodTask = new PeriodTask(period,notifier);
-            Thread tperiod = new Thread(periodTask);
-            tperiod.start();
-            //wait for notification
-            synchronized (notifier){
-                try{
-                    notifier.wait();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-            //finish period and threshold tasks execution
-            try{
-                periodTask.finishExecution();
-            }catch(Exception e){}
+        //wait until tasks finish
+        tperiod.join();
+        tthreashold.join();
 
-            try{
-                thresholdTask.finishExecution();
-            }catch(Exception e){}
-            //wait until tasks finish
-            tperiod.join();
-            tthreashold.join();
-        }else{
-            synchronized (notifier){
-                try{
-                    notifier.wait();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-            tthreashold.join();
-        }
-
-        //update number of requests in buffer
-        num_requests_in_sample += buffer.getNumberOfRequestsInBuffer();
+        //long duration = System.currentTimeMillis() - start_t;
+        //System.out.println("Technique C Adaptive finished waiting for " + duration + " milliseconds");
     }
 }
