@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "adaptive";
+		String experimentName = "a-load-factor-05";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
@@ -32,7 +32,6 @@ public class Main {
 		TestCConstant tc = new TestCConstant(resultsPath);
 		tc.run();
  */
-
 
 
 		boolean isVerbose = false;
