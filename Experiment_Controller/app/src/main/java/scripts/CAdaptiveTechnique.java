@@ -90,7 +90,9 @@ public class CAdaptiveTechnique extends ParentScript{
 
                         String storageApi_parameters = "{"
                                 + "\"isVerbose\":" + String.valueOf(isVerbose) + ","
-                                + "\"dataTransferTechnique\":\"a\","
+                                + "\"dataTransferTechnique\":\"c\","
+                                + "\"dataTransferTechniqueSettings\":{\"period\":60000,"
+                                + "\"maxsize\":100},"
                                 + "\"transmitter\":\"StorageManagerTransmitter\","
                                 + "\"destination\":\"" + manager_location + "\""
                                 + "}";
