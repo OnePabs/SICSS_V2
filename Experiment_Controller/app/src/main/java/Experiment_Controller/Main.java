@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "c-load-factor-50";
+		String experimentName = "b-load-factor";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
@@ -36,11 +36,11 @@ public class Main {
 
 		boolean isVerbose = false;
 		
-		String application_location = "http://ec2-3-145-106-139.us-east-2.compute.amazonaws.com:80";
+		String application_location = "http://ec2-3-142-136-33.us-east-2.compute.amazonaws.com:80";
 		//String application_location = "http://localhost:8000";
-		String handler_location = "http://ec2-18-220-182-183.us-east-2.compute.amazonaws.com:80";
+		String handler_location = "http://ec2-3-128-198-30.us-east-2.compute.amazonaws.com:80";
 		//String handler_location = "http://localhost:8080";
-		String manager_location = "http://ec2-18-188-114-211.us-east-2.compute.amazonaws.com:80";
+		String manager_location = "http://ec2-3-144-144-95.us-east-2.compute.amazonaws.com:80";
 		//String manager_location = "http://localhost:8090";
 
 		//RUNTIMES
