@@ -3,13 +3,13 @@ from PerformanceWriter import PerformanceWriter
 
 expPaths = [
 #"C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\results"
-r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-07-15-c-load-factor-50"
+r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-07-22-adaptive-lf05-test"
 ]
 
 
 resPaths = [
 #"C:\\Users\\Juan Pablo Contreras\\Documents\\expresults\\analysis"
-r"C:\Users\juanp\OneDrive\Documents\experiment_results\analysis-c-load-factor-50"
+r"C:\Users\juanp\OneDrive\Documents\experiment_results\analysis"
 ]
 
 numExperiments = len(expPaths)

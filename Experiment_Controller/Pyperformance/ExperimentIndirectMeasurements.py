@@ -93,7 +93,7 @@ class ExperimentIndirectMeasurements:
 #RUN script
 
 #api inter arrival
-path_before_measurements = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-07-15-test-b\ca-rt-300000-ia-50-cy-150000-cl-1000-st-40"
+path_before_measurements = r"C:\Users\juanp\OneDrive\Documents\experiment_results\2022-07-22-adaptive-lf05-test\ca-rt-300000-ia-50-cy-150000-cl-1000-st-40"
 measurementsFileNameApi = path_before_measurements + r"\measurements\strgapi.txt"
 inter_arrival_times_resultsFileNameAPI = path_before_measurements + r"\inter_arrival_times.csv"
 ExperimentIndirectMeasurements.writeInterArrivalTimes(measurementsFileNameApi,inter_arrival_times_resultsFileNameAPI,'STORAGE_API_ENTRY')
