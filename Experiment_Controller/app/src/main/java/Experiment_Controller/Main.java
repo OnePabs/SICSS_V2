@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Experiment Controller");
-		String experimentName = "a-lf-25";
+		String experimentName = "a-lf-75";
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
@@ -46,7 +46,7 @@ public class Main {
 		//RUNTIMES
 		long minutes_to_millis = (long)60000;
 		long[] runtimes = {20*minutes_to_millis};
-		double loadFactor = 0.25;
+		double loadFactor = 0.75;
 
 		//ARRIVAL TIMES
 		int[] inter_arrival_times = {50};
